@@ -72,12 +72,13 @@ Now we want to create a Kubernetes secret containing our newly obtained certific
 
 ```bash
 kubectl create namespace ingress-nginx
-sudo cd /etc/letsencrypt/live/lab.my-domain.net
+sudo su
+cd /etc/letsencrypt/live/lab.my-domain.net
 sudo kubectl create secret tls onyxia-tls \
     -n ingress-nginx \
     --key ./privkey.pem \
     --cert ./fullchain.pem
-cd ~/
+exit
 ```
 
 ### Ingress controller
@@ -113,103 +114,36 @@ Deploy an ingress controller on your cluster:
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.0/deploy/static/provider/aws/deploy.yaml
 ```
 
-(This commend was taken from [this guide](https://kubernetes.github.io/ingress-nginx/deploy/#aws))  
-
+(This commend was taken from [this guide](https://kubernetes.github.io/ingress-nginx/deploy/#aws))
 
 ### DNS
 
-Let's assume you own the domain name **my-domain.net,** for the rest of the guide you should replace **my-domain.net** by a domain you actually own.
+Let's assume you own the domain name **my-domain.net**, for the rest of the guide you should replace **my-domain.net** by a domain you actually own. &#x20;
 
-Get [your internet box routable IP](http://monip.org/) and create the following DNS records: &#x20;
+Now you need to get the external IP of your cluster: run the command&#x20;
+
+```bash
+kubectl get services -n ingress-nginx
+```
+
+and write down the External IP. It should be something like:&#x20;
+
+**xxx.elb.eu-west-1.amazonaws.com.** &#x20;
 
 ```dns-zone-file
-onyxia.my-domain.net A <YOUR_IP>
-*.lab.my-domain.net  A <YOUR_IP>
+onyxia.my-domain.net CNAME xxx.elb.eu-west-1.amazonaws.com. 
+*.lab.my-domain.net  CNAME xxx.elb.eu-west-1.amazonaws.com. 
 ```
 
-{% hint style="success" %}
-If you have DDNS domain you can create `CNAME` instead example: &#x20;
-
-```
-onyxia.my-domain.net CNAME jhon-doe-home.ddns.net.
-*.lab.my-domain.net  CNAME jhon-doe-home.ddnc.net.
-```
-{% endhint %}
-
-_**https://onyxia.my-domain.net**_ will be the URL for your instance of Onyxia.
-
-The URL of the services created by Onyxia are going to look like: _**https://xxx.lab.my-domain.net**_
+**https://onyxia.my-domain.net** will be the URL for your instance of Onyxia. The URL of the services created by Onyxia are going to look like: **https://xxx.lab.my-domain.net**&#x20;
 
 {% hint style="info" %}
-`"lab"` and `"onyxia"` are mere suggestions.
+"lab" and "onyxia" are mere suggestions
 {% endhint %}
-
-### SSL
-
-In this section we will obtain a TLS certificate issued by [LetsEncrypt](https://letsencrypt.org/) using the [certbot](https://certbot.eff.org/) commend line tool. &#x20;
-
-```bash
-brew install certbot #On Mac, lookup how to install certbot for your OS
-
-#Because we need a wildcard we have to complete the DNS callange.  
-sudo certbot certonly --manual --preferred-challenges dns
-
-# When asked for the domains you wish to optains a certificate for enter:
-#   *.lab.my-domain.net onyxia.my-domain.net 
-```
-
-{% hint style="info" %}
-The obtained certificate needs to be renewed every three month. &#x20;
-
-To avoid the burden of having to remember to re-run the `certbot` command periodically you can setup [cert-manager](https://cert-manager.io/) and configure a [DNS01 provider](https://cert-manager.io/docs/configuration/acme/dns01/#delegated-domains-for-dns01) on your cluster but that's out of scope for Onyxia. &#x20;
-{% endhint %}
-
-Now we want to create a Kubernetes secret containing our newly obtained certificate: &#x20;
-
-```bash
-kubectl create namespace ingress-nginx
-sudo cd /etc/letsencrypt/live/lab.my-domain.net
-sudo kubectl create secret tls onyxia-tls \
-    -n ingress-nginx \
-    --key ./privkey.pem \
-    --cert ./fullchain.pem
-cd ~/
-```
-
-### Ingress controller
-
-We'll install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/) in our cluster but any other ingress controller will do.
-
-```bash
-cat << EOF > ./ingress-nginx-values.yaml
-controller:
-  extraArgs:
-    default-ssl-certificate: "ingress-nginx/onyxia-tls"
-EOF
-
-helm install ingress-nginx ingress-nginx \
-    --repo https://kubernetes.github.io/ingress-nginx \
-    --namespace ingress-nginx \
-    -f ./ingress-nginx-values.yaml
-```
 
 
 {% endtab %}
 {% endtabs %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
