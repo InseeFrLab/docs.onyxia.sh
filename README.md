@@ -72,13 +72,10 @@ Now we want to create a Kubernetes secret containing our newly obtained certific
 
 ```bash
 kubectl create namespace ingress-nginx
-sudo su
-cd /etc/letsencrypt/live/lab.my-domain.net
-kubectl create secret tls onyxia-tls \
+sudo kubectl create secret tls onyxia-tls \
     -n ingress-nginx \
-    --key ./privkey.pem \
-    --cert ./fullchain.pem
-exit
+    --key /etc/letsencrypt/live/lab.my-domain.net/privkey.pem \
+    --cert /etc/letsencrypt/live/lab.my-domain.net/fullchain.pem
 ```
 
 ### Ingress controller
@@ -138,12 +135,55 @@ onyxia.my-domain.net CNAME xxx.elb.eu-west-1.amazonaws.com.
 **https://onyxia.my-domain.net** will be the URL for your instance of Onyxia. The URL of the services created by Onyxia are going to look like: **https://xxx.lab.my-domain.net**&#x20;
 
 {% hint style="info" %}
-"lab" and "onyxia" are mere suggestions
+"lab" and "onyxia" are mere suggestions &#x20;
 {% endhint %}
 
+### SSL
 
+In this section we will obtain a TLS certificate issued by [LetsEncrypt](https://letsencrypt.org/) using the [certbot](https://certbot.eff.org/) commend line tool then get our ingress controller to use it. &#x20;
+
+```bash
+brew install certbot #On Mac, lookup how to install certbot for your OS
+
+#Because we need a wildcard we have to complete the DNS callange.  
+sudo certbot certonly --manual --preferred-challenges dns
+
+# When asked for the domains you wish to optains a certificate for enter:
+#   *.lab.my-domain.net onyxia.my-domain.net
+```
+
+{% hint style="info" %}
+The obtained certificate needs to be renewed every three month. &#x20;
+
+To avoid the burden of having to remember to re-run the `certbot` command periodically you can setup [cert-manager](https://cert-manager.io/) and configure a [DNS01 provider](https://cert-manager.io/docs/configuration/acme/dns01/#delegated-domains-for-dns01) on your cluster but that's out of scope for Onyxia.
+{% endhint %}
+
+Now we want to create a Kubernetes secret containing our newly obtained certificate: &#x20;
+
+```bash
+sudo kubectl create secret tls onyxia-tls \
+    -n ingress-nginx \
+    --key /etc/letsencrypt/live/lab.my-domain.net/privkey.pem \
+    --cert /etc/letsencrypt/live/lab.my-domain.net/fullchain.pem
+```
+
+Lastly, we want to tell our ingress controller to use this TLS certificate, to do so run: &#x20;
+
+```bash
+kubectl edit deployment ingress-nginx-controller -n ingress-nginx
+```
+
+This command will open your configured text editor, go to line xxx and add: &#x20;
+
+```yaml
+        - --default-ssl-certificate=ingress-nginx/wildcard
+```
+
+![](<.gitbook/assets/image (7).png>)
 {% endtab %}
 {% endtabs %}
+
+
 
 
 
