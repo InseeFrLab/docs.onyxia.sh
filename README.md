@@ -187,9 +187,15 @@ This command will open your configured text editor, go to line `56` and add: &#x
 
 In this section we assume that:&#x20;
 
-* You have a Kubernetes cluster and kubectl configured
+* You have a Kubernetes cluster and `kubectl` configured
 * **onyxia.my-domain.net** and **\*.lab.my-domain.net** are pointing to your cluster's external address. **my-domain.net** being a domain that you own. You can customise "**onyxia**" and "**lab**" to your liking, for example you could chose **datalab.my-domain.net** and **\*.kub.my-domain.net**.
-*
+* You have an ingress controller configured with a default TLS certificate for **\*.lab.my-domain.net** and **onyxia.my-domain.net**.
+
+{% hint style="warning" %}
+As of today [the default service catalog](https://github.com/InseeFrLab/helm-charts-datascience) will only work with [ingress-nginx](https://kubernetes.github.io/ingress-nginx/). &#x20;
+
+This will be addressed in the near future. &#x20;
+{% endhint %}
 
 
 
