@@ -74,7 +74,7 @@ Now we want to create a Kubernetes secret containing our newly obtained certific
 kubectl create namespace ingress-nginx
 sudo su
 cd /etc/letsencrypt/live/lab.my-domain.net
-sudo kubectl create secret tls onyxia-tls \
+kubectl create secret tls onyxia-tls \
     -n ingress-nginx \
     --key ./privkey.pem \
     --cert ./fullchain.pem
