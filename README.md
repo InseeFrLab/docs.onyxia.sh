@@ -188,7 +188,7 @@ This command will open your configured text editor, go to line `56` and add: &#x
 In this section we assume that:&#x20;
 
 * You have a Kubernetes cluster and kubectl configured
-* **onyxia.my-domain.net** and **\*.lab.my-domain.net** are pointing to your cluster's address. **my-domain.net** being a domain that you own. You can customise "**onyxia**" and "**lab**" to your liking, for example you could chose **datalab.my-domain.net** and **\*.kub.my-domain.net**.
+* **onyxia.my-domain.net** and **\*.lab.my-domain.net** are pointing to your cluster's external address. **my-domain.net** being a domain that you own. You can customise "**onyxia**" and "**lab**" to your liking, for example you could chose **datalab.my-domain.net** and **\*.kub.my-domain.net**.
 *
 
 
