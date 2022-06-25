@@ -183,6 +183,8 @@ This command will open your configured text editor, go to line `56` and add: &#x
 {% endtab %}
 {% endtabs %}
 
+If you want to confirm that you are ready to move over to the next step you can [deploy a test web app on your cluster](misc.md#test-your-kubernetes-cluster).
+
 ### Installing Onyxia using helm
 
 In this section we assume that:&#x20;
