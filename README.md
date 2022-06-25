@@ -173,15 +173,25 @@ Lastly, we want to tell our ingress controller to use this TLS certificate, to d
 kubectl edit deployment ingress-nginx-controller -n ingress-nginx
 ```
 
-This command will open your configured text editor, go to line xxx and add: &#x20;
+This command will open your configured text editor, go to line `56` and add: &#x20;
 
 ```yaml
         - --default-ssl-certificate=ingress-nginx/wildcard
 ```
 
-![](<.gitbook/assets/image (7).png>)
+![](<.gitbook/assets/image (1).png>)
 {% endtab %}
 {% endtabs %}
+
+### Installing Onyxia using helm
+
+In this section we assume that:&#x20;
+
+* You have a Kubernetes cluster and kubectl configured
+* **onyxia.my-domain.net** and **\*.lab.my-domain.net** are pointing to your cluster's address. **my-domain.net** being a domain that you own. You can customise "**onyxia**" and "**lab**" to your liking, for example you could chose **datalab.my-domain.net** and **\*.kub.my-domain.net**.
+*
+
+
 
 
 
