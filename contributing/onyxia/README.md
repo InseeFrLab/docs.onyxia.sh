@@ -2,9 +2,9 @@
 description: The frontend
 ---
 
-# 🐲 onyxia
+# 🐲 onyxia-web
 
-This is the documentation for [InseeFrLab/onyxia](https://github.com/InseeFrLab/onyxia-web). &#x20;
+This is the documentation for [InseeFrLab/onyxia-we](https://github.com/InseeFrLab/onyxia-web). &#x20;
 
 It's the part of the App that runs on the users browser. It's a TypeScript codebase.&#x20;
 
