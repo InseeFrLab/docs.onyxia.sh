@@ -220,11 +220,32 @@ As of today [the default service catalog](https://github.com/InseeFrLab/helm-cha
 This will be addressed in the near future. &#x20;
 {% endhint %}
 
+```bash
+helm repo add inseefrlab https://inseefrlab.github.io/helm-charts
 
+cat << EOF > ./onyxia-values.yaml
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  hosts:
+    - host: onyxia.my-domain.net
+api:
+  regions: 
+    [
+      {
+        "services": {
+          "expose": { "domain": "lab.my-domain.net" }
+        }
+      }
+    ]
+EOF
 
+helm install onyxia inseefrlab/onyxia -f onyxia-values.yaml
+```
 
+&#x20;You can now access `https://onyxia.my-domain.net` and start services. Congratulations! 🥳
 
+At the moment the Onyxia you just deployed is running in degraded mode, there is no user authentication and no s3 integration for example. &#x20;
 
-
-
-
+Let's see how to enable theres features.
