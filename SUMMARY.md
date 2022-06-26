@@ -2,9 +2,9 @@
 
 * [🏁 Installing](README.md)
 * [👨💻 Contributing](contributing/README.md)
-  * [🐲 onyxia](contributing/onyxia/README.md)
-    * [🚀 Quick start](contributing/onyxia/quick\_start.md)
-    * [🕸 Dependencies](contributing/onyxia/dependencies.md)
-    * [📐 Architecture](contributing/onyxia/architecture.md)
+  * [🐲 onyxia-web](contributing/onyxia-web/README.md)
+    * [🚀 Quick start](contributing/onyxia-web/quick\_start.md)
+    * [🕸 Dependencies](contributing/onyxia-web/dependencies.md)
+    * [📐 Architecture](contributing/onyxia-web/architecture.md)
   * [🐉 onyxia-api](contributing/onyxia-api.md)
 * [💭 Misc](misc.md)
