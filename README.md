@@ -152,7 +152,7 @@ _**https://onyxia.my-domain.net**_ will be the URL for your instance of Onyxia.
 The URL of the services created by Onyxia are going to look like: _**https://xxx.lab.my-domain.net**_
 
 {% hint style="info" %}
-`"lab"` and `"onyxia"` are mere suggestions.
+You can customise "**onyxia**" and "**lab**" to your liking, for example you could chose **datalab.my-domain.net** and **\*.kub.my-domain.net**.
 {% endhint %}
 
 ### SSL
@@ -248,4 +248,4 @@ helm install onyxia inseefrlab/onyxia -f onyxia-values.yaml
 
 At the moment the Onyxia you just deployed is running in degraded mode, there is no user authentication and no s3 integration for example. &#x20;
 
-Let's see how to enable theres features.
+[Let's see how to enable theres features.](https://github.com/InseeFrLab/onyxia/tree/main/step-by-step#set-up-authentication-openidconnect)
