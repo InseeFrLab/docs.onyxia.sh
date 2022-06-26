@@ -96,12 +96,18 @@ helm install ingress-nginx ingress-nginx \
 ```
 {% endtab %}
 
-{% tab title="Provisioning a cluster on AWS" %}
-[Hashicorp](https://www.hashicorp.com/) maintains a great tutorial for getting started with [terraform](https://www.terraform.io/) on [AWS](https://aws.amazon.com/free/?trk=7214f2bf-dcfb-4d46-8a27-608345ad6b51\&sc\_channel=ps\&sc\_campaign=acquisition\&sc\_medium=ACQ-P|PS-GO|Brand|Desktop|SU|Core-Main|Core|FR|EN|Text\&s\_kwcid=AL!4422!3!454820903991!e!!g!!amazon%20web%20services\&ef\_id=CjwKCAjw77WVBhBuEiwAJ-YoJLQXmQRATR7nW2rfWnU3Rk704sb4-ggXveYG47rwLNq\_wBgX8SkNNRoCLy0QAvD\_BwE:G:s\&s\_kwcid=AL!4422!3!454820903991!e!!g!!amazon%20web%20services\&all-free-tier.sort-by=item.additionalFields.SortRank\&all-free-tier.sort-order=asc\&awsf.Free%20Tier%20Types=\*all\&awsf.Free%20Tier%20Categories=\*all) and deploying a basic Kubernetes cluster:
+{% tab title="Provisioning a cluster on AWS or GCP" %}
+[Hashicorp](https://www.hashicorp.com/) maintains great tutorials for [terraforming](https://www.terraform.io/) Kubernetes clusters on [AWS](https://aws.amazon.com/what-is-aws/), [GCP](https://cloud.google.com/) or [Azure](https://acloudguru.com/videos/acg-fundamentals/what-is-microsoft-azure).&#x20;
+
+Pick one of the three and follow the guide.&#x20;
+
+You can stop after the [configure kubectl section](https://learn.hashicorp.com/tutorials/terraform/eks#configure-kubectl). &#x20;
 
 {% embed url="https://learn.hashicorp.com/tutorials/terraform/eks" %}
 
-You can stop after the [configure kubectl section](https://learn.hashicorp.com/tutorials/terraform/eks#configure-kubectl). &#x20;
+{% embed url="https://learn.hashicorp.com/tutorials/terraform/gke?in=terraform/kubernetes" %}
+
+{% embed url="https://learn.hashicorp.com/tutorials/terraform/aks?in=terraform/kubernetes" %}
 
 ### Ingress controller &#x20;
 
@@ -117,13 +123,15 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 
 Let's assume you own the domain name **my-domain.net**, for the rest of the guide you should replace **my-domain.net** by a domain you actually own. &#x20;
 
-Now you need to get the external IP of your cluster: run the command&#x20;
+Now you need to get the external IP of your cluster, run the command&#x20;
 
 ```bash
 kubectl get services -n ingress-nginx
 ```
 
-and write down the External IP. It should be something like:&#x20;
+and write down the `External IP` assigned to the `LoadBalancer`.&#x20;
+
+It should be something like:&#x20;
 
 **xxx.elb.eu-west-1.amazonaws.com.** &#x20;
 
