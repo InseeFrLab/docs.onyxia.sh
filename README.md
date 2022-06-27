@@ -93,11 +93,10 @@ To avoid the burden of having to remember to re-run the `certbot` command period
 Now we want to create a Kubernetes secret containing our newly obtained certificate: &#x20;
 
 ```bash
-DOMAIN=my-domain.net
 sudo kubectl create secret tls onyxia-tls \
     -n ingress-nginx \
-    --key /etc/letsencrypt/live/lab.$DOMAIN/privkey.pem \
-    --cert /etc/letsencrypt/live/lab.$DOMAIN/fullchain.pem
+    --key /etc/letsencrypt/live/lab.my-domain.net/privkey.pem \
+    --cert /etc/letsencrypt/live/lab.my-domain.net/fullchain.pem
 ```
 
 Lastly, we want to tell our ingress controller to use this TLS certificate, to do so run: &#x20;
@@ -109,7 +108,7 @@ kubectl edit deployment ingress-nginx-controller -n ingress-nginx
 This command will open your configured text editor, go to line `56` and add: &#x20;
 
 ```yaml
-        - --default-ssl-certificate=ingress-nginx/onyxia-tls
+        - --default-ssl-certificate=ingress-nginx/wildcard
 ```
 
 ![](<.gitbook/assets/image (1).png>)
@@ -180,11 +179,10 @@ Now we want to create a Kubernetes secret containing our newly obtained certific
 
 ```bash
 kubectl create namespace ingress-nginx
-DOMAIN=my-domain.net
 sudo kubectl create secret tls onyxia-tls \
     -n ingress-nginx \
-    --key /etc/letsencrypt/live/lab.$DOMAIN/privkey.pem \
-    --cert /etc/letsencrypt/live/lab.$DOMAIN/fullchain.pem
+    --key /etc/letsencrypt/live/lab.my-domain.net/privkey.pem \
+    --cert /etc/letsencrypt/live/lab.my-domain.net/fullchain.pem
 ```
 
 ### Ingress controller
@@ -224,20 +222,20 @@ This will be addressed in the near future. &#x20;
 
 ```bash
 helm repo add inseefrlab https://inseefrlab.github.io/helm-charts
-DOMAIN=my-domain.net
+
 cat << EOF > ./onyxia-values.yaml
 ingress:
   enabled: true
   annotations:
     kubernetes.io/ingress.class: nginx
   hosts:
-    - host: onyxia.$DOMAIN
+    - host: onyxia.my-domain.net
 api:
   regions: 
     [
       {
         "services": {
-          "expose": { "domain": "lab.$DOMAIN" }
+          "expose": { "domain": "lab.my-domain.net" }
         }
       }
     ]
