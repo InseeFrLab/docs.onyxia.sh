@@ -4,7 +4,7 @@ This is a step by step guide that will assist you in installing Onyxia. &#x20;
 
 ### Provision a Kubernetes cluster
 
-First you'll need a Kubernetes (k8s) cluster.  If you have one already you can skip this section.
+First you'll need a Kubernetes cluster.  If you have one already you can skip this section.
 
 {% tabs %}
 {% tab title="Provisioning a cluster on AWS, GCP or Azure" %}
