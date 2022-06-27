@@ -2,6 +2,7 @@
 
 * [🏁 Installing](README.md)
 * [👨💻 Contributing](contributing/README.md)
+  * [📖 This website](contributing/this-website.md)
   * [🐲 onyxia-web](contributing/onyxia/README.md)
     * [🚀 Quick start](contributing/onyxia/quick\_start.md)
     * [🕸 Dependencies](contributing/onyxia/dependencies.md)
