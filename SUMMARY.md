@@ -8,4 +8,3 @@
     * [🕸 Dependencies](contributing/onyxia/dependencies.md)
     * [📐 Architecture](contributing/onyxia/architecture.md)
   * [🐉 onyxia-api](contributing/onyxia-api.md)
-* [💭 Misc](misc.md)
