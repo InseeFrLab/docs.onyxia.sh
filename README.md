@@ -434,11 +434,11 @@ EOF
           "min": 3,
           "max": 255
         },
-        "username-prohibited-characters": {},
 +       "pattern": {
 +         "error-message": "${alphanumericalCharsOnly}",
 +         "pattern": "^[a-zA-Z0-9]*$"
-+       }
++       },
+        "username-prohibited-characters": {}
       }
     },
     {
@@ -446,12 +446,12 @@ EOF
       "displayName": "${email}",
       "validations": {
         "email": {},
++       "pattern": {
++         "pattern": "^[^@]+@([^.]+\\.)*((gmail\\.com)|(hotmail\\.com))$"
++       },
         "length": {
           "max": 255
         }
-+       "pattern": {
-+         "pattern": "^[^@]+@([^.]+\\.)*((gmail\\.com)|(hotmail\\.com))$"
-+       }
       }
     },
     {
