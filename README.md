@@ -77,7 +77,7 @@ In this section we will obtain a TLS certificate issued by [LetsEncrypt](https:/
 ```bash
 brew install certbot #On Mac, lookup how to install certbot for your OS
 
-#Because we need a wildcard we have to complete the DNS callange.  
+#Because we need a wildcard certificate we have to complete the DNS callange.  
 sudo certbot certonly --manual --preferred-challenges dns
 
 # When asked for the domains you wish to optains a certificate for enter:
@@ -163,7 +163,7 @@ In this section we will obtain a TLS certificate issued by [LetsEncrypt](https:/
 ```bash
 brew install certbot #On Mac, lookup how to install certbot for your OS
 
-#Because we need a wildcard we have to complete the DNS callange.  
+#Because we need a wildcard certificate we have to complete the DNS callange.  
 sudo certbot certonly --manual --preferred-challenges dns
 
 # When asked for the domains you wish to optains a certificate for enter:
@@ -189,7 +189,7 @@ sudo kubectl create secret tls onyxia-tls \
 
 ### Ingress controller
 
-We'll install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/) in our cluster but any other ingress controller will do.
+We'll install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/) in our cluster ~~but any other ingress controller will do~~.
 
 ```bash
 cat << EOF > ./ingress-nginx-values.yaml
@@ -201,12 +201,10 @@ EOF
 helm install ingress-nginx ingress-nginx \
     --repo https://kubernetes.github.io/ingress-nginx \
     --namespace ingress-nginx \
-    -f ./ingress-nginx-values.yaml
+    -f ./ingress-nginx-values.yamlIf you want to confirm that you are ready to move over to the next step you can .
 ```
 {% endtab %}
 {% endtabs %}
-
-If you want to confirm that you are ready to move over to the next step you can [deploy a test web app on your cluster](misc.md#test-your-kubernetes-cluster).
 
 ### Installing Onyxia using helm
 
@@ -214,13 +212,42 @@ In this section we assume that:&#x20;
 
 * You have a Kubernetes cluster and `kubectl` configured
 * **onyxia.my-domain.net** and **\*.lab.my-domain.net** are pointing to your cluster's external address. **my-domain.net** being a domain that you own. You can customise "**onyxia**" and "**lab**" to your liking, for example you could chose **datalab.my-domain.net** and **\*.kub.my-domain.net**.
-* You have an ingress controller configured with a default TLS certificate for **\*.lab.my-domain.net** and **onyxia.my-domain.net**.
+* You have an ingress controller configured with a default TLS certificate for **\*.lab.my-domain.net** and **onyxia.my-domain.net**. &#x20;
 
 {% hint style="warning" %}
 As of today [the default service catalog](https://github.com/InseeFrLab/helm-charts-datascience) will only work with [ingress-nginx](https://kubernetes.github.io/ingress-nginx/). &#x20;
 
 This will be addressed in the near future. &#x20;
 {% endhint %}
+
+<details>
+
+<summary>(Optional) Make sure that your cluster is ready for Onyxia</summary>
+
+To make sure that your Kubernetes cluster is correctly configured let's deploy a test web app on it before deploying Onyxia.  &#x20;
+
+<img src=".gitbook/assets/image (8).png" alt="The hello world SPA deployed" data-size="original">
+
+```bash
+DOMAIN=my-domain.net
+cat << EOF > ./values.yaml
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  hosts:
+    - host: my-test-spa.lab.$DOMAIN
+image:
+  version: "0.4.3"
+EOF
+
+helm repo add etalab https://etalab.github.io/helm-charts
+helm install my-test-spa etalab/keycloakify-demo-app -f values.yaml
+echo "Navigate to https://my-test-spa.lab.$DOMAIN, see the Hello World"
+helm uninstall my-test-spa
+```
+
+</details>
 
 ```bash
 helm repo add inseefrlab https://inseefrlab.github.io/helm-charts
