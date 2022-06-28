@@ -335,3 +335,84 @@ helm install onyxia inseefrlab/onyxia -f onyxia-values.yaml
 At the moment the Onyxia you just deployed is running in degraded mode, there is no user authentication and no s3 integration for example. &#x20;
 
 [Let's see how to enable theres features.](https://github.com/InseeFrLab/onyxia/tree/main/step-by-step#set-up-authentication-openidconnect)
+
+### Enabling user authentication
+
+At the moment there is no authentication process, everyone can access our platform and and start services on the default namespace. &#x20;
+
+Let's setup Keycloak to enable users to create account and login to our Onyxia. &#x20;
+
+We will also see how to restrict registration to our service with a email domain accept list. &#x20;
+
+For deploying our Keycloak we use [codecentric's helm chart](https://github.com/codecentric/helm-charts/tree/master/charts/keycloak). &#x20;
+
+
+
+```bash
+cat << EOF > ./keycloak-values.yaml
+image:
+  tag: "18.0.0-legacy"
+replicas: 1
+
+extraInitContainers: |
+  - name: realm-ext-provider
+    image: curlimages/curl
+    imagePullPolicy: IfNotPresent
+    command:
+      - sh
+    args:
+      - -c
+      - |
+        curl -L -f -S -o /extensions/onyxia-web.jar https://github.com/InseeFrLab/onyxia-web/releases/latest/download/keycloak-theme.jar
+    volumeMounts:
+      - name: extensions
+        mountPath: /extensions
+extraVolumeMounts: |
+  - name: extensions
+    mountPath: /opt/jboss/keycloak/standalone/deployments
+extraVolumes: |
+  - name: extensions
+    emptyDir: {}
+extraEnv: |
+  - name: KEYCLOAK_USER
+    value: $KEYCLOAK_USER
+  - name: KEYCLOAK_PASSWORD
+    value: $KEYCLOAK_PASSWORD
+  - name: JGROUPS_DISCOVERY_PROTOCOL
+    value: kubernetes.KUBE_PING
+  - name: KUBERNETES_NAMESPACE
+    valueFrom:
+     fieldRef:
+       apiVersion: v1
+       fieldPath: metadata.namespace
+  - name: KEYCLOAK_STATISTICS
+    value: "true"
+  - name: CACHE_OWNERS_COUNT
+    value: "2"
+  - name: CACHE_OWNERS_AUTH_SESSIONS_COUNT
+    value: "2"
+  - name: PROXY_ADDRESS_FORWARDING
+    value: "true"
+  - name: JAVA_OPTS
+    value: >-
+      -Dkeycloak.profile=preview -XX:+UseContainerSupport -XX:MaxRAMPercentage=50.0 -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=\$JBOSS_MODULES_SYSTEM_PKGS -Djava.awt.headless=true 
+ingress:
+  enabled: true
+  servicePort: http
+  annotations:
+    ## Resolve HTTP 502 error using ingress-nginx:
+    ## See https://www.ibm.com/support/pages/502-error-ingress-keycloak-response
+    nginx.ingress.kubernetes.io/proxy-buffer-size: 128k
+  rules:
+    - host: "sill-auth.etalab.gouv.fr"
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - hosts:
+        - sill-auth.etalab.gouv.fr
+      secretName: sill-tls
+postgresql:
+  postgresqlPassword: $POSTGRESQL_PASSWORD
+EOF
+```
