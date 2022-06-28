@@ -230,21 +230,22 @@ To make sure that your Kubernetes cluster is correctly configured let's deploy a
 
 ```bash
 DOMAIN=my-domain.net
-cat << EOF > ./values.yaml
+
+cat << EOF > ./test-spa-values.yaml
 ingress:
   enabled: true
   annotations:
     kubernetes.io/ingress.class: nginx
   hosts:
-    - host: my-test-spa.lab.$DOMAIN
+    - host: test-spa.lab.$DOMAIN
 image:
   version: "0.4.3"
 EOF
 
 helm repo add etalab https://etalab.github.io/helm-charts
-helm install my-test-spa etalab/keycloakify-demo-app -f values.yaml
-echo "Navigate to https://my-test-spa.lab.$DOMAIN, see the Hello World"
-helm uninstall my-test-spa
+helm install test-spa etalab/keycloakify-demo-app -f test-spa-values.yaml
+echo "Navigate to https://test-spa.lab.$DOMAIN, see the Hello World"
+helm uninstall test-spa
 ```
 
 </details>
@@ -253,6 +254,24 @@ helm uninstall my-test-spa
 helm repo add inseefrlab https://inseefrlab.github.io/helm-charts
 
 DOMAIN=my-domain.net
+
+# cat << EOF > ./onyxia-values.yaml
+# ingress:
+#   enabled: true
+#   annotations:
+#     kubernetes.io/ingress.class: nginx
+#   hosts:
+#     - host: onyxia.$DOMAIN
+# api:
+#   regions: 
+#     [
+#       {
+#         "services": {
+#           "expose": { "domain": "lab.$DOMAIN" }
+#         }
+#       }
+#     ]
+# EOF
 
 cat << EOF > ./onyxia-values.yaml
 ingress:
@@ -265,9 +284,33 @@ api:
   regions: 
     [
       {
+        "id": "demo",
+        "name": "Demo",
+        "description": "This is a demo region, feel free to try Onyxia !",
         "services": {
-          "expose": { "domain": "lab.$DOMAIN" }
-        }
+          "type": "KUBERNETES",
+          "singleNamespace": true,
+          "namespacePrefix": "user-",
+          "usernamePrefix": "oidc-",
+          "groupNamespacePrefix": "projet-",
+          "groupPrefix": "oidc-",
+          "authenticationMode": "admin",
+          "expose": { "domain": "lab.$DOMAIN" },
+          "monitoring": { "URLPattern": "todo" },
+          "cloudshell": {
+            "catalogId": "inseefrlab-helm-charts-datascience",
+            "packageName": "cloudshell"
+          },
+            "initScript": "https://inseefrlab.github.io/onyxia/onyxia-init.sh"
+          },
+          "data": { 
+            "S3": { 
+              "URL": "todo", 
+              "monitoring": { "URLPattern": "todo" } 
+            } 
+          },
+          "auth": { "type": "openidconnect" },
+          "location": { "lat": 48.8164, "long": 2.3174, "name": "Montrouge (France)" }
       }
     ]
 EOF
