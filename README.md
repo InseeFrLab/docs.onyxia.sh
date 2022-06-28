@@ -301,8 +301,8 @@ api:
             "catalogId": "inseefrlab-helm-charts-datascience",
             "packageName": "cloudshell"
           },
-            "initScript": "https://inseefrlab.github.io/onyxia/onyxia-init.sh"
-          },
+          "initScript": "https://inseefrlab.github.io/onyxia/onyxia-init.sh"
+        },
           "data": { 
             "S3": { 
               "URL": "todo", 
