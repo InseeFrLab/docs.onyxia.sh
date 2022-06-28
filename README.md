@@ -416,3 +416,95 @@ postgresql:
   postgresqlPassword: $POSTGRESQL_PASSWORD
 EOF
 ```
+
+
+
+"Root URL": "https://onyxia.my-domain.net" and&#x20;
+
+"Valid redirect URIs": "https://onyxia.my-domain.net/\*"
+
+```diff
+{
+  "attributes": [
+    {
+      "name": "username",
+      "displayName": "${username}",
+      "validations": {
+        "length": {
+          "min": 3,
+          "max": 255
+        },
+        "username-prohibited-characters": {},
++       "pattern": {
++         "error-message": "${alphanumericalCharsOnly}",
++         "pattern": "^[a-zA-Z0-9]*$"
++       }
+      }
+    },
+    {
+      "name": "email",
+      "displayName": "${email}",
+      "validations": {
+        "email": {},
+        "length": {
+          "max": 255
+        }
++       "pattern": {
++         "pattern": "^[^@]+@([^.]+\\.)*((gmail\\.com)|(hotmail\\.com))$"
++       }
+      }
+    },
+    {
+      "name": "firstName",
+      "displayName": "${firstName}",
+      "required": {
+        "roles": [
+          "user"
+        ]
+      },
+      "permissions": {
+        "view": [
+          "admin",
+          "user"
+        ],
+        "edit": [
+          "admin",
+          "user"
+        ]
+      },
+      "validations": {
+        "length": {
+          "max": 255
+        },
+        "person-name-prohibited-characters": {}
+      }
+    },
+    {
+      "name": "lastName",
+      "displayName": "${lastName}",
+      "required": {
+        "roles": [
+          "user"
+        ]
+      },
+      "permissions": {
+        "view": [
+          "admin",
+          "user"
+        ],
+        "edit": [
+          "admin",
+          "user"
+        ]
+      },
+      "validations": {
+        "length": {
+          "max": 255
+        },
+        "person-name-prohibited-characters": {}
+      }
+    }
+  ]
+}
+```
+
