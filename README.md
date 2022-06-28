@@ -283,36 +283,48 @@ ingress:
 api:
   regions: 
     [
-      {
-        "id": "demo",
-        "name": "Demo",
-        "description": "This is a demo region, feel free to try Onyxia !",
-        "services": {
-          "type": "KUBERNETES",
-          "singleNamespace": true,
-          "namespacePrefix": "user-",
-          "usernamePrefix": "oidc-",
-          "groupNamespacePrefix": "projet-",
-          "groupPrefix": "oidc-",
-          "authenticationMode": "admin",
-          "expose": { "domain": "lab.$DOMAIN" },
-          "monitoring": { "URLPattern": "todo" },
-          "cloudshell": {
-            "catalogId": "inseefrlab-helm-charts-datascience",
-            "packageName": "cloudshell"
+       {
+          "id":"demo",
+          "name":"Demo",
+          "description":"This is a demo region, feel free to try Onyxia !",
+          "services":{
+             "type":"KUBERNETES",
+             "singleNamespace":true,
+             "namespacePrefix":"user-",
+             "usernamePrefix":"oidc-",
+             "groupNamespacePrefix":"projet-",
+             "groupPrefix":"oidc-",
+             "authenticationMode":"admin",
+             "expose":{
+                "domain":"lab.$DOMAIN"
+             },
+             "monitoring":{
+                "URLPattern":"todo"
+             },
+             "cloudshell":{
+                "catalogId":"inseefrlab-helm-charts-datascience",
+                "packageName":"cloudshell"
+             },
+             "initScript":"https://inseefrlab.github.io/onyxia/onyxia-init.sh"
           },
-          "initScript": "https://inseefrlab.github.io/onyxia/onyxia-init.sh"
-        },
-          "data": { 
-            "S3": { 
-              "URL": "todo", 
-              "monitoring": { "URLPattern": "todo" } 
-            } 
+          "data":{
+             "S3":{
+                "URL":"todo",
+                "monitoring":{
+                   "URLPattern":"todo"
+                }
+             }
           },
-          "auth": { "type": "openidconnect" },
-          "location": { "lat": 48.8164, "long": 2.3174, "name": "Montrouge (France)" }
-      }
-    ]
+          "auth":{
+             "type":"openidconnect"
+          },
+          "location":{
+             "lat":48.8164,
+             "long":2.3174,
+             "name":"Montrouge (France)"
+          }
+       }
+    ]    ]
 EOF
 
 helm install onyxia inseefrlab/onyxia -f onyxia-values.yaml
