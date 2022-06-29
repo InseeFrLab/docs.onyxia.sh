@@ -255,24 +255,6 @@ helm repo add inseefrlab https://inseefrlab.github.io/helm-charts
 
 DOMAIN=my-domain.net
 
-# cat << EOF > ./onyxia-values.yaml
-# ingress:
-#   enabled: true
-#   annotations:
-#     kubernetes.io/ingress.class: nginx
-#   hosts:
-#     - host: onyxia.$DOMAIN
-# api:
-#   regions: 
-#     [
-#       {
-#         "services": {
-#           "expose": { "domain": "lab.$DOMAIN" }
-#         }
-#       }
-#     ]
-# EOF
-
 cat << EOF > ./onyxia-values.yaml
 ingress:
   enabled: true
@@ -280,7 +262,16 @@ ingress:
     kubernetes.io/ingress.class: nginx
   hosts:
     - host: onyxia.$DOMAIN
+ui:
+  image:
+    # Update on your own therm but update!
+    # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
+    version: "0.56.3"
 api:
+  image:
+    # Same here
+    # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
+    version: "v0.11"
   regions: 
     [
        {
@@ -324,7 +315,7 @@ api:
              "name":"Montrouge (France)"
           }
        }
-    ]    ]
+    ]
 EOF
 
 helm install onyxia inseefrlab/onyxia -f onyxia-values.yaml
@@ -345,8 +336,6 @@ Let's setup Keycloak to enable users to create account and login to our Onyxia. 
 We will also see how to restrict registration to our service with a email domain accept list. &#x20;
 
 For deploying our Keycloak we use [codecentric's helm chart](https://github.com/codecentric/helm-charts/tree/master/charts/keycloak). &#x20;
-
-
 
 ```bash
 cat << EOF > ./keycloak-values.yaml
@@ -506,5 +495,11 @@ EOF
     }
   ]
 }
+```
+
+Update the `onyxia-values.yaml` file  that you created previously, don't forget to replace all the occurence of **my-domain.net** by your actual domain.
+
+```diff
+helm upgrade onyxia inseefrlab/onyxia -f onyxia-values.yaml
 ```
 
