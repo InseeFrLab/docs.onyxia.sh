@@ -399,7 +399,6 @@ ingress:
   enabled: true
   servicePort: http
   annotations:
-    kubernetes.io/ingress.class: nginx
     ## Resolve HTTP 502 error using ingress-nginx:
     ## See https://www.ibm.com/support/pages/502-error-ingress-keycloak-response
     nginx.ingress.kubernetes.io/proxy-buffer-size: 128k
