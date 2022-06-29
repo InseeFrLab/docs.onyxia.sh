@@ -338,9 +338,11 @@ For deploying our Keycloak we use [codecentric's helm chart](https://github.com/
 
 ```bash
 DOMAIN=my-domain.net
-KEYCLOAK_USER=admin #You can leav it as is
-KEYCLOAK_PASSWORD=xxxxxxxx #Replace by a strong password here
-POSTGRESQL_PASSWORD=yyyyyyyy #Same
+POSTGRESQL_PASSWORD=xxxxx #Replace by a strong password, you will never need it.
+# Credentials for logging to https://keycloak.lab.$DOMAIN/auth
+KEYCLOAK_USER=admin
+KEYCLOAK_PASSWORD=yyyyyy 
+
 cat << EOF > ./keycloak-values.yaml
 image:
   tag: "18.0.0-legacy"
