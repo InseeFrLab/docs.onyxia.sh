@@ -500,6 +500,81 @@ EOF
 Update the `onyxia-values.yaml` file  that you created previously, don't forget to replace all the occurence of **my-domain.net** by your actual domain.
 
 ```diff
++serviceAccount:
++  clusterAdmin: true
+ ingress:
+   enabled: true
+   annotations:
+     kubernetes.io/ingress.class: nginx
+   hosts:
+     - host: onyxia.my-domain.net
+ ui:
+   image:
+     # Update on your own therm but update!
+     # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
+     version: "0.56.3"
++  env:
++    KEYCLOAK_REALM: datalab
++    KEYCLOAK_CLIENT_ID: onyxia
++    KEYCLOAK_URL: https://keycloak.lab.my-domain.net/auth
+ api:
+   image:
+     # Same here
+     # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
+     version: "v0.11"
+   env:
++    authentication.mode: openidconnect
++    keycloak.realm: datalab
++    springdoc.swagger-ui.oauth.clientId: onyxia
++    keycloak.auth-server-url: https://keycloak.lab.my-domain.net/auth
+   regions:
+     [
+        {
+           "id":"demo",
+           "name":"Demo",
+           "description":"This is a demo region, feel free to try Onyxia !",
+           "services":{
+              "type":"KUBERNETES",
+-             "singleNamespace": true,
++             "singleNamespace": false,
+              "namespacePrefix":"user-",
+              "usernamePrefix":"oidc-",
+              "groupNamespacePrefix":"projet-",
+              "groupPrefix":"oidc-",
+              "authenticationMode":"admin",
+              "expose":{
+                 "domain":"lab.my-domain.net"
+              },
+              "monitoring":{
+                 "URLPattern":"todo"
+              },
+              "cloudshell":{
+                 "catalogId":"inseefrlab-helm-charts-datascience",
+                 "packageName":"cloudshell"
+              },
+              "initScript":"https://inseefrlab.github.io/onyxia/onyxia-init.sh"
+           },
+           "data":{
+              "S3":{
+                 "URL":"todo",
+                 "monitoring":{
+                    "URLPattern":"todo"
+                 }
+              }
+           },
+           "auth":{
+              "type":"openidconnect"
+           },
+           "location":{
+              "lat":48.8164,
+              "long":2.3174,
+              "name":"Montrouge (France)"
+           }
+        }
+     ]
+```
+
+```bash
 helm upgrade onyxia inseefrlab/onyxia -f onyxia-values.yaml
 ```
 
