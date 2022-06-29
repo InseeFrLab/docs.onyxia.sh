@@ -219,6 +219,14 @@ As of today [the default service catalog](https://github.com/InseeFrLab/helm-cha
 This will be addressed in the near future. &#x20;
 {% endhint %}
 
+{% hint style="success" %}
+Through out this guide we make as if everything was instantaneous. In reality if you are testing on a small cluster you will need to wait several minutes after hitting helm install for the services to be ready. &#x20;
+
+Use kubectl get pods to see if your pods are up and ready.&#x20;
+
+![](<.gitbook/assets/image (2).png>)
+{% endhint %}
+
 <details>
 
 <summary>(Optional) Make sure that your cluster is ready for Onyxia</summary>
@@ -399,6 +407,7 @@ ingress:
   enabled: true
   servicePort: http
   annotations:
+    kubernetes.io/ingress.class: nginx
     ## Resolve HTTP 502 error using ingress-nginx:
     ## See https://www.ibm.com/support/pages/502-error-ingress-keycloak-response
     nginx.ingress.kubernetes.io/proxy-buffer-size: 128k
