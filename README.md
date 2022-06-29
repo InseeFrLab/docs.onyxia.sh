@@ -351,7 +351,7 @@ helm repo add codecentric https://codecentric.github.io/helm-charts
 
 DOMAIN=my-domain.net
 POSTGRESQL_PASSWORD=xxxxx #Replace by a strong password, you will never need it.
-# Credentials for logging to https://keycloak.lab.$DOMAIN/auth
+# Credentials for logging to https://auth.lab.$DOMAIN/auth
 KEYCLOAK_USER=admin
 KEYCLOAK_PASSWORD=yyyyyy 
 
