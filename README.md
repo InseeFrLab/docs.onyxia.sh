@@ -273,7 +273,7 @@ ui:
   image:
     # Update on your own therm but update!
     # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
-    version: "0.56.3"
+    version: "0.56.4"
 api:
   image:
     # Same here
@@ -372,7 +372,7 @@ extraInitContainers: |
         # The version of the Keycloak theme and the version of onyxia-web don't need 
         # to match but you should update the theme from time to time.  
         # https://github.com/InseeFrLab/onyxia-web/releases
-        curl -L -f -S -o /extensions/onyxia-web.jar https://github.com/InseeFrLab/onyxia-web/releases/download/v0.56.3/standalone-keycloak-theme.jar
+        curl -L -f -S -o /extensions/onyxia-web.jar https://github.com/InseeFrLab/onyxia-web/releases/download/v0.56.4/standalone-keycloak-theme.jar
     volumeMounts:
       - name: extensions
         mountPath: /extensions
