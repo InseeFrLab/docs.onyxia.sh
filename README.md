@@ -352,7 +352,7 @@ extraInitContainers: |
     args:
       - -c
       - |
-        curl -L -f -S -o /extensions/onyxia-web.jar https://github.com/InseeFrLab/onyxia-web/releases/latest/download/keycloak-theme.jar
+        curl -L -f -S -o /extensions/onyxia-web.jar https://github.com/InseeFrLab/onyxia-web/releases/download/v0.56.3/standalone-keycloak-theme.jar
     volumeMounts:
       - name: extensions
         mountPath: /extensions
