@@ -10,4 +10,4 @@ This enables you to edit the Markdown files that are the source of this website 
 
 However this isn't the best editing experience. To get access to the [GitBook](https://www.gitbook.com/) online editor please request an access by sending an email to [joseph.garrone@data.gouv.fr](mailto:joseph.garrone@data.gouv.fr). &#x20;
 
-![The GitBook "what you see is what you get" editor](<../.gitbook/assets/image (3).png>)
+![The GitBook "what you see is what you get" editor](<../.gitbook/assets/image (3) (1).png>)

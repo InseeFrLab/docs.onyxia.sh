@@ -220,9 +220,9 @@ This will be addressed in the near future. &#x20;
 {% endhint %}
 
 {% hint style="success" %}
-Through out this guide we make as if everything was instantaneous. In reality if you are testing on a small cluster you will need to wait several minutes after hitting helm install for the services to be ready. &#x20;
+Through out this guide we make as if everything was instantaneous. In reality if you are testing on a small cluster you will need to wait several minutes after hitting `helm install` for the services to be ready. &#x20;
 
-Use kubectl get pods to see if your pods are up and ready.&#x20;
+Use `kubectl get pods` to see if your pods are up and ready.&#x20;
 
 ![](<.gitbook/assets/image (2).png>)
 {% endhint %}
