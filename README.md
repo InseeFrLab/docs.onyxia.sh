@@ -414,13 +414,13 @@ ingress:
     ## See https://www.ibm.com/support/pages/502-error-ingress-keycloak-response
     nginx.ingress.kubernetes.io/proxy-buffer-size: 128k
   rules:
-    - host: "keycloak.lab.$DOMAIN"
+    - host: "auth.lab.$DOMAIN"
       paths:
         - path: /
           pathType: Prefix
   tls:
     - hosts:
-        - keycloak.lab.$DOMAIN
+        - auth.lab.$DOMAIN
 postgresql:
   postgresqlPassword: $POSTGRESQL_PASSWORD
 EOF
@@ -537,8 +537,7 @@ Update the `onyxia-values.yaml` file  that you created previously, don't forget 
      version: "0.56.3"
 +  env:
 +    KEYCLOAK_REALM: datalab
-+    KEYCLOAK_CLIENT_ID: onyxia
-+    KEYCLOAK_URL: https://keycloak.lab.my-domain.net/auth
++    KEYCLOAK_URL: https://auth.lab.my-domain.net/auth
  api:
    image:
      # Same here
@@ -548,8 +547,7 @@ Update the `onyxia-values.yaml` file  that you created previously, don't forget 
      security.cors.allowed_origins: "http://localhost:3000"
 +    authentication.mode: openidconnect
 +    keycloak.realm: datalab
-+    springdoc.swagger-ui.oauth.clientId: onyxia
-+    keycloak.auth-server-url: https://keycloak.lab.my-domain.net/auth
++    keycloak.auth-server-url: https://auth.lab.my-domain.net/auth
    regions:
      [
         {
