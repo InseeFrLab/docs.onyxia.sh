@@ -522,7 +522,7 @@ Update the `onyxia-values.yaml` file  that you created previously, don't forget 
      # Same here
      # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
      version: "v0.11"
-   env:
++  env:
 +    authentication.mode: openidconnect
 +    keycloak.realm: datalab
 +    springdoc.swagger-ui.oauth.clientId: onyxia
