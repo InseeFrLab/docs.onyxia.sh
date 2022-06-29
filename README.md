@@ -279,6 +279,8 @@ api:
     # Same here
     # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
     version: "v0.11"
+  env:
+    security.cors.allowed_origins: "http://localhost:3000"
   regions: 
     [
        {
@@ -542,7 +544,8 @@ Update the `onyxia-values.yaml` file  that you created previously, don't forget 
      # Same here
      # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
      version: "v0.11"
-+  env:
+   env:
+     security.cors.allowed_origins: "http://localhost:3000"
 +    authentication.mode: openidconnect
 +    keycloak.realm: datalab
 +    springdoc.swagger-ui.oauth.clientId: onyxia
