@@ -337,6 +337,8 @@ We will also see how to restrict registration to our service with a email domain
 For deploying our Keycloak we use [codecentric's helm chart](https://github.com/codecentric/helm-charts/tree/master/charts/keycloak). &#x20;
 
 ```bash
+helm repo add codecentric https://codecentric.github.io/helm-charts
+
 DOMAIN=my-domain.net
 POSTGRESQL_PASSWORD=xxxxx #Replace by a strong password, you will never need it.
 # Credentials for logging to https://keycloak.lab.$DOMAIN/auth
@@ -355,11 +357,11 @@ extraInitContainers: |
       - sh
     args:
       - -c
-# There is a custom theme published alongside every onyxia-web release
-# The version of the Keycloak theme and the version of onyxia-web don't need 
-# to match but you should update the theme from time to time.  
-# https://github.com/InseeFrLab/onyxia-web/releases
       - |
+        # There is a custom theme published alongside every onyxia-web release
+        # The version of the Keycloak theme and the version of onyxia-web don't need 
+        # to match but you should update the theme from time to time.  
+        # https://github.com/InseeFrLab/onyxia-web/releases
         curl -L -f -S -o /extensions/onyxia-web.jar https://github.com/InseeFrLab/onyxia-web/releases/download/v0.56.3/standalone-keycloak-theme.jar
     volumeMounts:
       - name: extensions
@@ -407,11 +409,12 @@ ingress:
           pathType: Prefix
   tls:
     - hosts:
-        - sill-auth.etalab.gouv.fr
-      secretName: sill-tls
+        - keycloak.lab.$DOMAIN
 postgresql:
   postgresqlPassword: $POSTGRESQL_PASSWORD
 EOF
+
+helm install keycloak codecentric/keycloak -f keycloak-values.yaml
 ```
 
 
