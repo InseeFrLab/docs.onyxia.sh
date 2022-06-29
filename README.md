@@ -24,18 +24,17 @@ You can stop after the [configure kubectl section](https://learn.hashicorp.com/t
 
 Deploy an ingress controller on your cluster:
 
-```bash
-# AWS: 
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.0/deploy/static/provider/aws/deploy.yaml
-```
-
 {% hint style="warning" %}
-[The above command](https://kubernetes.github.io/ingress-nginx/deploy/#aws) is for AWS. &#x20;
+The following command is [for AWS](https://kubernetes.github.io/ingress-nginx/deploy/#aws). &#x20;
 
 For GCP use [this command](https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke).
 
 For Azure use [this command](https://kubernetes.github.io/ingress-nginx/deploy/#azure).
 {% endhint %}
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.0/deploy/static/provider/aws/deploy.yaml
+```
 
 ### DNS
 
@@ -338,6 +337,10 @@ We will also see how to restrict registration to our service with a email domain
 For deploying our Keycloak we use [codecentric's helm chart](https://github.com/codecentric/helm-charts/tree/master/charts/keycloak). &#x20;
 
 ```bash
+DOMAIN=my-domain.net
+KEYCLOAK_USER=admin #You can leav it as is
+KEYCLOAK_PASSWORD=xxxxxxxx #Replace by a strong password here
+POSTGRESQL_PASSWORD=yyyyyyyy #Same
 cat << EOF > ./keycloak-values.yaml
 image:
   tag: "18.0.0-legacy"
@@ -393,7 +396,7 @@ ingress:
     ## See https://www.ibm.com/support/pages/502-error-ingress-keycloak-response
     nginx.ingress.kubernetes.io/proxy-buffer-size: 128k
   rules:
-    - host: "sill-auth.etalab.gouv.fr"
+    - host: "keycloak.lab.$DOMAIN"
       paths:
         - path: /
           pathType: Prefix
