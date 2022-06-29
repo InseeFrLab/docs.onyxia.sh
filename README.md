@@ -347,7 +347,6 @@ cat << EOF > ./keycloak-values.yaml
 image:
   tag: "18.0.0-legacy"
 replicas: 1
-
 extraInitContainers: |
   - name: realm-ext-provider
     image: curlimages/curl
@@ -356,6 +355,10 @@ extraInitContainers: |
       - sh
     args:
       - -c
+# There is a custom theme published alongside every onyxia-web release
+# The version of the Keycloak theme and the version of onyxia-web don't need 
+# to match but you should update the theme from time to time.  
+# https://github.com/InseeFrLab/onyxia-web/releases
       - |
         curl -L -f -S -o /extensions/onyxia-web.jar https://github.com/InseeFrLab/onyxia-web/releases/download/v0.56.3/standalone-keycloak-theme.jar
     volumeMounts:
