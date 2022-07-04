@@ -348,7 +348,27 @@ Let's setup Keycloak to enable users to create account and login to our Onyxia. 
 
 If you already have a Keycloak server it is up to you to pick from this guide what is rellevent to you. &#x20;
 
-Main takeway is that you probably want to load the Onyxia custom Keycloak theme and enable `-Dkeycloak.profile=preview` in order to be able to enforce that usernames are well formatted and define an accept list of email&#x20;
+Main takeway is that you probably want to load the Onyxia custom Keycloak theme and enable `-Dkeycloak.profile=preview` in order to be able to enforce that usernames are well formatted and define an accept list of email domains allowed to create account on your Onyxia instance. &#x20;
+
+You probably want to enable [Terms and Conditions as required actions](https://docs.keycloakify.dev/terms-and-conditions).
+
+That out of the way, note that you can configure onyxia-web to integrate with your existing Keycloak server, you just need to set some dedicated environment variable in the `values.yaml` of the onyxia helm chart. Example: &#x20;
+
+```yaml
+ ui:
+   image:
+     version: "0.56.5"
+  env:
+    # Available env are documented here: https://github.com/InseeFrLab/onyxia-web/blob/main/.env
+    KEYCLOAK_URL: https://auth.lab.my-domain.net/auth
+    KEYCLOAK_CLIENT_ID: onyxia
+    KEYCLOAK_REALM: datalab
+    JWT_EMAIL_CLAIM: email
+    JWT_FAMILY_NAME_CLAIM: family_name
+    JWT_FIRST_NAME_CLAIM: given_name
+    JWT_USERNAME_CLAIM: preferred_username
+    JWT_LOCALE_CLAIM: locale
+```
 
 </details>
 
@@ -463,10 +483,13 @@ Vous pouvez maintenant vous&#x20;
    2. _Valid redirect URIs_: **https://onyxia.my-domain.net/app/\***
    3. _Web origins_: **\***
    4. Login theme: **onyxia-web**
+3. In **Authentication** (on the left panel) -> Tab **Required Actions** enable **Therms and Conditions.**
 
+Now you want to ensure that the username chosen by your users complies with Onyxia requirement (only alphanumerical characters) and define a list of email domain allowed to register to your service. &#x20;
 
+Go to **Realm Settings** (on the left panel) -> Tab **User Profile** (this tab shows up only if User Profile is enabled in the General tab and you can enable user profile only if you have started Keycloak with `-Dkeycloak.profile=preview)` -> **JSON Editor**.
 
-
+Now you can edit the file as suggested in the following DIFF snippet. Be mindful that in this example we only allow emails @gmail.com and @hotmail.com to register you want to edit that. &#x20;
 
 ```diff
 {
@@ -553,7 +576,11 @@ Vous pouvez maintenant vous&#x20;
 }
 ```
 
-Update the `onyxia-values.yaml` file  that you created previously, don't forget to replace all the occurence of **my-domain.net** by your actual domain.
+Now our Keycloak server is fully configured we just need to update our Onyxia deployment to let it know about it. &#x20;
+
+Update the `onyxia-values.yaml` file  that you created previously, don't forget to replace all the occurence of **my-domain.net** by your actual domain. &#x20;
+
+Don't forget as well to remplace the terms of services of the [sspcloud](https://www.sspcloud.fr) by your own terms of services. CORS should be enabled on those `.md` links (`Access-Control-Allow-Origin: *`).
 
 ```diff
 +serviceAccount:
@@ -572,6 +599,8 @@ Update the `onyxia-values.yaml` file  that you created previously, don't forget 
 +  env:
 +    KEYCLOAK_REALM: datalab
 +    KEYCLOAK_URL: https://auth.lab.my-domain.net/auth
++    TERMS_OF_SERVICES: |
++      { "en": "https://www.sspcloud.fr/tos_en.md", "fr": "https://www.sspcloud.fr/tos_fr.md" }
  api:
    image:
      # Same here
@@ -629,7 +658,8 @@ Update the `onyxia-values.yaml` file  that you created previously, don't forget 
      ]
 ```
 
+Now that you have updated `onyxia-values.yaml` restart onyxia-web with the new configuration.
+
 ```bash
 helm upgrade onyxia inseefrlab/onyxia -f onyxia-values.yaml
 ```
-
