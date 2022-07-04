@@ -452,7 +452,7 @@ EOF
 helm install keycloak codecentric/keycloak -f keycloak-values.yaml
 ```
 
-Vous pouvez maintenant vous&#x20;
+You can now login to the **administration console** of **https://auth.lab.my-domain.net** and login using the credentials you have defined with `KEYCLOAK_USER` and `KEYCLOAK_PASSWORD`.
 
 1. Create a realm called "datalab" (or something else), go to **Realm settings**
    1. On the tab General
@@ -475,8 +475,8 @@ Vous pouvez maintenant vous&#x20;
       1. _Internationalization_: **Enabled**
       2. _Supported locales_: \<Select the languages you wish to support>
 2. Create a client called "onyxia"
-   1. _Root URL_: **https://onyxia.my-domain.net/app/**
-   2. _Valid redirect URIs_: **https://onyxia.my-domain.net/app/\***
+   1. _Root URL_: **https://onyxia.my-domain.net/**
+   2. _Valid redirect URIs_: **https://onyxia.my-domain.net/\***
    3. _Web origins_: **\***
    4. Login theme: **onyxia-web**
 3. In **Authentication** (on the left panel) -> Tab **Required Actions** enable **Therms and Conditions.**
