@@ -466,8 +466,8 @@ Vous pouvez maintenant vous&#x20;
       2. _Host_: **email-smtp.eu-west-1.amazonaws.com**
       3. _Port_: **465**
       4. _Authentication_: **enabled**
-      5. _Username_: **AKIA4W5YLFNKFGNRVIGY**
-      6. _Password_: **BJwamZlBVzlOxVRpYDRQq7NuKzdzjlhWunZBSVdLrGSE**
+      5. _Username_: **\*\*\*\*\*\*\*\*\*\*\*\*\*\***
+      6. _Password_: **\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\***
    4. On the tab Themes
       1. _Login theme_: **onyxia-web** (you can also select the login theme on a per client basis)
       2. _Email theme_: **onyxia-web**
