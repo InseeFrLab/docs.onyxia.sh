@@ -428,6 +428,37 @@ EOF
 helm install keycloak codecentric/keycloak -f keycloak-values.yaml
 ```
 
+1.  Create a realm called "datalab" (or something else), go to **Realm settings**
+
+    ****
+
+    1. &#x20;On the tab **login**
+       1. User registration: on
+       2. Forgot password: on
+       3. Remember me: on
+    2. On the tab **email,** we give an example with **** [AWS SES](https://aws.amazon.com/ses/), if you don't have a SMTP server at hand you can skip this by going to **Authentication** (on the left panel) -> Tab **Required Actions** -> Uncheck **Verify Email**. Be aware that with email verification disable, anyone will be able to sign up to your service.
+       1. From: **auth-noreply@lab.my-domain.net**
+       2. Host: **email-smtp.eu-west-1.amazonaws.com**
+       3. Port: **465**
+       4. Authentication: **enabled**
+       5. Username: **AKIA4W5YLFNKFGNRVIGY**
+       6. Password: **BJwamZlBVzlOxVRpYDRQq7NuKzdzjlhWunZBSVdLrGSE**
+    3. On the tab Themes
+       1. Login theme: **onyxia-web** (you can also select the login theme on a per client basis)
+       2. Email theme: **onyxia-web**
+    4. On the tab **Localization**
+       1. Internationalization: **Enabled**
+       2. Supported locales: \<Select the languages you wish to support>
+2. Create a client called "onyxia"
+   1. _Root URL_: **https://onyxia.my-domain.net/app/**
+   2. _Valid redirect URIs_: **https://onyxia.my-domain.net/app/\***
+   3. _Web origins_: **\***
+   4. Login theme: **onyxia-web**
+
+
+
+
+
 
 
 "Root URL": "https://onyxia.my-domain.net" and&#x20;
