@@ -660,6 +660,8 @@ Now that you have updated `onyxia-values.yaml` restart onyxia-web with the new c
 helm upgrade onyxia inseefrlab/onyxia -f onyxia-values.yaml
 ```
 
+Now your users should be able to create account, log-in, and start services on their own Kubernetes namespace.
+
 ### Minio, Vault
 
 TODO; [Refer to the legacy documentation.](https://github.com/InseeFrLab/onyxia/tree/main/step-by-step#set-up-authentication-openidconnect)
