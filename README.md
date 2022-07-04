@@ -338,11 +338,19 @@ At the moment the Onyxia you just deployed is running in degraded mode, there is
 
 ### Enabling user authentication
 
-At the moment there is no authentication process, everyone can access our platform and and start services on the default namespace. &#x20;
+At the moment there is no authentication process, everyone can access our platform and and start services. &#x20;
 
 Let's setup Keycloak to enable users to create account and login to our Onyxia. &#x20;
 
-We will also see how to restrict registration to our service with a email domain accept list. &#x20;
+<details>
+
+<summary>Notes if you already have a Keycloak server</summary>
+
+If you already have a Keycloak server it is up to you to pick from this guide what is rellevent to you. &#x20;
+
+Main takeway is that you probably want to load the Onyxia custom Keycloak theme and enable `-Dkeycloak.profile=preview` in order to be able to enforce that usernames are well formatted and define an accept list of email&#x20;
+
+</details>
 
 For deploying our Keycloak we use [codecentric's helm chart](https://github.com/codecentric/helm-charts/tree/master/charts/keycloak). &#x20;
 
@@ -428,27 +436,28 @@ EOF
 helm install keycloak codecentric/keycloak -f keycloak-values.yaml
 ```
 
-1.  Create a realm called "datalab" (or something else), go to **Realm settings**
+Vous pouvez maintenant vous&#x20;
 
-    ****
-
-    1. &#x20;On the tab **login**
-       1. User registration: on
-       2. Forgot password: on
-       3. Remember me: on
-    2. On the tab **email,** we give an example with **** [AWS SES](https://aws.amazon.com/ses/), if you don't have a SMTP server at hand you can skip this by going to **Authentication** (on the left panel) -> Tab **Required Actions** -> Uncheck **Verify Email**. Be aware that with email verification disable, anyone will be able to sign up to your service.
-       1. From: **auth-noreply@lab.my-domain.net**
-       2. Host: **email-smtp.eu-west-1.amazonaws.com**
-       3. Port: **465**
-       4. Authentication: **enabled**
-       5. Username: **AKIA4W5YLFNKFGNRVIGY**
-       6. Password: **BJwamZlBVzlOxVRpYDRQq7NuKzdzjlhWunZBSVdLrGSE**
-    3. On the tab Themes
-       1. Login theme: **onyxia-web** (you can also select the login theme on a per client basis)
-       2. Email theme: **onyxia-web**
-    4. On the tab **Localization**
-       1. Internationalization: **Enabled**
-       2. Supported locales: \<Select the languages you wish to support>
+1. Create a realm called "datalab" (or something else), go to **Realm settings**
+   1. On the tab General
+      1. _User Profile Enabled_: **On**
+   2. On the tab **login**
+      1. _User registration_: **On**
+      2. _Forgot password_: **On**
+      3. _Remember me_: **On**
+   3. On the tab **email,** we give an example with **** [AWS SES](https://aws.amazon.com/ses/), if you don't have a SMTP server at hand you can skip this by going to **Authentication** (on the left panel) -> Tab **Required Actions** -> Uncheck **Verify Email**. Be aware that with email verification disable, anyone will be able to sign up to your service.
+      1. _From_: **auth-noreply@lab.my-domain.net**
+      2. _Host_: **email-smtp.eu-west-1.amazonaws.com**
+      3. _Port_: **465**
+      4. _Authentication_: **enabled**
+      5. _Username_: **AKIA4W5YLFNKFGNRVIGY**
+      6. _Password_: **BJwamZlBVzlOxVRpYDRQq7NuKzdzjlhWunZBSVdLrGSE**
+   4. On the tab Themes
+      1. _Login theme_: **onyxia-web** (you can also select the login theme on a per client basis)
+      2. _Email theme_: **onyxia-web**
+   5. On the tab **Localization**
+      1. _Internationalization_: **Enabled**
+      2. _Supported locales_: \<Select the languages you wish to support>
 2. Create a client called "onyxia"
    1. _Root URL_: **https://onyxia.my-domain.net/app/**
    2. _Valid redirect URIs_: **https://onyxia.my-domain.net/app/\***
@@ -458,12 +467,6 @@ helm install keycloak codecentric/keycloak -f keycloak-values.yaml
 
 
 
-
-
-
-"Root URL": "https://onyxia.my-domain.net" and&#x20;
-
-"Valid redirect URIs": "https://onyxia.my-domain.net/\*"
 
 ```diff
 {
