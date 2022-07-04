@@ -332,10 +332,6 @@ helm install onyxia inseefrlab/onyxia -f onyxia-values.yaml
 
 &#x20;You can now access `https://onyxia.my-domain.net` and start services. Congratulations! 🥳
 
-At the moment the Onyxia you just deployed is running in degraded mode, there is no user authentication and no s3 integration for example. &#x20;
-
-[Let's see how to enable theres features.](https://github.com/InseeFrLab/onyxia/tree/main/step-by-step#set-up-authentication-openidconnect)
-
 ### Enabling user authentication
 
 At the moment there is no authentication process, everyone can access our platform and and start services. &#x20;
@@ -663,3 +659,7 @@ Now that you have updated `onyxia-values.yaml` restart onyxia-web with the new c
 ```bash
 helm upgrade onyxia inseefrlab/onyxia -f onyxia-values.yaml
 ```
+
+### Minio, Vault
+
+TODO; [Refer to the legacy documentation.](https://github.com/InseeFrLab/onyxia/tree/main/step-by-step#set-up-authentication-openidconnect)
