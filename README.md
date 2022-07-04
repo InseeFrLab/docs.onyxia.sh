@@ -461,7 +461,7 @@ You can now login to the **administration console** of **https://auth.lab.my-dom
       1. _User registration_: **On**
       2. _Forgot password_: **On**
       3. _Remember me_: **On**
-   3. On the tab **email,** we give an example with **** [AWS SES](https://aws.amazon.com/ses/), if you don't have a SMTP server at hand you can skip this by going to **Authentication** (on the left panel) -> Tab **Required Actions** -> Uncheck **Verify Email**. Be aware that with email verification disable, anyone will be able to sign up to your service.
+   3. On the tab **email,** we give an example with **** [AWS SES](https://aws.amazon.com/ses/), if you don't have a SMTP server at hand you can skip this by going to **Authentication** (on the left panel) -> Tab **Required Actions** -> Uncheck "set as default action" **Verify Email**. Be aware that with email verification disable, anyone will be able to sign up to your service.
       1. _From_: **noreply@lab.my-domain.net**
       2. _Host_: **email-smtp.us-east-2.amazonaws.com**
       3. _Port_: **465**
@@ -480,7 +480,7 @@ You can now login to the **administration console** of **https://auth.lab.my-dom
    2. _Valid redirect URIs_: **https://onyxia.my-domain.net/\***
    3. _Web origins_: **\***
    4. Login theme: **onyxia-web**
-3. In **Authentication** (on the left panel) -> Tab **Required Actions** enable **Therms and Conditions.**
+3. In **Authentication** (on the left panel) -> Tab **Required Actions** enable and set as default action **Therms and Conditions.**
 
 Now you want to ensure that the username chosen by your users complies with Onyxia requirement (only alphanumerical characters) and define a list of email domain allowed to register to your service. &#x20;
 
