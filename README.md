@@ -381,7 +381,8 @@ KEYCLOAK_PASSWORD=yyyyyy
 
 cat << EOF > ./keycloak-values.yaml
 image:
-  tag: "18.0.0-legacy"
+  # We use the legacy variant of the image until codecentric update it's helm chart
+  tag: "18.0.2-legacy"
 replicas: 1
 extraInitContainers: |
   - name: realm-ext-provider
