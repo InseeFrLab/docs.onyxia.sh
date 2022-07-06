@@ -1,6 +1,7 @@
 # Table of contents
 
 * [🏁 Installing](README.md)
+* [🕹 User guide](user-guide.md)
 * [👨💻 Contributing](contributing/README.md)
   * [📖 This website](contributing/this-website.md)
   * [🐲 onyxia-web](contributing/onyxia/README.md)
