@@ -273,12 +273,12 @@ ui:
   image:
     # Update on your own therm but update!
     # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
-    version: "0.56.6"
+    version: 0.56.6
 api:
   image:
     # Same here
     # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
-    version: "v0.11"
+    version: multi-arch
   env:
     security.cors.allowed_origins: "http://localhost:3000"
   regions: 
@@ -593,7 +593,7 @@ Don't forget as well to remplace the terms of services of the [sspcloud](https:/
    image:
      # Update on your own therm but update!
      # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
-     version: "0.56.6"
+     version: 0.56.6
 +  env:
 +    KEYCLOAK_REALM: datalab
 +    KEYCLOAK_URL: https://auth.lab.my-domain.net/auth
@@ -603,7 +603,7 @@ Don't forget as well to remplace the terms of services of the [sspcloud](https:/
    image:
      # Same here
      # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
-     version: "v0.11"
+     version: multi-arch
    env:
      security.cors.allowed_origins: "http://localhost:3000"
 +    authentication.mode: openidconnect
