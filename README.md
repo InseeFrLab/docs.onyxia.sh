@@ -273,7 +273,7 @@ ui:
   image:
     # Update on your own therm but update!
     # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
-    version: "0.56.4"
+    version: "0.56.6"
 api:
   image:
     # Same here
@@ -397,7 +397,7 @@ extraInitContainers: |
         # The version of the Keycloak theme and the version of onyxia-web don't need 
         # to match but you should update the theme from time to time.  
         # https://github.com/InseeFrLab/onyxia-web/releases
-        curl -L -f -S -o /extensions/onyxia-web.jar https://github.com/InseeFrLab/onyxia-web/releases/download/v0.56.4/standalone-keycloak-theme.jar
+        curl -L -f -S -o /extensions/onyxia-web.jar https://github.com/InseeFrLab/onyxia-web/releases/download/v0.56.6/standalone-keycloak-theme.jar
     volumeMounts:
       - name: extensions
         mountPath: /extensions
@@ -593,7 +593,7 @@ Don't forget as well to remplace the terms of services of the [sspcloud](https:/
    image:
      # Update on your own therm but update!
      # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
-     version: "0.56.3"
+     version: "0.56.6"
 +  env:
 +    KEYCLOAK_REALM: datalab
 +    KEYCLOAK_URL: https://auth.lab.my-domain.net/auth
