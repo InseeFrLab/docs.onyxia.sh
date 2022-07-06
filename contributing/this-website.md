@@ -4,7 +4,7 @@ To edit this documentation website you have two options.&#x20;
 
 On every page there is a "[Edit on GitHub](https://github.com/InseeFrLab/docs.onyxia.sh)" link on the right of the page.
 
-![](<../.gitbook/assets/image (6).png>)
+![](<../.gitbook/assets/image (6) (1).png>)
 
 This enables you to edit the Markdown files that are the source of this website and submit a PR to us even if you aren't a member of the [InseeFrLab organisation](https://github.com/InseeFrLab). &#x20;
 

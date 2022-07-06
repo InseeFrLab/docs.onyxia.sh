@@ -9,3 +9,4 @@
     * [🕸 Dependencies](contributing/onyxia/dependencies.md)
     * [📐 Architecture](contributing/onyxia/architecture.md)
   * [🐉 onyxia-api](contributing/onyxia-api.md)
+  * [🔬 Catalog of services](contributing/catalog-of-services.md)
