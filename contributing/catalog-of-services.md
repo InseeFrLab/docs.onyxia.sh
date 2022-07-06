@@ -20,21 +20,71 @@ If you take [this other instance](https://sill-demo.etalab.gouv.fr), it has only
 
 
 
+```bash
+helm repo add inseefrlab https://inseefrlab.github.io/helm-charts
 
+DOMAIN=my-domain.net
 
+cat << EOF > ./onyxia-values.yaml
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  hosts:
+    - host: onyxia.$DOMAIN
+ui:
+  image:
+    version: 0.56.6
+api:
+  image:
+    version: v0.12
+  catalogs: 
+    [
+      {
+        "id": "inseefrlab-helm-charts-datascience",
+        "name": "Inseefrlab datascience",
+        "description": "Services for datascientists.",
+        "maintainer": "innovation@insee.fr",
+        "location": "https://inseefrlab.github.io/helm-charts-datascience",
+        "status": "PROD",
+        "type": "helm"
+      },
+      {
+        "id": "inseefrlab-helm-charts-shiny-apps",
+        "name": "Inseefrlab R Shiny apps",
+        "description": "R Shiny apps as services.",
+        "maintainer": "innovation@insee.fr",
+        "location": "https://inseefrlab.github.io/helm-charts-shiny-apps",
+        "status": "PROD",
+        "type": "helm"
+      },
+    ]
+  regions: 
+    [
+      {
+        "services":{
+          "expose":{
+            "domain":"lab.$DOMAIN"
+          }
+        }
+      }
+    ]
+EOF
 
+helm install onyxia inseefrlab/onyxia -f onyxia-values.yaml
+```
 
 In order to contribute you have to be familiar with [Helm](https://helm.sh/) and to be familiar with Helm you need to be familiar with [Kubernetes objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/). &#x20;
 
-In Onyxia, we use the `values.shema.json` to know what options should be displayed to the user at [the service configuration step](https://user-images.githubusercontent.com/6702424/177571819-f2e1b4ef-ecd1-479b-a5a1-658d87d7c7c0.png) and what default value Onyxia should inject. &#x20;
+In Onyxia we use the values.shema.json be  to know what options should be displayed to the user at [the service configuration step](https://user-images.githubusercontent.com/6702424/177571819-f2e1b4ef-ecd1-479b-a5a1-658d87d7c7c0.png) and what default value Onyxia should inject. &#x20;
 
 ![https://helm.sh/docs/topics/charts/#the-chart-file-structure](<../.gitbook/assets/image (6).png>)
 
-How it works in practice is that, in a Helm chart made for Onyxia the values.sheama.json isn't actually a JSON file per say but rather a [.mustache](https://mustache.github.io/) template that renders into a JSON file. &#x20;
+How it works in practice is that, in a Helm chart made for Onyxia, the `values.sheama.json` isn't actually a JSON file but rather a [.mustache](https://mustache.github.io/) template that renders into a JSON file. &#x20;
 
 {% embed url="https://cloud.githubusercontent.com/assets/288977/8779228/a3cf700e-2f02-11e5-869a-300312fb7a00.gif" %}
 
-Let's consider a sample of the values.scema.json of the InseeFrLab/helm-charts-datascience's Jupyter helm chart: &#x20;
+Let's consider a sample of the [values.scema.json of the InseeFrLab/helm-charts-datascience's Jupyter helm chart](https://github.com/InseeFrLab/helm-charts-datascience/blob/36608fd0ebadd39607cb1fa467b5baa6bade3bb8/charts/jupyter/values.schema.json#L283-L362): &#x20;
 
 ```mustache
 "git": {
@@ -120,9 +170,9 @@ And it translate into this:
 
 {% embed url="https://user-images.githubusercontent.com/6702424/177571819-f2e1b4ef-ecd1-479b-a5a1-658d87d7c7c0.png" %}
 
-Note the \{{git.name\}} \{{git.email\}} and \{{git.token\}} in the the values.shema.json, this enables onyxia-web to pre fill the fields. &#x20;
+Note the [`{{git.name}}`](https://github.com/InseeFrLab/helm-charts-datascience/blob/36608fd0ebadd39607cb1fa467b5baa6bade3bb8/charts/jupyter/values.schema.json#L297), [`{{git.email}}`](https://github.com/InseeFrLab/helm-charts-datascience/blob/36608fd0ebadd39607cb1fa467b5baa6bade3bb8/charts/jupyter/values.schema.json#L309) and [`{{git.token}}`](https://github.com/InseeFrLab/helm-charts-datascience/blob/36608fd0ebadd39607cb1fa467b5baa6bade3bb8/charts/jupyter/values.schema.json#L333) in the the [`values.shema.json`](https://github.com/InseeFrLab/helm-charts-datascience/blob/master/charts/jupyter/values.schema.json), this enables [onyxia-web](https://github.com/InseeFrLab/onyxia-web) to pre fill the fields. &#x20;
 
-If the user took the time to fill it's profile information, onyxia-web know what is the Git username, email and personal access token of the user. &#x20;
+If the user took the time to fill it's profile information, [onyxia-web](https://github.com/InseeFrLab/onyxia-web) know what is the Git **username**, **email** and **personal access token** of the user. &#x20;
 
 ![](<../.gitbook/assets/image (7).png>)
 
@@ -183,3 +233,8 @@ export type MustacheParams = {
 };
 ```
 
+You now have all the relevent information to submit PR on the exsisting catalogs or even to build your own. &#x20;
+
+Remember that a helm chart repository is nothing more than a GitHub repo with a special [github Action setup](https://github.com/marketplace/actions/helm-deploy) to publish the charts on GitHub Pages. &#x20;
+
+If you are looking for a repo to start from have a look at [this one](https://github.com/etalab/helm-charts-sill), it has a directory where you can put the icons of your services. &#x20;
