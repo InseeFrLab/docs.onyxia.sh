@@ -18,7 +18,7 @@ If you take [this other instance](https://sill-demo.etalab.gouv.fr), it has only
 
 ![https://sill-demo.etalab.gouv.fr/catalog](<../.gitbook/assets/image (9).png>)
 
-
+The available catalogs in a given Onyxia instance are configured at install time, example with datalab.sspcloud.fr: &#x20;
 
 ```bash
 helm repo add inseefrlab https://inseefrlab.github.io/helm-charts
