@@ -233,6 +233,10 @@ export type MustacheParams = {
 };
 ```
 
+{% hint style="danger" %}
+There are gotchas when you try to inject values that aren't string. If you have questions do not hesitate to reach out joseph.garrone@data.gouv.fr.
+{% endhint %}
+
 You now have all the relevent information to submit PR on the exsisting catalogs or even to build your own. &#x20;
 
 Remember that a helm chart repository is nothing more than a GitHub repo with a special [github Action setup](https://github.com/marketplace/actions/helm-deploy) to publish the charts on GitHub Pages. &#x20;
