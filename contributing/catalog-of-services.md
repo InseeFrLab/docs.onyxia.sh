@@ -133,7 +133,7 @@ Let's consider a sample of the `values.scema.json` of the InseeFrLab/helm-charts
             "description": "personal access token",
             "default": "",
             "x-onyxia": {
-                "overwriteDefaultWith": "git.tokennn"
+                "overwriteDefaultWith": "git.token"
             },
             "hidden": {
                 "value": false,
