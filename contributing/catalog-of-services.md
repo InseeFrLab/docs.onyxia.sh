@@ -76,17 +76,13 @@ helm install onyxia inseefrlab/onyxia -f onyxia-values.yaml
 
 In order to contribute you have to be familiar with [Helm](https://helm.sh/) and to be familiar with Helm you need to be familiar with [Kubernetes objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/). &#x20;
 
-In Onyxia we use the values.shema.json be  to know what options should be displayed to the user at [the service configuration step](https://user-images.githubusercontent.com/6702424/177571819-f2e1b4ef-ecd1-479b-a5a1-658d87d7c7c0.png) and what default value Onyxia should inject. &#x20;
+In Onyxia we use the `values.shema.json` be  to know what options should be displayed to the user at [the service configuration step](https://user-images.githubusercontent.com/6702424/177571819-f2e1b4ef-ecd1-479b-a5a1-658d87d7c7c0.png) and what default value Onyxia should inject. &#x20;
 
 ![https://helm.sh/docs/topics/charts/#the-chart-file-structure](<../.gitbook/assets/image (6).png>)
 
-How it works in practice is that, in a Helm chart made for Onyxia, the `values.sheama.json` isn't actually a JSON file but rather a [.mustache](https://mustache.github.io/) template that renders into a JSON file. &#x20;
+Let's consider a sample of the `values.scema.json` of the InseeFrLab/helm-charts-datascience's Jupyter chart: &#x20;
 
-{% embed url="https://cloud.githubusercontent.com/assets/288977/8779228/a3cf700e-2f02-11e5-869a-300312fb7a00.gif" %}
-
-Let's consider a sample of the [values.scema.json of the InseeFrLab/helm-charts-datascience's Jupyter helm chart](https://github.com/InseeFrLab/helm-charts-datascience/blob/36608fd0ebadd39607cb1fa467b5baa6bade3bb8/charts/jupyter/values.schema.json#L283-L362): &#x20;
-
-```mustache
+```javascript
 "git": {
     "description": "Git user configuration",
     "type": "object",
@@ -100,8 +96,8 @@ Let's consider a sample of the [values.scema.json of the InseeFrLab/helm-charts-
             "type": "string",
             "description": "user name for git",
             "default": "",
-            "x-form": {
-                "value": "{{git.name}}"
+            "x-onyxia": {
+                "overwriteDefaultWith": "git.name"
             },
             "hidden": {
                 "value": false,
@@ -112,8 +108,8 @@ Let's consider a sample of the [values.scema.json of the InseeFrLab/helm-charts-
             "type": "string",
             "description": "user email for git",
             "default": "",
-            "x-form": {
-                "value": "{{git.email}}"
+            "x-onyxia": {
+                "overwriteDefaultWith": "git.email"
             },
             "hidden": {
                 "value": false,
@@ -124,8 +120,8 @@ Let's consider a sample of the [values.scema.json of the InseeFrLab/helm-charts-
             "type": "string",
             "description": "duration in seconds of the credentials cache duration",
             "default": "",
-            "x-form": {
-                "value": "{{git.credentials_cache_duration}}"
+            "x-onyxia": {
+                "overwriteDefaultWith": "git.credentials_cache_duration"
             },
             "hidden": {
                 "value": false,
@@ -136,8 +132,8 @@ Let's consider a sample of the [values.scema.json of the InseeFrLab/helm-charts-
             "type": "string",
             "description": "personal access token",
             "default": "",
-            "x-form": {
-                "value": "{{git.token}}"
+            "x-onyxia": {
+                "overwriteDefaultWith": "git.tokennn"
             },
             "hidden": {
                 "value": false,
@@ -170,16 +166,16 @@ And it translate into this:
 
 {% embed url="https://user-images.githubusercontent.com/6702424/177571819-f2e1b4ef-ecd1-479b-a5a1-658d87d7c7c0.png" %}
 
-Note the [`{{git.name}}`](https://github.com/InseeFrLab/helm-charts-datascience/blob/36608fd0ebadd39607cb1fa467b5baa6bade3bb8/charts/jupyter/values.schema.json#L297), [`{{git.email}}`](https://github.com/InseeFrLab/helm-charts-datascience/blob/36608fd0ebadd39607cb1fa467b5baa6bade3bb8/charts/jupyter/values.schema.json#L309) and [`{{git.token}}`](https://github.com/InseeFrLab/helm-charts-datascience/blob/36608fd0ebadd39607cb1fa467b5baa6bade3bb8/charts/jupyter/values.schema.json#L333) in the the [`values.shema.json`](https://github.com/InseeFrLab/helm-charts-datascience/blob/master/charts/jupyter/values.schema.json), this enables [onyxia-web](https://github.com/InseeFrLab/onyxia-web) to pre fill the fields. &#x20;
+Note the `"git.name"`, `"git.email"` and `"git.token"`, this enables [onyxia-web](https://github.com/InseeFrLab/onyxia-web) to pre fill the fields. &#x20;
 
 If the user took the time to fill it's profile information, [onyxia-web](https://github.com/InseeFrLab/onyxia-web) know what is the Git **username**, **email** and **personal access token** of the user. &#x20;
 
-![](<../.gitbook/assets/image (7).png>)
+![The onyxia user profile](<../.gitbook/assets/image (7).png>)
 
-[Here are the values](https://github.com/InseeFrLab/onyxia-web/blob/ea2580954d50b1acedc03867353b6c26ab27eb79/src/core/ports/OnyxiaApiClient.ts#L139-L190) that you can use in the `values.shema.json` mustache template:&#x20;
+[Here are the values](https://github.com/InseeFrLab/onyxia-web/blob/ea2580954d50b1acedc03867353b6c26ab27eb79/src/core/ports/OnyxiaApiClient.ts#L139-L190) that you can use in the `overwriteDefaultWith` field :&#x20;
 
 ```typescript
-export type MustacheParams = {
+export type OnyxiaValues = {
     user: {
         idep: string;
         name: string;
@@ -196,7 +192,7 @@ export type MustacheParams = {
         name: string;
         email: string;
         credentials_cache_duration: number;
-        token: string | null;
+        token?: string;
     };
     vault: {
         VAULT_ADDR: string;
@@ -204,7 +200,7 @@ export type MustacheParams = {
         VAULT_MOUNT: string;
         VAULT_TOP_DIR: string;
     };
-    kaggleApiToken: string | null;
+    kaggleApiToken?: string;
     s3: {
         AWS_ACCESS_KEY_ID: string;
         AWS_SECRET_ACCESS_KEY: string;
@@ -215,15 +211,13 @@ export type MustacheParams = {
         port: number;
     };
     region: {
-        defaultIpProtection: boolean | undefined;
-        defaultNetworkPolicy: boolean | undefined;
+        defaultIpProtection?: boolean;
+        defaultNetworkPolicy?: boolean;
         allowedURIPattern: string;
-        kafka:
-            | {
-                  url: string;
-                  topicName: string;
-              }
-            | undefined;
+        kafka?: {
+          url: string;
+          topicName: string;
+        };
     };
     k8s: {
         domain: string;
@@ -233,11 +227,21 @@ export type MustacheParams = {
 };
 ```
 
-{% hint style="danger" %}
-There are gotchas when you try to inject values that aren't string. If you have questions do not hesitate to reach out joseph.garrone@data.gouv.fr.
-{% endhint %}
+You can also concatenate string values using [mustache](https://mustache.github.io/) syntax.
 
-You now have all the relevent information to submit PR on the exsisting catalogs or even to build your own. &#x20;
+```javascript
+"hostname": {
+  "type": "string",
+  "form": true,
+  "title": "Hostname",
+  "x-onyxia": {
+    "hidden": true,
+    "overwriteDefaultWith": "{{project.id}}-{{k8s.randomSubdomain}}.{{k8s.domain}}"
+  }
+}
+```
+
+You now have all the relevent information to submit PR on the exsisting catalogs or even to create your own. &#x20;
 
 Remember that a helm chart repository is nothing more than a GitHub repo with a special [github Action setup](https://github.com/marketplace/actions/helm-deploy) to publish the charts on GitHub Pages. &#x20;
 
