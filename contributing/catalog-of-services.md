@@ -235,7 +235,6 @@ You can also concatenate string values using [mustache](https://mustache.github.
   "form": true,
   "title": "Hostname",
   "x-onyxia": {
-    "hidden": true,
     "overwriteDefaultWith": "{{project.id}}-{{k8s.randomSubdomain}}.{{k8s.domain}}"
   }
 }
