@@ -1,6 +1,7 @@
 # Table of contents
 
-* [🏁 Installing](README.md)
+* [⬆ Migration v0 -> v1](README.md)
+* [🏁 Installing](<README (1).md>)
 * [🕹 User guide](user-guide.md)
 * [👨💻 Contributing](contributing/README.md)
   * [🔬 Catalog of services](contributing/catalog-of-services.md)
