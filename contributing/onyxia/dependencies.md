@@ -255,7 +255,7 @@ Anything contained in the [src/lib](https://github.com/InseeFrLab/onyxia-web/tre
 
 It's toolset for redux. No need to dig too deep. Getting familiar with the core concept of redux should be more than enough to get you started. Beyond that refer to the following library.
 
-### clean-redux 🐔
+### redux-clean-architecture 🐔
 
 {% embed url="https://github.com/garronej/clean-redux" %}
 
