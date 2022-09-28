@@ -172,7 +172,7 @@ If the user took the time to fill it's profile information, [onyxia-web](https:/
 
 ![The onyxia user profile](<../.gitbook/assets/image (7).png>)
 
-[Here are the values](https://github.com/InseeFrLab/onyxia-web/blob/ea2580954d50b1acedc03867353b6c26ab27eb79/src/core/ports/OnyxiaApiClient.ts#L139-L190) that you can use in the `overwriteDefaultWith` field :&#x20;
+[Here are the values](https://github.com/InseeFrLab/onyxia-web/blob/2bef7775601f421b9fa4be0512ad4310cc780e0c/src/core/ports/OnyxiaApiClient.ts#L154-L210) that you can use in the `overwriteDefaultWith` field :&#x20;
 
 ```typescript
 export type OnyxiaValues = {
@@ -192,7 +192,7 @@ export type OnyxiaValues = {
         name: string;
         email: string;
         credentials_cache_duration: number;
-        token?: string;
+        token: string | undefined;
     };
     vault: {
         VAULT_ADDR: string;
@@ -200,7 +200,7 @@ export type OnyxiaValues = {
         VAULT_MOUNT: string;
         VAULT_TOP_DIR: string;
     };
-    kaggleApiToken?: string;
+    kaggleApiToken: string | undefined;
     s3: {
         AWS_ACCESS_KEY_ID: string;
         AWS_SECRET_ACCESS_KEY: string;
@@ -211,16 +211,23 @@ export type OnyxiaValues = {
         port: number;
     };
     region: {
-        defaultIpProtection?: boolean;
-        defaultNetworkPolicy?: boolean;
+        defaultIpProtection: boolean | undefined;
+        defaultNetworkPolicy: boolean | undefined;
         allowedURIPattern: string;
-        kafka?: {
-          url: string;
-          topicName: string;
-        };
+        kafka:
+            | {
+                  url: string;
+                  topicName: string;
+              }
+            | undefined;
+        tolerations: unknown[] | undefined;
+        from: unknown[] | undefined;
+        nodeSelector: Record<string, unknown> | undefined;
+        startupProbe: Record<string, unknown> | undefined;
     };
     k8s: {
         domain: string;
+        ingressClassName: string | undefined;
         randomSubdomain: string;
         initScriptUrl: string;
     };
