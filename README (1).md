@@ -279,7 +279,7 @@ ui:
   image:
     # Update on your own therm but update!
     # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
-    version: 0.56.6
+    version: 2.1.10
 api:
   image:
     # Same here
@@ -599,7 +599,7 @@ Don't forget as well to remplace the terms of services of the [sspcloud](https:/
    image:
      # Update on your own therm but update!
      # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
-     version: 0.56.6
+     version: 2.1.10
 +  env:
 +    KEYCLOAK_REALM: datalab
 +    KEYCLOAK_URL: https://auth.lab.my-domain.net/auth
