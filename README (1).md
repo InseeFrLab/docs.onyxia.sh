@@ -284,7 +284,7 @@ api:
   image:
     # Same here
     # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
-    version: multi-arch
+    version: latest
   env:
     security.cors.allowed_origins: "http://localhost:3000"
   regions: 
@@ -609,7 +609,7 @@ Don't forget as well to remplace the terms of services of the [sspcloud](https:/
    image:
      # Same here
      # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
-     version: multi-arch
+     version: latest
    env:
      security.cors.allowed_origins: "http://localhost:3000"
 +    authentication.mode: openidconnect
