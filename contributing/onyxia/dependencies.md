@@ -18,7 +18,7 @@ You can skip anything related to `class` we don't do OOP in the project.
 
 {% embed url="https://www.tsafe.dev" %}
 
-We also heavily rely on [tsafe](https://github.com/garronej/tsafe). It's a collection of utilities that help write cleaner TypeScript code. We like to think of it as "_The missing TypeScript builtins_".
+We also heavily rely on [tsafe](https://github.com/garronej/tsafe). It's a collection of utilities that help write cleaner TypeScript code. It is crutial to understand at least [`assert`](https://docs.tsafe.dev/assert), [id](https://docs.tsafe.dev/id), [Equals](https://docs.tsafe.dev/equals) and [symToStr](https://docs.tsafe.dev/symtostr) to be able to contribute on the codebase.
 
 ### TS-CI 🐔
 
