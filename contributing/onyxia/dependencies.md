@@ -183,7 +183,7 @@ Please try not to access the environment variable to liberally through out the c
 
 {% embed url="https://github.com/garronej/powerhooks" %}
 
-It's a collection general purpose react hooks. Let's document the few use cases you should know about.
+It's a collection general purpose react hooks. Let's document the few use cases **you absolutely need to understand**:
 
 #### Avoiding useless re-render of Components
 
