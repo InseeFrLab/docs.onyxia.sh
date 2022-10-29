@@ -46,7 +46,13 @@ After launching a service, notes are shown to the user. He can retrieve those no
 
 Users can manage their files on S3. There is no support for rename in S3 so don't be surprise. Onyxia is educational. Any action on the S3 browser in the UI is written in a console with a cli.
 
-<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption><p>s3 browser</p></figcaption></figure>
+
+User can do the following S3 actions :&#x20;
+
+* download files
+* upload files
+* delete files
 
 Of course, in our default catalags there are all the necessary tools to connect to S3.
 
@@ -57,5 +63,9 @@ Our advice is to never download file to your container but directly ingest in me
 Users can mange their secrets on Vault. There is also a cli console.
 
 <figure><img src=".gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
+
+Onyxia use only a key value v2 secret engine in Vault. Users can store some secrets there and inject them in their services if configured by the helm chart.
+
+<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
 
 Of course, in our default catalags there are all the necessary tools to connect to Vault.
