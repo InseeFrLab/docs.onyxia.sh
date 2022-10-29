@@ -6,9 +6,19 @@ description: Contributing to the helm charts
 
 
 
-Every Onyxia instance may or may not have it's own catalog. &#x20;
+Every Onyxia instance may or may not have it's own catalog. There is three default catalogs : &#x20;
 
-If you take for example [this instance](https://datalab.sspcloud.fr/catalog) it offers two catalogs, [InseeFrLab datascience](https://github.com/InseeFrLab/helm-charts-datascience) and [InseeFrLab R Shiny apps](https://github.com/InseeFrLab/helm-charts-shiny-apps). &#x20;
+* &#x20;[InseeFrLab/helm-charts-interactive-services](https://github.com/inseefrlab/helm-charts-interactive-services)
+
+This collection of charts help users to launch many IDE with various binary stacks (python , R) with or without GPU support. Docker images are built [here](https://github.com/inseefrlab/images-datascience) and help us to give a homogeneous stack.
+
+* &#x20;[InseeFrLab/helm-charts-databases](https://github.com/inseefrlab/helm-charts-databases)
+
+This collection of charts help users to launch many databases system. Most of them are based on [bitnami/charts](https://guthub.com/bitnami/charts).
+
+* &#x20;[InseeFrLab/helm-charts-automation](https://github.com/InseeFrLab/helm-charts-datascience)
+
+This collection of charts help users to start automation tools for their datascience activity.&#x20;
 
 You can always find the source of the catalog by clicking on the "contribute to the... " link.
 
@@ -40,24 +50,36 @@ api:
     version: v0.12
   catalogs: 
     [
-      {
-        "id": "inseefrlab-helm-charts-datascience",
-        "name": "Inseefrlab datascience",
-        "description": "Services for datascientists.",
-        "maintainer": "innovation@insee.fr",
-        "location": "https://inseefrlab.github.io/helm-charts-datascience",
-        "status": "PROD",
-        "type": "helm"
-      },
-      {
-        "id": "inseefrlab-helm-charts-shiny-apps",
-        "name": "Inseefrlab R Shiny apps",
-        "description": "R Shiny apps as services.",
-        "maintainer": "innovation@insee.fr",
-        "location": "https://inseefrlab.github.io/helm-charts-shiny-apps",
-        "status": "PROD",
-        "type": "helm"
-      },
+       {
+          "id": "ide",
+          "name": "Services interactifs",
+          "description": "Services for datascientists.",
+          "maintainer": "innovation@insee.fr",
+          "location": "https://inseefrlab.github.io/helm-charts-interactive-services",
+          "status": "PROD",
+          "highlightedCharts": ["jupyter-python", "rstudio", "vscode-python"],
+          "type": "helm",
+        },
+        {
+          "id": "databases",
+          "name": "Bases de données",
+          "description": "Services for datascientists.",
+          "maintainer": "innovation@insee.fr",
+          "location": "https://inseefrlab.github.io/helm-charts-databases",
+          "status": "PROD",
+          "highlightedCharts": ["postgresql", "elastic"],
+          "type": "helm",
+        },
+        {
+          "id": "automation",
+          "name": "Automatisation",
+          "description": "Services for datascientists.",
+          "maintainer": "innovation@insee.fr",
+          "location": "https://inseefrlab.github.io/helm-charts-automation",
+          "status": "PROD",
+          "highlightedCharts": ["argo-cd", "argo-workflows", "mlflow"],
+          "type": "helm",
+        }
     ]
   regions: 
     [
@@ -247,7 +269,7 @@ You can also concatenate string values using [mustache](https://mustache.github.
 }
 ```
 
-You now have all the relevent information to submit PR on the exsisting catalogs or even to create your own. &#x20;
+You now have all the relevent information to submit PR on the existing catalogs or even to create your own. &#x20;
 
 Remember that a helm chart repository is nothing more than a GitHub repo with a special [github Action setup](https://github.com/marketplace/actions/helm-deploy) to publish the charts on GitHub Pages. &#x20;
 

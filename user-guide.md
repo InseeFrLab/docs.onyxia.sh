@@ -36,17 +36,17 @@ Users can edit various parameters. Onyxia do some assertion based on the charts 
 
 
 
-![](<.gitbook/assets/image (11).png>)
+<figure><img src=".gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
 
 After launching a service, notes are shown to the user. He can retrieve those notes on the README button. Charts administrator should explain how to connect to the services (url , account) and what happens on deletion.
 
-![](<.gitbook/assets/image (2) (3).png>)
+<figure><img src=".gitbook/assets/image (2) (3).png" alt=""><figcaption></figcaption></figure>
 
 ## File browser
 
 Users can manage their files on S3. There is no support for rename in S3 so don't be surprise. Onyxia is educational. Any action on the S3 browser in the UI is written in a console with a cli.
 
-<img src=".gitbook/assets/image (2).png" alt="" data-size="original">
+<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
 
 Of course, in our default catalags there are all the necessary tools to connect to S3.
 
@@ -56,6 +56,6 @@ Our advice is to never download file to your container but directly ingest in me
 
 Users can mange their secrets on Vault. There is also a cli console.
 
-![](<.gitbook/assets/image (10).png>)
+<figure><img src=".gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
 
 Of course, in our default catalags there are all the necessary tools to connect to Vault.
