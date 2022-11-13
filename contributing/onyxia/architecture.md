@@ -3,7 +3,6 @@
 ## Main rules
 
 * [`src/ui`](https://github.com/InseeFrLab/onyxia-web/tree/main/src/ui) contains the React application, it's the UI of the app.
-  * All the import of src/core should be made in [`src/ui/coreApi`](https://github.com/InseeFrLab/onyxia-web/tree/main/src/ui/coreApi).
 * [`src/core`](https://github.com/InseeFrLab/onyxia-web/tree/main/src/core) contains the 🧠  of the app.
   * Nothing in the `src/core` directory should relate to React. A concept like react hooks for example is out of scope for the src/core directory.
   * `src/core` should never import anything from `src/ui`, even types.
