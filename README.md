@@ -117,7 +117,7 @@ This command will open your configured text editor, go to line `56` and add:
       - --default-ssl-certificate=ingress-nginx/onyxia-tls
 ```
 
-![](<.gitbook/assets/image (1).png>)
+![](<.gitbook/assets/image (1) (2).png>)
 {% endtab %}
 
 {% tab title="Test on your machine" %}
@@ -232,7 +232,7 @@ Through out this guide we make as if everything was instantaneous. In reality if
 
 Use `kubectl get pods` to see if your pods are up and ready.
 
-<img src=".gitbook/assets/image (2).png" alt="" data-size="original">
+![](<.gitbook/assets/image (1).png>)
 {% endhint %}
 
 <details>
