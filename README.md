@@ -1,18 +1,20 @@
-# 🏁 Installing
+# 🏁 Install
 
-This is a step by step guide that will assist you in installing Onyxia. &#x20;
+This is a step by step guide that will assist you in installing Onyxia.
 
 ### Provision a Kubernetes cluster
 
-First you'll need a Kubernetes cluster.  If you have one already you can skip this section.
+First you'll need a Kubernetes cluster. If you have one already you can skip this section.
 
-#### TAB: Provisioning a cluster on AWS, GCP or Azure  
 
-[Hashicorp](https://www.hashicorp.com/) maintains great tutorials for [terraforming](https://www.terraform.io/) Kubernetes clusters on [AWS](https://aws.amazon.com/what-is-aws/), [GCP](https://cloud.google.com/) or [Azure](https://acloudguru.com/videos/acg-fundamentals/what-is-microsoft-azure).&#x20;
 
-Pick one of the three and follow the guide.&#x20;
+{% tabs %}
+{% tab title="Provisioning a cluster on AWS, GCP or Azure" %}
+[Hashicorp](https://www.hashicorp.com/) maintains great tutorials for [terraforming](https://www.terraform.io/) Kubernetes clusters on [AWS](https://aws.amazon.com/what-is-aws/), [GCP](https://cloud.google.com/) or [Azure](https://acloudguru.com/videos/acg-fundamentals/what-is-microsoft-azure).
 
-You can stop after the [configure kubectl section](https://learn.hashicorp.com/tutorials/terraform/eks#configure-kubectl). &#x20;
+Pick one of the three and follow the guide.
+
+You can stop after the [configure kubectl section](https://learn.hashicorp.com/tutorials/terraform/eks#configure-kubectl).
 
 {% embed url="https://learn.hashicorp.com/tutorials/terraform/eks" %}
 
@@ -20,12 +22,12 @@ You can stop after the [configure kubectl section](https://learn.hashicorp.com/t
 
 {% embed url="https://learn.hashicorp.com/tutorials/terraform/aks?in=terraform/kubernetes" %}
 
-### Ingress controller &#x20;
+### Ingress controller
 
 Deploy an ingress controller on your cluster:
 
 {% hint style="warning" %}
-The following command is [for AWS](https://kubernetes.github.io/ingress-nginx/deploy/#aws). &#x20;
+The following command is [for AWS](https://kubernetes.github.io/ingress-nginx/deploy/#aws).
 
 For GCP use [this command](https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke).
 
@@ -38,19 +40,19 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 
 ### DNS
 
-Let's assume you own the domain name **my-domain.net**, for the rest of the guide you should replace **my-domain.net** by a domain you actually own. &#x20;
+Let's assume you own the domain name **my-domain.net**, for the rest of the guide you should replace **my-domain.net** by a domain you actually own.
 
-Now you need to get the external address of your cluster, run the command&#x20;
+Now you need to get the external address of your cluster, run the command
 
 ```bash
 kubectl get services -n ingress-nginx
 ```
 
-and write down the `External IP` assigned to the `LoadBalancer`.&#x20;
+and write down the `External IP` assigned to the `LoadBalancer`.
 
-Depending on the cloud provider you are using it can be an IPv4, an IPv6 or a domain. On AWS for example, it will be a domain like **xxx.elb.eu-west-1.amazonaws.com**. &#x20;
+Depending on the cloud provider you are using it can be an IPv4, an IPv6 or a domain. On AWS for example, it will be a domain like **xxx.elb.eu-west-1.amazonaws.com**.
 
-If you see `<pending>`, wait a few seconds and try again. &#x20;
+If you see `<pending>`, wait a few seconds and try again.
 
 Once you have the address, create the following DNS records:
 
@@ -63,7 +65,7 @@ If the address you got was an IPv4 (`x.x.x.x`), create a `A` record instead of a
 
 If the address you got was ans IPv6 (`y:y:y:y:y:y:y:y`), create a `AAAA` record.
 
-**https://onyxia.my-domain.net** will be the URL for your instance of Onyxia. The URL of the services created by Onyxia are going to look like: **https://\<something>.lab.my-domain.net**&#x20;
+**https://onyxia.my-domain.net** will be the URL for your instance of Onyxia. The URL of the services created by Onyxia are going to look like: **https://\<something>.lab.my-domain.net**
 
 {% hint style="info" %}
 You can customise "**onyxia**" and "**lab**" to your liking, for example you could chose **datalab.my-domain.net** and **\*.kub.my-domain.net**.
@@ -71,9 +73,9 @@ You can customise "**onyxia**" and "**lab**" to your liking, for example you cou
 
 ### SSL
 
-In this section we will obtain a TLS certificate issued by [LetsEncrypt](https://letsencrypt.org/) using the [certbot](https://certbot.eff.org/) commend line tool then get our ingress controller to use it. &#x20;
+In this section we will obtain a TLS certificate issued by [LetsEncrypt](https://letsencrypt.org/) using the [certbot](https://certbot.eff.org/) commend line tool then get our ingress controller to use it.
 
-If you are already familiar with `certbot` you're probably used to run it on a remote host via SSH. In this case you are expected to run it on your own machine, we'll use the DNS chalenge instead of the HTTP chalenge.&#x20;
+If you are already familiar with `certbot` you're probably used to run it on a remote host via SSH. In this case you are expected to run it on your own machine, we'll use the DNS chalenge instead of the HTTP chalenge.
 
 ```bash
 brew install certbot #On Mac, lookup how to install certbot for your OS
@@ -86,14 +88,14 @@ sudo certbot certonly --manual --preferred-challenges dns
 ```
 
 {% hint style="info" %}
-The obtained certificate needs to be renewed every three month. &#x20;
+The obtained certificate needs to be renewed every three month.
 
-To avoid the burden of having to remember to re-run the `certbot` command periodically you can setup [cert-manager](https://cert-manager.io/) and configure a [DNS01 challenge provider](https://cert-manager.io/docs/configuration/acme/dns01/) on your cluster but that's out of scope for Onyxia. &#x20;
+To avoid the burden of having to remember to re-run the `certbot` command periodically you can setup [cert-manager](https://cert-manager.io/) and configure a [DNS01 challenge provider](https://cert-manager.io/docs/configuration/acme/dns01/) on your cluster but that's out of scope for Onyxia.
 
 You may need to delegate your DNS Servers to one of the supported [DNS service provider](https://cert-manager.io/docs/configuration/acme/dns01/#supported-dns01-providers).
 {% endhint %}
 
-Now we want to create a Kubernetes secret containing our newly obtained certificate: &#x20;
+Now we want to create a Kubernetes secret containing our newly obtained certificate:
 
 ```bash
 DOMAIN=my-domain.net
@@ -103,22 +105,22 @@ sudo kubectl create secret tls onyxia-tls \
     --cert /etc/letsencrypt/live/onyxia.$DOMAIN/fullchain.pem
 ```
 
-Lastly, we want to tell our ingress controller to use this TLS certificate, to do so run: &#x20;
+Lastly, we want to tell our ingress controller to use this TLS certificate, to do so run:
 
 ```bash
 kubectl edit deployment ingress-nginx-controller -n ingress-nginx
 ```
 
-This command will open your configured text editor, go to line `56` and add: &#x20;
+This command will open your configured text editor, go to line `56` and add:
 
-```yaml
-        - --default-ssl-certificate=ingress-nginx/onyxia-tls
+```
+      - --default-ssl-certificate=ingress-nginx/onyxia-tls
 ```
 
 ![](<.gitbook/assets/image (1).png>)
+{% endtab %}
 
-#### TAB: Test on your machine  
-
+{% tab title="Test on your machine" %}
 If you are on a Mac or Window computer you can install [Docker desktop](https://www.docker.com/products/docker-desktop/) then enable Kubernetes.
 
 ![Enable Kubernetes in Docker desktop](<.gitbook/assets/image (5) (1).png>)
@@ -129,13 +131,13 @@ Docker desktop isn't available on Linux, you can use [Kind](https://kind.sigs.k8
 
 ### Port Forwarding
 
-You'll need to [forward the TCP ports 80 and 443 to your local machine](https://user-images.githubusercontent.com/6702424/174459930-23fb577c-11a2-49ef-a082-873f4139aca1.png).  It's done from the administration panel of your domestic internet Box. If you're on a corporate network, no luck for you I'm afraid.
+You'll need to [forward the TCP ports 80 and 443 to your local machine](https://user-images.githubusercontent.com/6702424/174459930-23fb577c-11a2-49ef-a082-873f4139aca1.png). It's done from the administration panel of your domestic internet Box. If you're on a corporate network, no luck for you I'm afraid.
 
 ### DNS
 
 Let's assume you own the domain name **my-domain.net,** for the rest of the guide you should replace **my-domain.net** by a domain you actually own.
 
-Get [your internet box routable IP](http://monip.org/) and create the following DNS records: &#x20;
+Get [your internet box routable IP](http://monip.org/) and create the following DNS records:
 
 ```dns-zone-file
 onyxia.my-domain.net A <YOUR_IP>
@@ -143,7 +145,7 @@ onyxia.my-domain.net A <YOUR_IP>
 ```
 
 {% hint style="success" %}
-If you have DDNS domain you can create `CNAME` instead example: &#x20;
+If you have DDNS domain you can create `CNAME` instead example:
 
 ```
 onyxia.my-domain.net CNAME jhon-doe-home.ddns.net.
@@ -161,7 +163,7 @@ You can customise "**onyxia**" and "**lab**" to your liking, for example you cou
 
 ### SSL
 
-In this section we will obtain a TLS certificate issued by [LetsEncrypt](https://letsencrypt.org/) using the [certbot](https://certbot.eff.org/) commend line tool. &#x20;
+In this section we will obtain a TLS certificate issued by [LetsEncrypt](https://letsencrypt.org/) using the [certbot](https://certbot.eff.org/) commend line tool.
 
 ```bash
 brew install certbot #On Mac, lookup how to install certbot for your OS
@@ -174,14 +176,14 @@ sudo certbot certonly --manual --preferred-challenges dns
 ```
 
 {% hint style="info" %}
-The obtained certificate needs to be renewed every three month. &#x20;
+The obtained certificate needs to be renewed every three month.
 
-To avoid the burden of having to remember to re-run the `certbot` command periodically you can setup [cert-manager](https://cert-manager.io/) and configure a [DNS01 challenge provider](https://cert-manager.io/docs/configuration/acme/dns01/) on your cluster but that's out of scope for Onyxia. &#x20;
+To avoid the burden of having to remember to re-run the `certbot` command periodically you can setup [cert-manager](https://cert-manager.io/) and configure a [DNS01 challenge provider](https://cert-manager.io/docs/configuration/acme/dns01/) on your cluster but that's out of scope for Onyxia.
 
 You may need to delegate your DNS Servers to one of the supported [DNS service provider](https://cert-manager.io/docs/configuration/acme/dns01/#supported-dns01-providers).
 {% endhint %}
 
-Now we want to create a Kubernetes secret containing our newly obtained certificate: &#x20;
+Now we want to create a Kubernetes secret containing our newly obtained certificate:
 
 ```bash
 kubectl create namespace ingress-nginx
@@ -208,36 +210,36 @@ helm install ingress-nginx ingress-nginx \
     --namespace ingress-nginx \
     -f ./ingress-nginx-values.yaml
 ```
-
-==================================================
+{% endtab %}
+{% endtabs %}
 
 ### Installing Onyxia using helm
 
-In this section we assume that:&#x20;
+In this section we assume that:
 
 * You have a Kubernetes cluster and `kubectl` configured
 * **onyxia.my-domain.net** and **\*.lab.my-domain.net** are pointing to your cluster's external address. **my-domain.net** being a domain that you own. You can customise "**onyxia**" and "**lab**" to your liking, for example you could chose **datalab.my-domain.net** and **\*.kub.my-domain.net**.
-* You have an ingress controller configured with a default TLS certificate for **\*.lab.my-domain.net** and **onyxia.my-domain.net**. &#x20;
+* You have an ingress controller configured with a default TLS certificate for **\*.lab.my-domain.net** and **onyxia.my-domain.net**.
 
 {% hint style="warning" %}
-As of today [the default service catalog](https://github.com/InseeFrLab/helm-charts-datascience) will only work with [ingress-nginx](https://kubernetes.github.io/ingress-nginx/). &#x20;
+As of today [the default service catalog](https://github.com/InseeFrLab/helm-charts-datascience) will only work with [ingress-nginx](https://kubernetes.github.io/ingress-nginx/).
 
-This will be addressed in the near future. &#x20;
+This will be addressed in the near future.
 {% endhint %}
 
 {% hint style="success" %}
-Through out this guide we make as if everything was instantaneous. In reality if you are testing on a small cluster you will need to wait several minutes after hitting `helm install` for the services to be ready. &#x20;
+Through out this guide we make as if everything was instantaneous. In reality if you are testing on a small cluster you will need to wait several minutes after hitting `helm install` for the services to be ready.
 
-Use `kubectl get pods` to see if your pods are up and ready.&#x20;
+Use `kubectl get pods` to see if your pods are up and ready.
 
-![](<.gitbook/assets/image (2).png>)
+<img src=".gitbook/assets/image (2).png" alt="" data-size="original">
 {% endhint %}
 
 <details>
 
 <summary>(Optional) Make sure that your cluster is ready for Onyxia</summary>
 
-To make sure that your Kubernetes cluster is correctly configured let's deploy a test web app on it before deploying Onyxia.  &#x20;
+To make sure that your Kubernetes cluster is correctly configured let's deploy a test web app on it before deploying Onyxia.
 
 <img src=".gitbook/assets/image (8).png" alt="The hello world SPA deployed" data-size="original">
 
@@ -336,25 +338,25 @@ EOF
 helm install onyxia inseefrlab/onyxia -f onyxia-values.yaml
 ```
 
-&#x20;You can now access `https://onyxia.my-domain.net` and start services. Congratulations! 🥳
+You can now access `https://onyxia.my-domain.net` and start services. Congratulations! 🥳
 
 ### Enabling user authentication
 
-At the moment there is no authentication process, everyone can access our platform and and start services. &#x20;
+At the moment there is no authentication process, everyone can access our platform and and start services.
 
-Let's setup Keycloak to enable users to create account and login to our Onyxia. &#x20;
+Let's setup Keycloak to enable users to create account and login to our Onyxia.
 
 <details>
 
 <summary>Notes if you already have a Keycloak server</summary>
 
-If you already have a Keycloak server it is up to you to pick from this guide what is rellevent to you. &#x20;
+If you already have a Keycloak server it is up to you to pick from this guide what is rellevent to you.
 
-Main takeway is that you probably want to load the Onyxia custom Keycloak theme and enable `-Dkeycloak.profile=preview` in order to be able to enforce that usernames are well formatted and define an accept list of email domains allowed to create account on your Onyxia instance. &#x20;
+Main takeway is that you probably want to load the Onyxia custom Keycloak theme and enable `-Dkeycloak.profile=preview` in order to be able to enforce that usernames are well formatted and define an accept list of email domains allowed to create account on your Onyxia instance.
 
 You probably want to enable [Terms and Conditions as required actions](https://docs.keycloakify.dev/terms-and-conditions).
 
-That out of the way, note that you can configure onyxia-web to integrate with your existing Keycloak server, you just need to set some dedicated environment variable in the `values.yaml` of the onyxia helm chart. Example: &#x20;
+That out of the way, note that you can configure onyxia-web to integrate with your existing Keycloak server, you just need to set some dedicated environment variable in the `values.yaml` of the onyxia helm chart. Example:
 
 ```yaml
  ui:
@@ -374,7 +376,7 @@ That out of the way, note that you can configure onyxia-web to integrate with yo
 
 </details>
 
-For deploying our Keycloak we use [codecentric's helm chart](https://github.com/codecentric/helm-charts/tree/master/charts/keycloak). &#x20;
+For deploying our Keycloak we use [codecentric's helm chart](https://github.com/codecentric/helm-charts/tree/master/charts/keycloak).
 
 ```bash
 helm repo add codecentric https://codecentric.github.io/helm-charts
@@ -468,7 +470,7 @@ You can now login to the **administration console** of **https://auth.lab.my-dom
       1. _User registration_: **On**
       2. _Forgot password_: **On**
       3. _Remember me_: **On**
-   3. On the tab **email,** we give an example with **** [AWS SES](https://aws.amazon.com/ses/), if you don't have a SMTP server at hand you can skip this by going to **Authentication** (on the left panel) -> Tab **Required Actions** -> Uncheck "set as default action" **Verify Email**. Be aware that with email verification disable, anyone will be able to sign up to your service.
+   3. On the tab **email,** we give an example with \*\*\*\* [AWS SES](https://aws.amazon.com/ses/), if you don't have a SMTP server at hand you can skip this by going to **Authentication** (on the left panel) -> Tab **Required Actions** -> Uncheck "set as default action" **Verify Email**. Be aware that with email verification disable, anyone will be able to sign up to your service.
       1. _From_: **noreply@lab.my-domain.net**
       2. _Host_: **email-smtp.us-east-2.amazonaws.com**
       3. _Port_: **465**
@@ -489,11 +491,11 @@ You can now login to the **administration console** of **https://auth.lab.my-dom
    4. Login theme: **onyxia-web**
 3. In **Authentication** (on the left panel) -> Tab **Required Actions** enable and set as default action **Therms and Conditions.**
 
-Now you want to ensure that the username chosen by your users complies with Onyxia requirement (only alphanumerical characters) and define a list of email domain allowed to register to your service. &#x20;
+Now you want to ensure that the username chosen by your users complies with Onyxia requirement (only alphanumerical characters) and define a list of email domain allowed to register to your service.
 
 Go to **Realm Settings** (on the left panel) -> Tab **User Profile** (this tab shows up only if User Profile is enabled in the General tab and you can enable user profile only if you have started Keycloak with `-Dkeycloak.profile=preview)` -> **JSON Editor**.
 
-Now you can edit the file as suggested in the following DIFF snippet. Be mindful that in this example we only allow emails @gmail.com and @hotmail.com to register you want to edit that. &#x20;
+Now you can edit the file as suggested in the following DIFF snippet. Be mindful that in this example we only allow emails @gmail.com and @hotmail.com to register you want to edit that.
 
 ```diff
 {
@@ -580,9 +582,9 @@ Now you can edit the file as suggested in the following DIFF snippet. Be mindful
 }
 ```
 
-Now our Keycloak server is fully configured we just need to update our Onyxia deployment to let it know about it. &#x20;
+Now our Keycloak server is fully configured we just need to update our Onyxia deployment to let it know about it.
 
-Update the `onyxia-values.yaml` file  that you created previously, don't forget to replace all the occurence of **my-domain.net** by your actual domain. &#x20;
+Update the `onyxia-values.yaml` file that you created previously, don't forget to replace all the occurence of **my-domain.net** by your actual domain.
 
 Don't forget as well to remplace the terms of services of the [sspcloud](https://www.sspcloud.fr) by your own terms of services. CORS should be enabled on those `.md` links (`Access-Control-Allow-Origin: *`).
 
