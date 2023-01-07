@@ -102,10 +102,9 @@ In Onyxia we use the `values.shema.json` be  to know what options should be disp
 
 ![https://helm.sh/docs/topics/charts/#the-chart-file-structure](<../.gitbook/assets/image (6).png>)
 
-Let's consider a sample of the `values.scema.json` of the InseeFrLab/helm-charts-datascience's Jupyter chart: &#x20;
+Let's consider a sample of the `values.schema.json` of the InseeFrLab/helm-charts-datascience's Jupyter chart: &#x20;
 
-```javascript
-"git": {
+<pre class="language-javascript" data-title="values.schema.json"><code class="lang-javascript">"git": {
     "description": "Git user configuration",
     "type": "object",
     "properties": {
@@ -118,10 +117,10 @@ Let's consider a sample of the `values.scema.json` of the InseeFrLab/helm-charts
             "type": "string",
             "description": "user name for git",
             "default": "",
-            "x-onyxia": {
-                "overwriteDefaultWith": "git.name"
-            },
-            "hidden": {
+<strong>            "x-onyxia": {
+</strong><strong>                "overwriteDefaultWith": "git.name"
+</strong><strong>            },
+</strong>            "hidden": {
                 "value": false,
                 "path": "git/enabled"
             }
@@ -130,10 +129,10 @@ Let's consider a sample of the `values.scema.json` of the InseeFrLab/helm-charts
             "type": "string",
             "description": "user email for git",
             "default": "",
-            "x-onyxia": {
-                "overwriteDefaultWith": "git.email"
-            },
-            "hidden": {
+<strong>            "x-onyxia": {
+</strong><strong>                "overwriteDefaultWith": "git.email"
+</strong><strong>            },
+</strong>            "hidden": {
                 "value": false,
                 "path": "git/enabled"
             }
@@ -142,10 +141,10 @@ Let's consider a sample of the `values.scema.json` of the InseeFrLab/helm-charts
             "type": "string",
             "description": "duration in seconds of the credentials cache duration",
             "default": "",
-            "x-onyxia": {
-                "overwriteDefaultWith": "git.credentials_cache_duration"
-            },
-            "hidden": {
+<strong>            "x-onyxia": {
+</strong><strong>                "overwriteDefaultWith": "git.credentials_cache_duration"
+</strong><strong>            },
+</strong>            "hidden": {
                 "value": false,
                 "path": "git/enabled"
             }
@@ -154,10 +153,10 @@ Let's consider a sample of the `values.scema.json` of the InseeFrLab/helm-charts
             "type": "string",
             "description": "personal access token",
             "default": "",
-            "x-onyxia": {
-                "overwriteDefaultWith": "git.token"
-            },
-            "hidden": {
+<strong>            "x-onyxia": {
+</strong><strong>                "overwriteDefaultWith": "git.token"
+</strong><strong>            },
+</strong>            "hidden": {
                 "value": false,
                 "path": "git/enabled"
             }
@@ -182,7 +181,7 @@ Let's consider a sample of the `values.scema.json` of the InseeFrLab/helm-charts
         }
     }
 },
-```
+</code></pre>
 
 And it translate into this:
 
