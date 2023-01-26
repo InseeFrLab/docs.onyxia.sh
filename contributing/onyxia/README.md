@@ -4,8 +4,19 @@ description: The frontend
 
 # 🐲 onyxia-web
 
-This is the documentation for [InseeFrLab/onyxia-we](https://github.com/InseeFrLab/onyxia-web). &#x20;
+This is the documentation for [InseeFrLab/onyxia-web](https://github.com/InseeFrLab/onyxia-web). &#x20;
 
-It's the part of the App that runs on the users browser. It's a TypeScript codebase.&#x20;
+```bash
+git clone https://github.com/InseeFrLab/onyxia-web
+cd onyxia-web
 
-{% embed url="https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=InseeFrLab/onyxia-web" %}
+# Download the binary files (images, fonts, ect, you need git LFS)
+git lfs install && git lfs pull
+yarn install
+#Setup the var envs to tell the app to connect to the sspcloud
+#Fill up with your own value to run the web app against your own infra.
+cp .env.local.sample-insee .env.local
+
+# To stat the app locally
+yarn start 
+```
