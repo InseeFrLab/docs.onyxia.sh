@@ -193,7 +193,7 @@ If the user took the time to fill it's profile information, [onyxia-web](https:/
 
 ![The onyxia user profile](<../.gitbook/assets/image (7).png>)
 
-[Here are the values](https://github.com/InseeFrLab/onyxia-web/blob/2bef7775601f421b9fa4be0512ad4310cc780e0c/src/core/ports/OnyxiaApiClient.ts#L154-L210) that you can use in the `overwriteDefaultWith` field :&#x20;
+[Here are the values](https://github.com/InseeFrLab/onyxia-web/blob/main/src/core/ports/OnyxiaApiClient.ts#L212-L309) that you can use in the `overwriteDefaultWith` field :&#x20;
 
 ```typescript
 export type OnyxiaValues = {
@@ -249,9 +249,50 @@ export type OnyxiaValues = {
     k8s: {
         domain: string;
         ingressClassName: string | undefined;
+        ingress: boolean | undefined;
+        route: boolean | undefined;
         randomSubdomain: string;
         initScriptUrl: string;
     };
+    proxyInjection:
+        | {
+              httpProxyUrl: string | undefined;
+              httpsProxyUrl: string | undefined;
+              noProxy: string | undefined;
+          }
+        | undefined;
+    packageRepositoryInjection:
+        | {
+              cranProxyUrl: string | undefined;
+              condaProxyUrl: string | undefined;
+              pypiProxyUrl: string | undefined;
+          }
+        | undefined;
+    certificateAuthorityInjection:
+        | {
+              cacerts: string | undefined;
+              pathToCaBundle: string | undefined;
+          }
+        | undefined;
+    sliders: Record<
+        string,
+        {
+            sliderMin: number;
+            sliderMax: number;
+            sliderStep: number;
+            sliderUnit: string;
+        }
+    >;
+    resources:
+        | {
+              cpuRequest: string | undefined;
+              cpuLimit: string | undefined;
+              memoryRequest: string | undefined;
+              memoryLimit: string | undefined;
+              disk: string | undefined;
+              gpu: number | undefined;
+          }
+        | undefined;
 };
 ```
 
