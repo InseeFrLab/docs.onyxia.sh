@@ -245,6 +245,25 @@ export type OnyxiaValues = {
         from: unknown[] | undefined;
         nodeSelector: Record<string, unknown> | undefined;
         startupProbe: Record<string, unknown> | undefined;
+        sliders: Record<
+            string,
+            {
+                sliderMin: number;
+                sliderMax: number;
+                sliderStep: number;
+                sliderUnit: string;
+            }
+        >;
+        resources:
+            | {
+                  cpuRequest?: `${number}${string}`;
+                  cpuLimit?: `${number}${string}`;
+                  memoryRequest?: `${number}${string}`;
+                  memoryLimit?: `${number}${string}`;
+                  disk?: `${number}${string}`;
+                  gpu?: `${number}`;
+              }
+            | undefined;
     };
     k8s: {
         domain: string;
@@ -274,25 +293,6 @@ export type OnyxiaValues = {
               pathToCaBundle: string | undefined;
           }
         | undefined;
-    sliders: Record<
-        string,
-        {
-            sliderMin: number;
-            sliderMax: number;
-            sliderStep: number;
-            sliderUnit: string;
-        }
-    >;
-    resources:
-        | {
-              cpuRequest: string | undefined;
-              cpuLimit: string | undefined;
-              memoryRequest: string | undefined;
-              memoryLimit: string | undefined;
-              disk: string | undefined;
-              gpu: number | undefined;
-          }
-        | undefined;
 };
 ```
 
@@ -308,6 +308,138 @@ You can also concatenate string values using [mustache](https://mustache.github.
   }
 }
 ```
+
+#### Defining  region scoped resources limit
+
+You probably want to be able to define a limit to the amount of resources a user can request when launching a service. &#x20;
+
+It's possible to do it at the catalog level but it's best to enable the person who is deploying Onyxia to define boundaries for hes deployment regions.&#x20;
+
+This is the pupose of the `x-onyxia` param `useRegionSliderConfig`&#x20;
+
+<pre class="language-yaml" data-title="onyxia/values.yaml"><code class="lang-yaml">onyxia:
+
+  ui:
+    ...
+    
+  api:
+    ...
+    regions:
+      [
+        {
+          "id": "paris",
+          "name": "Kubernetes DG Insee",
+          "services": {
+            "defaultConfiguration": {
+<strong>              "sliders": {
+</strong>                "cpu": {
+                  "sliderMin": 100,
+                  "sliderMax": 80000,
+                  "sliderStep": 100,
+                  "sliderUnit": "m"
+                },
+                "memory": {
+                  "sliderMin": 1,
+                  "sliderMax": 400,
+                  "sliderStep": 1,
+                  "sliderUnit": "Gi"
+                },
+<strong>                "gpu": {
+</strong><strong>                  "sliderMin": 1,
+</strong><strong>                  "sliderMax": 4,
+</strong><strong>                  "sliderStep": 1,
+</strong><strong>                  "sliderUnit": ""
+</strong><strong>                },
+</strong>                "disk": {
+                  "sliderMin": 1,
+                  "sliderMax": 100,
+                  "sliderStep": 1,
+                  "sliderUnit": "Gi"
+                }
+              },
+              "resources": {
+                "cpuRequest": "100m",
+                "cpuLimit": "40000m",
+                "memoryRequest": "1Gi",
+                "memoryLimit": "200Gi",
+                "disk": "10Gi",
+<strong>                "gpu": "1"
+</strong>              }
+            }
+          }
+        }
+      ]
+</code></pre>
+
+<pre class="language-json" data-title="values.schema.json"><code class="lang-json">{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "resources": {
+      "description": "Your service will have at least the requested resources and never more than its limits. No limit for a resource and you can consume everything left on the host machine.",
+      "type": "object",
+      "properties": {
+        "limits": {
+          "description": "max resources",
+          "type": "object",
+          "properties": {
+            "nvidia.com/gpu": {
+              "description": "GPU to allocate to this instance. This is also requested",
+              "type": "string",
+<strong>              "default": "0", // Will be overwritten by "1"
+</strong>              "render": "slider",
+<strong>              "sliderMin": 0, // Will be overwritten by 1
+</strong><strong>              "sliderMax": 3, // Will be overwritten by 4
+</strong><strong>              "sliderStep": 1, // Will be overwritten by 1
+</strong><strong>              "sliderUnit": "", // Will be overwritten by ""
+</strong><strong>              "x-onyxia": {
+</strong><strong>                "overwriteDefaultWith": "region.resources.gpu",
+</strong><strong>                "useRegionSliderConfig": "gpu" // 👀
+</strong><strong>              }
+</strong>            },
+            "cpu": {
+              "description": "The maximum amount of cpu",
+              "title": "CPU",
+              "type": "string",
+              "default": "30000m",
+              "render": "slider",
+              "sliderMin": 50,
+              "sliderMax": 40000,
+              "sliderStep": 50,
+              "sliderUnit": "m",
+              "sliderExtremity": "up",
+              "sliderExtremitySemantic": "Maximum",
+              "sliderRangeId": "cpu",
+              "x-onyxia": {
+                "overwriteDefaultWith": "region.resources.cpuLimit",
+                "useRegionSliderConfig": "cpu"
+              }
+            },
+            "memory": {
+              "description": "The maximum amount of memory",
+              "title": "Memory",
+              "type": "string",
+              "default": "50Gi",
+              "render": "slider",
+              "sliderMin": 1,
+              "sliderMax": 200,
+              "sliderStep": 1,
+              "sliderUnit": "Gi",
+              "sliderExtremity": "up",
+              "sliderExtremitySemantic": "Maximum",
+              "sliderRangeId": "memory",
+              "x-onyxia": {
+                "overwriteDefaultWith": "region.resources.memoryLimit",
+                "useRegionSliderConfig": "memory"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+</code></pre>
 
 You now have all the relevent information to submit PR on the existing catalogs or even to create your own. &#x20;
 
