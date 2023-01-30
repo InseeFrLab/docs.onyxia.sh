@@ -14,7 +14,7 @@ This collection of charts help users to launch many IDE with various binary stac
 
 * &#x20;[InseeFrLab/helm-charts-databases](https://github.com/inseefrlab/helm-charts-databases)
 
-This collection of charts help users to launch many databases system. Most of them are based on [bitnami/charts](https://guthub.com/bitnami/charts).
+This collection of charts help users to launch many databases system. Most of them are based on [bitnami/charts](https://github.com/bitnami/charts).
 
 * &#x20;[InseeFrLab/helm-charts-automation](https://github.com/InseeFrLab/helm-charts-datascience)
 
@@ -98,7 +98,7 @@ helm install onyxia inseefrlab/onyxia -f onyxia-values.yaml
 
 In order to contribute you have to be familiar with [Helm](https://helm.sh/) and to be familiar with Helm you need to be familiar with [Kubernetes objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/). &#x20;
 
-In Onyxia we use the `values.shema.json` be  to know what options should be displayed to the user at [the service configuration step](https://user-images.githubusercontent.com/6702424/177571819-f2e1b4ef-ecd1-479b-a5a1-658d87d7c7c0.png) and what default value Onyxia should inject. &#x20;
+In Onyxia we use the `values.schema.json` file to know what options should be displayed to the user at [the service configuration step](https://user-images.githubusercontent.com/6702424/177571819-f2e1b4ef-ecd1-479b-a5a1-658d87d7c7c0.png) and what default value Onyxia should inject. &#x20;
 
 ![https://helm.sh/docs/topics/charts/#the-chart-file-structure](<../.gitbook/assets/image (6).png>)
 
@@ -183,13 +183,13 @@ Let's consider a sample of the `values.schema.json` of the InseeFrLab/helm-chart
 },
 </code></pre>
 
-And it translate into this:
+And it translates into this:
 
 {% embed url="https://user-images.githubusercontent.com/6702424/177571819-f2e1b4ef-ecd1-479b-a5a1-658d87d7c7c0.png" %}
 
 Note the `"git.name"`, `"git.email"` and `"git.token"`, this enables [onyxia-web](https://github.com/InseeFrLab/onyxia-web) to pre fill the fields. &#x20;
 
-If the user took the time to fill it's profile information, [onyxia-web](https://github.com/InseeFrLab/onyxia-web) know what is the Git **username**, **email** and **personal access token** of the user. &#x20;
+If the user took the time to fill its profile information, [onyxia-web](https://github.com/InseeFrLab/onyxia-web) know what is the Git **username**, **email** and **personal access token** of the user. &#x20;
 
 ![The onyxia user profile](<../.gitbook/assets/image (7).png>)
 
@@ -313,9 +313,9 @@ You can also concatenate string values using [mustache](https://mustache.github.
 
 You probably want to be able to define a limit to the amount of resources a user can request when launching a service. &#x20;
 
-It's possible to do it at the catalog level but it's best to enable the person who is deploying Onyxia to define boundaries for hes deployment regions.&#x20;
+It's possible to do it at the catalog level but it's best to enable the person who is deploying Onyxia to define boundaries for his deployment regions.&#x20;
 
-This is the pupose of the `x-onyxia` param `useRegionSliderConfig`&#x20;
+This is the purpose of the `x-onyxia` param `useRegionSliderConfig`&#x20;
 
 <pre class="language-yaml" data-title="onyxia/values.yaml"><code class="lang-yaml">onyxia:
 
