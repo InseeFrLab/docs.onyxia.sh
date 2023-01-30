@@ -183,7 +183,7 @@ Let's consider a sample of the `values.schema.json` of the InseeFrLab/helm-chart
 },
 </code></pre>
 
-And it translate into this:
+And it translates into this:
 
 {% embed url="https://user-images.githubusercontent.com/6702424/177571819-f2e1b4ef-ecd1-479b-a5a1-658d87d7c7c0.png" %}
 
