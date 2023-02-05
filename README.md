@@ -672,6 +672,191 @@ helm upgrade onyxia inseefrlab/onyxia -f onyxia-values.yaml
 
 Now your users should be able to create account, log-in, and start services on their own Kubernetes namespace.
 
-### Minio, Vault
+### S3 Storage
+
+Onyxia-web use [AWS Security Token Service API](https://docs.aws.amazon.com/STS/latest/APIReference/welcome.html) to get token and empowered user with storage features. We support any S3 storage compatible with this API.
+
+Before configuring Minio, let's create a new client for keycloak
+
+Create a client called "minio"
+
+1. _Root URL_: **https://minio.lab.my-domain.net/**
+2. _Valid redirect URIs_: **https://minio.lab.my-domain.net/\***
+3. _Web origins_: **\***
+
+Minio
+
+We recommand you to follow [minio documentation](https://min.io/docs/minio/linux/administration/identity-access-management/oidc-access-management.html#minio-external-identity-management-openid) for this installation and you must activate OIDC authentification.  We will use the official helm in this tutorial.
+
+```bash
+helm repo add minio https://charts.min.io/
+ 
+DOMAIN=my-domain.net
+
+cat << EOF > ./minio-values.yaml
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  rules:
+    - host: "minio.lab.$DOMAIN"
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - hosts:
+        - minio.lab.$DOMAIN
+consoleIngress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  rules:
+    - host: "minio-console.lab.$DOMAIN"
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - hosts:
+        - minio-console.lab.$DOMAIN
+oidc:
+  enabled: true
+  configUrl: "https://auth.lab.$DOMAIN/.well-known/openid-configuration"
+  clientId: "minio"
+  clientSecret: ""
+  claimName: "policy"
+  scopes: "openid,profile,email"
+  redirectUri: "https://minio-console.lab.$DOMAIN/oauth_callback"
+policies:
+  - name: stsonly
+    statements:
+      - resources:
+          - 'arn:aws:s3:::oidc-${jwt:preferred_username}'
+          - 'arn:aws:s3:::oidc-${jwt:preferred_username}/*'
+        actions:
+          - "s3:*"
+EOF
+
+helm install minio minio/minio -f minio-values.yaml
+```
+
+Minio is now deployed and is accessible on the console url.\
+Before configuring the onyxia region to create tokens we should go back to keycloak and create a new client to enable onyxia-web to request token for minio. This client is a little bit more complexe than other if you want to manage durations (here 7 days) and this client should have a claim name policy and with a value of stsonly according to our last deployment of minio. \
+
+
+Create a client called "onyxia-minio"
+
+1. _Root URL_: **https://onyxia.my-domain.net/**
+2. _Valid redirect URIs_: **https://onyxia.my-domain.net/\***
+3. _Web origins_: **\***
+4. Advanced Settings\
+   1\. Access Token Lifespan : 7 days\
+   2\. Client Session Idle : 7 days\
+   3\. Client Session Max: 7 days
+5. Mappers\
+   1\. Create\
+   2\. Hardcoded Claim\
+   3\. Token Claim Name : policy\
+   4\. Claim value : stsonly\
+   5\. name : policy
+
+S3 storage is configured inside a region in Onyxia api. You have some options to configure this storage and let inform Onyxia web all needed informations how to generate those tokens : keycloak parameters to access storage API, duration of STS tokens, bucket name with a standard prefix and a claim in the user JWT token to generate a unique identifiant for this bucket name, whether Onyxia-web should try to to create this bucket silently or not. There is also options for projects. You should look all options for the version of your need on [github](https://github.com/InseeFrLab/onyxia-api/blob/master/docs/region-configuration.md#s3)
+
+<pre class="language-diff"><code class="lang-diff">serviceAccount:
+  clusterAdmin: true
+ ingress:
+   enabled: true
+   annotations:
+     kubernetes.io/ingress.class: nginx
+   hosts:
+     - host: onyxia.my-domain.net
+ ui:
+   image:
+     # Update on your own therm but update!
+     # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
+     version: 2.1.10
+  env:
+    KEYCLOAK_REALM: datalab
+    KEYCLOAK_URL: https://auth.lab.my-domain.net/auth
+    TERMS_OF_SERVICES: |
+      { "en": "https://www.sspcloud.fr/tos_en.md", "fr": "https://www.sspcloud.fr/tos_fr.md" }
+ api:
+   image:
+     # Same here
+     # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
+     version: latest
+   env:
+     security.cors.allowed_origins: "http://localhost:3000"
+    authentication.mode: openidconnect
+    keycloak.realm: datalab
+    keycloak.auth-server-url: https://auth.lab.my-domain.net/auth
+   regions:
+     [
+        {
+           "id":"demo",
+           "name":"Demo",
+           "description":"This is a demo region, feel free to try Onyxia !",
+           "services":{
+              "type":"KUBERNETES",
+              "singleNamespace": false,
+              "namespacePrefix":"user-",
+              "usernamePrefix":"oidc-",
+              "groupNamespacePrefix":"projet-",
+              "groupPrefix":"oidc-",
+              "authenticationMode":"admin",
+              "expose":{
+                 "domain":"lab.my-domain.net"
+              },
+              "monitoring":{
+                 "URLPattern":"todo"
+              },
+              "cloudshell":{
+                 "catalogId":"inseefrlab-helm-charts-datascience",
+                 "packageName":"cloudshell"
+              },
+              "initScript":"https://inseefrlab.github.io/onyxia/onyxia-init.sh"
+           },
+           "data":{
+              "S3":{
+<strong>-                "URL":"todo",
+</strong>+                "type": "minio",
++                "URL": "https://minio.my-domain.net",
++                "region": "us-east-1",
++                "bucketPrefix": "oidc-",
++                "groupBucketPrefix": "projet-",
++                "bucketClaim": "preferred_username",
++                "defaultDurationSeconds": 86400,
++                "keycloakParams":
++                {
++                      "URL": "https://auth.lab.my-domain.net/auth",
++                      "realm": "datalab",
++                      "clientId": "onyxia-minio",
++                },
++                "acceptBucketCreation": true,
+                 "monitoring":{
+                    "URLPattern":"minio"
+                 }
+              }
+           },
+           "auth":{
+              "type":"openidconnect"
+           },
+           "location":{
+              "lat":48.8164,
+              "long":2.3174,
+              "name":"Montrouge (France)"
+           }
+        }
+     ]
+</code></pre>
+
+```bash
+helm upgrade onyxia inseefrlab/onyxia -f onyxia-values.yaml
+```
+
+###
+
+### Vault
+
+
 
 TODO; [Refer to the legacy documentation.](https://github.com/InseeFrLab/onyxia/tree/main/step-by-step#set-up-authentication-openidconnect)
