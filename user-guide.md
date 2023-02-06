@@ -4,6 +4,12 @@ description: Using Onyxia (as a data scientist)
 
 # 🕹 User guide
 
+{% hint style="success" %}
+See also [https://docs.sspcloud.fr](https://docs.sspcloud.fr/)
+
+It's the Onyxia user guide dedicated to our staff. &#x20;
+{% endhint %}
+
 There are 3 main components accessible on the onyxia web interface :
 
 * catalogs and services launched by the users (Kubernetes access)
