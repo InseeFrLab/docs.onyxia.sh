@@ -277,16 +277,7 @@ ingress:
     kubernetes.io/ingress.class: nginx
   hosts:
     - host: onyxia.$DOMAIN
-ui:
-  image:
-    # Update on your own therm but update!
-    # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
-    version: 2.1.10
 api:
-  image:
-    # Same here
-    # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
-    version: latest
   env:
     security.cors.allowed_origins: "http://localhost:3000"
   regions: 
@@ -360,8 +351,6 @@ That out of the way, note that you can configure onyxia-web to integrate with yo
 
 ```yaml
  ui:
-   image:
-     version: "0.56.5"
   env:
     # Available env are documented here: https://github.com/InseeFrLab/onyxia-web/blob/main/.env
     KEYCLOAK_URL: https://auth.lab.my-domain.net/auth
@@ -598,20 +587,12 @@ Don't forget as well to remplace the terms of services of the [sspcloud](https:/
    hosts:
      - host: onyxia.my-domain.net
  ui:
-   image:
-     # Update on your own therm but update!
-     # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
-     version: 2.1.10
 +  env:
 +    KEYCLOAK_REALM: datalab
 +    KEYCLOAK_URL: https://auth.lab.my-domain.net/auth
 +    TERMS_OF_SERVICES: |
 +      { "en": "https://www.sspcloud.fr/tos_en.md", "fr": "https://www.sspcloud.fr/tos_fr.md" }
  api:
-   image:
-     # Same here
-     # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
-     version: latest
    env:
      security.cors.allowed_origins: "http://localhost:3000"
 +    authentication.mode: openidconnect
@@ -770,20 +751,12 @@ S3 storage is configured inside a region in Onyxia api. You have some options to
    hosts:
      - host: onyxia.my-domain.net
  ui:
-   image:
-     # Update on your own therm but update!
-     # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
-     version: 2.1.10
   env:
     KEYCLOAK_REALM: datalab
     KEYCLOAK_URL: https://auth.lab.my-domain.net/auth
     TERMS_OF_SERVICES: |
       { "en": "https://www.sspcloud.fr/tos_en.md", "fr": "https://www.sspcloud.fr/tos_fr.md" }
  api:
-   image:
-     # Same here
-     # https://hub.docker.com/r/inseefrlab/onyxia-api/tags
-     version: latest
    env:
      security.cors.allowed_origins: "http://localhost:3000"
     authentication.mode: openidconnect
