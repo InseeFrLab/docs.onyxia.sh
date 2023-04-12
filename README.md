@@ -1,12 +1,12 @@
 # 🏁 Install
 
-This is a step by step guide that will assist you in installing Onyxia.
+Following is a step by step guide that will assist you in installing Onyxia. &#x20;
+
+If you&#x20;
 
 ### Provision a Kubernetes cluster
 
 First you'll need a Kubernetes cluster. If you have one already you can skip this section.
-
-
 
 {% tabs %}
 {% tab title="Provisioning a cluster on AWS, GCP or Azure" %}
@@ -16,13 +16,13 @@ Pick one of the three and follow the guide.
 
 You can stop after the [configure kubectl section](https://learn.hashicorp.com/tutorials/terraform/eks#configure-kubectl).
 
-{% embed url="https://learn.hashicorp.com/tutorials/terraform/eks" %}
+{% embed url="https://developer.hashicorp.com/terraform/tutorials/kubernetes/eks" %}
 
-{% embed url="https://learn.hashicorp.com/tutorials/terraform/gke?in=terraform/kubernetes" %}
+{% embed url="https://developer.hashicorp.com/terraform/tutorials/kubernetes/gke?in=terraform%2Fkubernetes" %}
 
-{% embed url="https://learn.hashicorp.com/tutorials/terraform/aks?in=terraform/kubernetes" %}
+{% embed url="https://developer.hashicorp.com/terraform/tutorials/kubernetes/aks?in=terraform%2Fkubernetes" %}
 
-### Ingress controller
+#### Ingress controller
 
 Deploy an ingress controller on your cluster:
 
@@ -38,7 +38,7 @@ For Azure use [this command](https://kubernetes.github.io/ingress-nginx/deploy/#
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.0/deploy/static/provider/aws/deploy.yaml
 ```
 
-### DNS
+#### DNS
 
 Let's assume you own the domain name **my-domain.net**, for the rest of the guide you should replace **my-domain.net** by a domain you actually own.
 
@@ -71,7 +71,7 @@ If the address you got was ans IPv6 (`y:y:y:y:y:y:y:y`), create a `AAAA` record.
 You can customise "**onyxia**" and "**lab**" to your liking, for example you could chose **datalab.my-domain.net** and **\*.kub.my-domain.net**.
 {% endhint %}
 
-### SSL
+#### SSL
 
 In this section we will obtain a TLS certificate issued by [LetsEncrypt](https://letsencrypt.org/) using the [certbot](https://certbot.eff.org/) commend line tool then get our ingress controller to use it.
 
@@ -129,11 +129,11 @@ If you are on a Mac or Window computer you can install [Docker desktop](https://
 Docker desktop isn't available on Linux, you can use [Kind](https://kind.sigs.k8s.io/) instead.
 {% endhint %}
 
-### Port Forwarding
+#### Port Forwarding
 
 You'll need to [forward the TCP ports 80 and 443 to your local machine](https://user-images.githubusercontent.com/6702424/174459930-23fb577c-11a2-49ef-a082-873f4139aca1.png). It's done from the administration panel of your domestic internet Box. If you're on a corporate network, no luck for you I'm afraid.
 
-### DNS
+#### DNS
 
 Let's assume you own the domain name **my-domain.net,** for the rest of the guide you should replace **my-domain.net** by a domain you actually own.
 
@@ -161,7 +161,7 @@ The URL of the services created by Onyxia are going to look like: _**https://xxx
 You can customise "**onyxia**" and "**lab**" to your liking, for example you could chose **datalab.my-domain.net** and **\*.kub.my-domain.net**.
 {% endhint %}
 
-### SSL
+#### SSL
 
 In this section we will obtain a TLS certificate issued by [LetsEncrypt](https://letsencrypt.org/) using the [certbot](https://certbot.eff.org/) commend line tool.
 
@@ -194,7 +194,7 @@ sudo kubectl create secret tls onyxia-tls \
     --cert /etc/letsencrypt/live/onyxia.$DOMAIN/fullchain.pem
 ```
 
-### Ingress controller
+#### Ingress controller
 
 We'll install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/) in our cluster ~~but any other ingress controller will do~~.
 
@@ -232,7 +232,7 @@ Through out this guide we make as if everything was instantaneous. In reality if
 
 Use `kubectl get pods` to see if your pods are up and ready.
 
-![](<.gitbook/assets/image (1).png>)
+<img src=".gitbook/assets/image (1).png" alt="" data-size="original">
 {% endhint %}
 
 <details>
@@ -667,7 +667,7 @@ Create a client called "minio"
 
 Minio
 
-We recommand you to follow [minio documentation](https://min.io/docs/minio/linux/administration/identity-access-management/oidc-access-management.html#minio-external-identity-management-openid) for this installation and you must activate OIDC authentification.  We will use the official helm in this tutorial.
+We recommand you to follow [minio documentation](https://min.io/docs/minio/linux/administration/identity-access-management/oidc-access-management.html#minio-external-identity-management-openid) for this installation and you must activate OIDC authentification. We will use the official helm in this tutorial.
 
 ```bash
 helm repo add minio https://charts.min.io/
@@ -721,8 +721,7 @@ helm install minio minio/minio -f minio-values.yaml
 ```
 
 Minio is now deployed and is accessible on the console url.\
-Before configuring the onyxia region to create tokens we should go back to keycloak and create a new client to enable onyxia-web to request token for minio. This client is a little bit more complexe than other if you want to manage durations (here 7 days) and this client should have a claim name policy and with a value of stsonly according to our last deployment of minio. \
-
+Before configuring the onyxia region to create tokens we should go back to keycloak and create a new client to enable onyxia-web to request token for minio. This client is a little bit more complexe than other if you want to manage durations (here 7 days) and this client should have a claim name policy and with a value of stsonly according to our last deployment of minio. \\
 
 Create a client called "onyxia-minio"
 
@@ -826,11 +825,9 @@ S3 storage is configured inside a region in Onyxia api. You have some options to
 helm upgrade onyxia inseefrlab/onyxia -f onyxia-values.yaml
 ```
 
-###
-
 ### Vault
 
-Onyxia-web use vault as a storage for two kinds of secrets : \
+Onyxia-web use vault as a storage for two kinds of secrets :\
 1\. secrets or information generate by Onyxia to store differents values (ui preferences for example)\
 2\. user secrets\
 \

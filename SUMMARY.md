@@ -2,7 +2,7 @@
 
 * [🏁 Install](README.md)
 * [🕹 User guide](user-guide.md)
-* [👨💻 Contributing](contributing/README.md)
+* [👨💻 👨💻 Contributing](contributing/README.md)
   * [🔬 Catalog of services](contributing/catalog-of-services.md)
   * [🐲 onyxia-web](contributing/onyxia/README.md)
     * [🕸 Dependencies](contributing/onyxia/dependencies.md)
