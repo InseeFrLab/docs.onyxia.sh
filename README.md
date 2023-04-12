@@ -1,8 +1,25 @@
+---
+description: Your Onyxia instance, today
+---
+
 # 🏁 Install
 
-Following is a step by step guide that will assist you in installing Onyxia. &#x20;
+## Oneliner&#x20;
 
-If you&#x20;
+TLDR. Here is how you can get an Onyxia instance running in a matter of seconds.
+
+```bash
+helm repo add inseefrlab https://inseefrlab.github.io/helm-charts
+helm install onyxia inseefrlab/onyxia \
+    --set ingress.enabled=true \
+    --set ingress.hosts[0].host=datalab.yourdomain.com
+```
+
+With this, you will obtain an instance operating in a degraded mode, which lacks features such as authentication, S3 explorer, secret management, etc. However, you will still have the capability to launch services from the catalog.
+
+## Step by step installation guide
+
+In this section, we will set up Onyxia from the ground up, along with all the associated technologies. This includes [Minio](https://min.io/) for S3, [Keycloak](https://www.keycloak.org/) for OIDC, and [Vault](https://www.vaultproject.io/) for managing secrets. &#x20;
 
 ### Provision a Kubernetes cluster
 
