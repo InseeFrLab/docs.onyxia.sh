@@ -19,7 +19,7 @@ With this, you will obtain an instance operating in a degraded mode, which lacks
 
 ## Step by step installation guide
 
-In this section, we will set up Onyxia from the ground up, along with all the associated technologies. This includes [Minio](https://min.io/) for S3, [Keycloak](https://www.keycloak.org/) for OIDC, and [Vault](https://www.vaultproject.io/) for managing secrets. &#x20;
+In this section, we will set up Onyxia from the ground up, along with all the associated technologies. This includes [MinIO](https://min.io/) for S3, [Keycloak](https://www.keycloak.org/) for OIDC, and [Vault](https://www.vaultproject.io/) for managing secrets. &#x20;
 
 ### Provision a Kubernetes cluster
 
@@ -672,19 +672,44 @@ Now your users should be able to create account, log-in, and start services on t
 
 ### S3 Storage
 
-Onyxia-web use [AWS Security Token Service API](https://docs.aws.amazon.com/STS/latest/APIReference/welcome.html) to get token and empowered user with storage features. We support any S3 storage compatible with this API.
+Onyxia-web use [AWS Security Token Service API](https://docs.aws.amazon.com/STS/latest/APIReference/welcome.html) to get token and empowered user with storage features. We support any S3 storage compatible with this API. In this context, we are using [MinIO](https://min.io/), which is compatible with the Amazon S3 storage service and we demonstrate how to integrate it with Keycloak.
 
-Before configuring Minio, let's create a new client for keycloak
+#### Create a Keycloak client for Accessing Keycloak
 
-Create a client called "minio"
+Before configuring MinIO, let's create a new client for Keycloak (from the previous existing "datalab" realm).
 
-1. _Root URL_: **https://minio.lab.my-domain.net/**
-2. _Valid redirect URIs_: **https://minio.lab.my-domain.net/\***
+Create a client called "minio".
+
+1. _Client ID_: **minio**
+2. _Client Protocol_: **openid-connect**
+3. _Root URL_: **https://minio.lab.my-domain.net/**
+
+Complete the content of client "minio" with the following values.
+
+1. _Access Type_: **confidential**
+2. _Valid Redirect URIs_ (two values are required): **https://minio.lab.my-domain.net/\*** and **https://minio-console.lab.my-domain.net/\***
 3. _Web origins_: **\***
 
-Minio
+Save the content, a new tab called Credentials must be appear. Navigate to Credentials tab and copy the secret value for the next section.
 
-We recommand you to follow [minio documentation](https://min.io/docs/minio/linux/administration/identity-access-management/oidc-access-management.html#minio-external-identity-management-openid) for this installation and you must activate OIDC authentification. We will use the official helm in this tutorial.
+Navigate to Mappers tab and create a protocol Mapper.
+
+1. _Name_: **policy**
+2. _Mapper Type_: **Hardcoded claim**
+
+Complete the content of Mapper "policy" with the following values.
+
+1. _Token Claim Name_: **policy**
+2. _Claim value_: **stsonly**
+3. _Add to ID token_: **on**
+4. _Add to access token_: **on**
+5. _Add to userinfo_: **on**
+
+#### Install MinIO
+
+We recommand you to follow [MinIO documentation](https://min.io/docs/minio/linux/administration/identity-access-management/oidc-access-management.html#minio-external-identity-management-openid) for this installation and you must activate OIDC authentification. We will use the official Helm in this tutorial. All Helm configuration values can be found within this [link](https://github.com/minio/minio/blob/master/helm/minio/values.yaml).
+
+> Replace `COPY_SECRET_FROM_KEYCLOAK_MINIO_CLIENT` by the secret value defined into the "minio" Keycloak client (see previous section).
 
 ```bash
 helm repo add minio https://charts.min.io/
@@ -692,15 +717,14 @@ helm repo add minio https://charts.min.io/
 DOMAIN=my-domain.net
 
 cat << EOF > ./minio-values.yaml
+## replicas: 16
 ingress:
   enabled: true
   annotations:
     kubernetes.io/ingress.class: nginx
-  rules:
-    - host: "minio.lab.$DOMAIN"
-      paths:
-        - path: /
-          pathType: Prefix
+  path: /
+  hosts:
+    - minio.lab.$DOMAIN
   tls:
     - hosts:
         - minio.lab.$DOMAIN
@@ -708,22 +732,24 @@ consoleIngress:
   enabled: true
   annotations:
     kubernetes.io/ingress.class: nginx
-  rules:
-    - host: "minio-console.lab.$DOMAIN"
-      paths:
-        - path: /
-          pathType: Prefix
+  paths: /
+  hosts:
+    - minio-console.lab.$DOMAIN
   tls:
     - hosts:
         - minio-console.lab.$DOMAIN
+environment:
+  MINIO_BROWSER_REDIRECT_URL: https://minio-console.lab.$DOMAIN
 oidc:
   enabled: true
-  configUrl: "https://auth.lab.$DOMAIN/.well-known/openid-configuration"
+  configUrl: "https://auth.lab.$DOMAIN/auth/realms/datalab/.well-known/openid-configuration"
   clientId: "minio"
-  clientSecret: ""
   claimName: "policy"
   scopes: "openid,profile,email"
   redirectUri: "https://minio-console.lab.$DOMAIN/oauth_callback"
+  claimPrefix: ""
+  comment: ""
+  clientSecret: COPY_SECRET_FROM_KEYCLOAK_MINIO_CLIENT
 policies:
   - name: stsonly
     statements:
@@ -737,24 +763,51 @@ EOF
 helm install minio minio/minio -f minio-values.yaml
 ```
 
-Minio is now deployed and is accessible on the console url.\
-Before configuring the onyxia region to create tokens we should go back to keycloak and create a new client to enable onyxia-web to request token for minio. This client is a little bit more complexe than other if you want to manage durations (here 7 days) and this client should have a claim name policy and with a value of stsonly according to our last deployment of minio. \\
+MinIO is now deployed and is accessible on the console url.
 
-Create a client called "onyxia-minio"
+> By default, there are 16 MinIO containers running. If this number is too large for your Kubernetes cluster, you can limit it by configuring the 'replicas' key.
 
-1. _Root URL_: **https://onyxia.my-domain.net/**
-2. _Valid redirect URIs_: **https://onyxia.my-domain.net/\***
+#### Create a Keycloak Client for Onyxia/MinIO
+
+Before configuring the onyxia region to create tokens we should go back to Keycloak and create a new client to enable onyxia-web to request token for MinIO. This client is a little bit more complexe than other if you want to manage durations (here 7 days) and this client should have a claim name policy and with a value of stsonly according to our last deployment of MinIO.
+
+From "datalab" realm, create a client called "onyxia-minio"
+
+1. _Client ID_: **onyxia-minio**
+2. _Client Protocol_: **openid-connect**
+3. _Root URL_: **https://onyxia.my-domain.net/**
+
+Complete the content of client "onyxia-minio" with the following values.
+
+1. _Access Type_: **public**
+2. _Valid Redirect URIs_: **https://onyxia.my-domain.net/\***
 3. _Web origins_: **\***
 4. Advanced Settings\
    1\. Access Token Lifespan : 7 days\
    2\. Client Session Idle : 7 days\
    3\. Client Session Max: 7 days
-5. Mappers\
-   1\. Create\
-   2\. Hardcoded Claim\
-   3\. Token Claim Name : policy\
-   4\. Claim value : stsonly\
-   5\. name : policy
+
+Save the content and navigate to Mappers tab and create two protocol Mappers.
+
+Create the first Mapper called "policy".
+
+1. _Token Name_: **policy**
+2. _Mapper Type_: **Hardcoded claim**
+3. _Token Claim Name_: **policy**
+4. _Claim value_: **stsonly**
+5. _Add to ID token_: **on**
+6. _Add to access token_: **on**
+7. _Add to userinfo_: **on**
+
+Create the second Mapper called "audience-minio".
+
+1. _Token Name_: **audience-minio**
+2. _Mapper Type_: **Audience**
+3. _Included Custom Audience _: **minio**
+4. _Add to ID token_: **on**
+5. _Add to access token_: **on**
+
+#### Update Onyxia
 
 S3 storage is configured inside a region in Onyxia api. You have some options to configure this storage and let inform Onyxia web all needed informations how to generate those tokens : keycloak parameters to access storage API, duration of STS tokens, bucket name with a standard prefix and a claim in the user JWT token to generate a unique identifiant for this bucket name, whether Onyxia-web should try to to create this bucket silently or not. There is also options for projects. You should look all options for the version of your need on [github](https://github.com/InseeFrLab/onyxia-api/blob/master/docs/region-configuration.md#s3)
 
@@ -808,7 +861,7 @@ S3 storage is configured inside a region in Onyxia api. You have some options to
               "S3":{
 <strong>-                "URL":"todo",
 </strong>+                "type": "minio",
-+                "URL": "https://minio.my-domain.net",
++                "URL": "https://minio.lab.my-domain.net",
 +                "region": "us-east-1",
 +                "bucketPrefix": "oidc-",
 +                "groupBucketPrefix": "projet-",
