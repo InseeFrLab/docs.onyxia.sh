@@ -10,3 +10,5 @@
   * [🐉 onyxia-api](contributing/onyxia-api.md)
   * [📖 This website](contributing/this-website.md)
 * [⬆ Migration v0 -> v2](migration.md)
+* [Roadmap](roadmap.md)
+* [Security information](security-information.md)
