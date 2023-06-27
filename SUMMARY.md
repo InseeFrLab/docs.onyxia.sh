@@ -11,4 +11,4 @@
   * [📖 This website](contributing/this-website.md)
 * [⬆ Migration v0 -> v2](migration.md)
 * [🛣 Roadmap](roadmap.md)
-* [🔓 Securing Onyxia Installation](securing-onyxia-installation.md)
+* [🔓 Security consideration](security-consideration.md)
