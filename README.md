@@ -4,7 +4,7 @@ description: Your Onyxia instance, today
 
 # 🏁 Install
 
-## Oneliner&#x20;
+## Oneliner
 
 TLDR. Here is how you can get an Onyxia instance running in a matter of seconds.
 
@@ -19,7 +19,7 @@ With this, you will obtain an instance operating in a degraded mode, which lacks
 
 ## Step by step installation guide
 
-In this section, we will set up Onyxia from the ground up, along with all the associated technologies. This includes [MinIO](https://min.io/) for S3, [Keycloak](https://www.keycloak.org/) for OIDC, and [Vault](https://www.vaultproject.io/) for managing secrets. &#x20;
+In this section, we will set up Onyxia from the ground up, along with all the associated technologies. This includes [MinIO](https://min.io/) for S3, [Keycloak](https://www.keycloak.org/) for OIDC, and [Vault](https://www.vaultproject.io/) for managing secrets.
 
 ### Provision a Kubernetes cluster
 
@@ -39,7 +39,7 @@ You can stop after the [configure kubectl section](https://learn.hashicorp.com/t
 
 {% embed url="https://developer.hashicorp.com/terraform/tutorials/kubernetes/aks?in=terraform%2Fkubernetes" %}
 
-#### Ingress controller
+**Ingress controller**
 
 Deploy an ingress controller on your cluster:
 
@@ -55,7 +55,7 @@ For Azure use [this command](https://kubernetes.github.io/ingress-nginx/deploy/#
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.0/deploy/static/provider/aws/deploy.yaml
 ```
 
-#### DNS
+**DNS**
 
 Let's assume you own the domain name **my-domain.net**, for the rest of the guide you should replace **my-domain.net** by a domain you actually own.
 
@@ -88,7 +88,7 @@ If the address you got was ans IPv6 (`y:y:y:y:y:y:y:y`), create a `AAAA` record.
 You can customise "**onyxia**" and "**lab**" to your liking, for example you could chose **datalab.my-domain.net** and **\*.kub.my-domain.net**.
 {% endhint %}
 
-#### SSL
+**SSL**
 
 In this section we will obtain a TLS certificate issued by [LetsEncrypt](https://letsencrypt.org/) using the [certbot](https://certbot.eff.org/) commend line tool then get our ingress controller to use it.
 
@@ -146,11 +146,11 @@ If you are on a Mac or Window computer you can install [Docker desktop](https://
 Docker desktop isn't available on Linux, you can use [Kind](https://kind.sigs.k8s.io/) instead.
 {% endhint %}
 
-#### Port Forwarding
+**Port Forwarding**
 
 You'll need to [forward the TCP ports 80 and 443 to your local machine](https://user-images.githubusercontent.com/6702424/174459930-23fb577c-11a2-49ef-a082-873f4139aca1.png). It's done from the administration panel of your domestic internet Box. If you're on a corporate network, no luck for you I'm afraid.
 
-#### DNS
+**DNS**
 
 Let's assume you own the domain name **my-domain.net,** for the rest of the guide you should replace **my-domain.net** by a domain you actually own.
 
@@ -178,7 +178,7 @@ The URL of the services created by Onyxia are going to look like: _**https://xxx
 You can customise "**onyxia**" and "**lab**" to your liking, for example you could chose **datalab.my-domain.net** and **\*.kub.my-domain.net**.
 {% endhint %}
 
-#### SSL
+**SSL**
 
 In this section we will obtain a TLS certificate issued by [LetsEncrypt](https://letsencrypt.org/) using the [certbot](https://certbot.eff.org/) commend line tool.
 
@@ -211,7 +211,7 @@ sudo kubectl create secret tls onyxia-tls \
     --cert /etc/letsencrypt/live/onyxia.$DOMAIN/fullchain.pem
 ```
 
-#### Ingress controller
+**Ingress controller**
 
 We'll install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/) in our cluster ~~but any other ingress controller will do~~.
 
@@ -347,6 +347,12 @@ helm install onyxia inseefrlab/onyxia -f onyxia-values.yaml
 ```
 
 You can now access `https://onyxia.my-domain.net` and start services. Congratulations! 🥳
+
+{% hint style="info" %}
+You have the ability to customize the user interface (UI) of Onyxia through the provision of specific environment variables to the UI. For details on the available options, please consult the 'UI Customization' section of [this file](https://github.com/InseeFrLab/onyxia-web/blob/main/.env).
+
+If you are unsure about how to supply these variables, refer to the later section of this guide where we discuss how to provide the KEYCLOAK\_\* parameters. You'll then be able to add your UI-related parameters alongside them.
+{% endhint %}
 
 ### Enabling user authentication
 
@@ -608,7 +614,10 @@ Don't forget as well to remplace the terms of services of the [sspcloud](https:/
 +    KEYCLOAK_REALM: datalab
 +    KEYCLOAK_URL: https://auth.lab.my-domain.net/auth
 +    TERMS_OF_SERVICES: |
-+      { "en": "https://www.sspcloud.fr/tos_en.md", "fr": "https://www.sspcloud.fr/tos_fr.md" }
++      { 
++        "en": "https://www.sspcloud.fr/tos_en.md", 
++        "fr": "https://www.sspcloud.fr/tos_fr.md" 
++      }
  api:
    env:
      security.cors.allowed_origins: "http://localhost:3000"
@@ -803,7 +812,7 @@ Create the second Mapper called "audience-minio".
 
 1. _Token Name_: **audience-minio**
 2. _Mapper Type_: **Audience**
-3. _Included Custom Audience _: **minio**
+3. \_Included Custom Audience \_: **minio**
 4. _Add to ID token_: **on**
 5. _Add to access token_: **on**
 
