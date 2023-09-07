@@ -58,10 +58,7 @@ Actually, from the standpoint of the web app, it is. When a user that isn't auth
 Now let's say we want the search to be restricted to a given GitHub organization. (Example: InseeFrLab.) The GitHub organization should be specified as an environment variable by the person in charge of deploying Onyxia. e.g.:
 
 ```yaml
-  UI:
-    image:
-      name: inseefrlab/onyxia-web
-      version: 0.15.13
+  web:
     env:
       MINIO_URL: https://minio.lab.sspcloud.fr
       VAULT_URL: https://vault.lab.sspcloud.fr

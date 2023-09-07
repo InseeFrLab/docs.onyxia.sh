@@ -42,12 +42,7 @@ ingress:
     kubernetes.io/ingress.class: nginx
   hosts:
     - host: onyxia.$DOMAIN
-ui:
-  image:
-    version: 0.56.6
 api:
-  image:
-    version: v0.12
   catalogs: 
     [
        {
@@ -319,7 +314,7 @@ This is the purpose of the `x-onyxia` param `useRegionSliderConfig`&#x20;
 
 <pre class="language-yaml" data-title="onyxia/values.yaml"><code class="lang-yaml">onyxia:
 
-  ui:
+  web:
     ...
     
   api:

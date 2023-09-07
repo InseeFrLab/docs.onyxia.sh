@@ -270,8 +270,6 @@ ingress:
     kubernetes.io/ingress.class: nginx
   hosts:
     - host: test-spa.lab.$DOMAIN
-image:
-  version: "0.4.3"
 EOF
 
 helm repo add etalab https://etalab.github.io/helm-charts
@@ -373,7 +371,7 @@ You probably want to enable [Terms and Conditions as required actions](https://d
 That out of the way, note that you can configure onyxia-web to integrate with your existing Keycloak server, you just need to set some dedicated environment variable in the `values.yaml` of the onyxia helm chart. Example:
 
 ```yaml
- ui:
+ web:
   env:
     # Available env are documented here: https://github.com/InseeFrLab/onyxia-web/blob/main/.env
     KEYCLOAK_URL: https://auth.lab.my-domain.net/auth
@@ -609,7 +607,7 @@ Don't forget as well to remplace the terms of services of the [sspcloud](https:/
      kubernetes.io/ingress.class: nginx
    hosts:
      - host: onyxia.my-domain.net
- ui:
+ web:
 +  env:
 +    KEYCLOAK_REALM: datalab
 +    KEYCLOAK_URL: https://auth.lab.my-domain.net/auth
@@ -828,7 +826,7 @@ S3 storage is configured inside a region in Onyxia api. You have some options to
      kubernetes.io/ingress.class: nginx
    hosts:
      - host: onyxia.my-domain.net
- ui:
+ web:
   env:
     KEYCLOAK_REALM: datalab
     KEYCLOAK_URL: https://auth.lab.my-domain.net/auth

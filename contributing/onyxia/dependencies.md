@@ -156,11 +156,8 @@ It enables to run onyxia-web again a specific infrastructure while keeping the a
 Checkout [the helm chart](https://github.com/InseeFrLab/paris-sspcloud/blob/812b12e00e8c24f031083ab41949335bd24b9f4b/apps/onyxia/values.yaml#L18-L33):
 
 ```
-  UI:
+  web:
     replicaCount: 2
-    image:
-      name: inseefrlab/onyxia-web
-      version: 0.15.13
     env:
       MINIO_URL: https://minio.lab.sspcloud.fr
       VAULT_URL: https://vault.lab.sspcloud.fr
