@@ -103,6 +103,14 @@ Rules of thumbs when it comes to styling:
 * A component should not size or position itself. It should always be the responsibility of the parent component to do it. In other words, you should never have `height`, `width`, `top`, `left`, `right`, `bottom` or `margin` in [the root styles](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/src/app/components/App/Footer.tsx#L16-L23) of your components.
 * You should never have a color or a dimension hardcoded elsewhere than in [the theme configuration](https://github.com/InseeFrLab/onyxia-web/blob/main/src/app/theme.tsx). Use `theme.spacing()` ([ex1](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/src/app/components/pages/MyServices/MyServicesCards/MyServicesCard/MyServicesCard.tsx#L24), [ex2](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/src/app/components/pages/MyServices/MyServicesCards/MyServicesCard/MyServicesCard.tsx#L31), [ex3](https://github.com/InseeFrLab/onyxia-web/blob/95667d66cc6ee835ede8d9d6a9bca5299d11bc1a/src/app/components/pages/MyServices/MyServicesSavedConfigs/MyServicesSavedConfig/MyServicesSavedConfig.tsx#L30)) and [`theme.colors.useCases.xxx`](https://github.com/InseeFrLab/onyxia-web/blob/08addbc60c820b8306cf8b0ccbe4793bd2f85661/src/app/components/pages/MyServices/MyServicesSavedConfigs/MyServicesSavedConfig/MyServicesSavedConfigOptions.tsx#L23-L32).
 
+### screen-scaler 🐔
+
+{% embed url="https://github.com/garronej/screen-scaler" %}
+
+Onyxia is mostly used on desktop computer screens. It's not worth the effort to create a fully flege responsive design for the UI.  \
+screen-scaler enables us to design for a sigle canonical screen size. The library take charge of scaling/shrinking the image. depending on the real size of the screen.  \
+It also asks to rotate the screen when the app is rendered in protrait mode. &#x20;
+
 ### Storybook
 
 {% embed url="https://storybook.js.org" %}
@@ -228,7 +236,7 @@ This is a video to demonstrate how to setup a new page and add it to the `<Leftb
 
 {% embed url="https://www.i18nifty.dev" %}
 
-For internalization and translation.&#x20;
+For internalization and translation.
 
 ### create-react-app
 
