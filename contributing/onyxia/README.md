@@ -9,6 +9,7 @@ This is the documentation for [InseeFrLab/onyxia-web](https://github.com/InseeFr
 ```bash
 git clone https://github.com/InseeFrLab/onyxia-web
 cd onyxia-web
+git submodule update --init --recursive
 
 # Download the binary files (images, fonts, ect, you need git LFS)
 git lfs install && git lfs pull
