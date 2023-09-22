@@ -16,7 +16,7 @@ This collection of charts help users to launch many IDE with various binary stac
 
 This collection of charts help users to launch many databases system. Most of them are based on [bitnami/charts](https://github.com/bitnami/charts).
 
-* &#x20;[InseeFrLab/helm-charts-automation](https://github.com/InseeFrLab/helm-charts-datascience)
+* &#x20;[InseeFrLab/helm-charts-automation](https://github.com/InseeFrLab/helm-charts-automation/)
 
 This collection of charts help users to start automation tools for their datascience activity.&#x20;
 
