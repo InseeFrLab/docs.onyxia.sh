@@ -4,21 +4,19 @@ description: Contributing to the helm charts
 
 # 🔬 Catalog of services
 
+Every Onyxia instance may or may not have it's own catalog. There is three default catalogs :
 
-
-Every Onyxia instance may or may not have it's own catalog. There is three default catalogs : &#x20;
-
-* &#x20;[InseeFrLab/helm-charts-interactive-services](https://github.com/inseefrlab/helm-charts-interactive-services)
+* [InseeFrLab/helm-charts-interactive-services](https://github.com/inseefrlab/helm-charts-interactive-services)
 
 This collection of charts help users to launch many IDE with various binary stacks (python , R) with or without GPU support. Docker images are built [here](https://github.com/inseefrlab/images-datascience) and help us to give a homogeneous stack.
 
-* &#x20;[InseeFrLab/helm-charts-databases](https://github.com/inseefrlab/helm-charts-databases)
+* [InseeFrLab/helm-charts-databases](https://github.com/inseefrlab/helm-charts-databases)
 
 This collection of charts help users to launch many databases system. Most of them are based on [bitnami/charts](https://github.com/bitnami/charts).
 
-* &#x20;[InseeFrLab/helm-charts-automation](https://github.com/InseeFrLab/helm-charts-automation/)
+* [InseeFrLab/helm-charts-automation](https://github.com/InseeFrLab/helm-charts-automation/)
 
-This collection of charts help users to start automation tools for their datascience activity.&#x20;
+This collection of charts help users to start automation tools for their datascience activity.
 
 You can always find the source of the catalog by clicking on the "contribute to the... " link.
 
@@ -28,7 +26,7 @@ If you take [this other instance](https://sill-demo.etalab.gouv.fr), it has only
 
 ![https://sill-demo.etalab.gouv.fr/catalog](<../.gitbook/assets/image (9).png>)
 
-The available catalogs in a given Onyxia instance are configured at install time, example with datalab.sspcloud.fr: &#x20;
+The available catalogs in a given Onyxia instance are configured at install time, example with datalab.sspcloud.fr:
 
 ```bash
 helm repo add inseefrlab https://inseefrlab.github.io/helm-charts
@@ -91,13 +89,13 @@ EOF
 helm install onyxia inseefrlab/onyxia -f onyxia-values.yaml
 ```
 
-In order to contribute you have to be familiar with [Helm](https://helm.sh/) and to be familiar with Helm you need to be familiar with [Kubernetes objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/). &#x20;
+In order to contribute you have to be familiar with [Helm](https://helm.sh/) and to be familiar with Helm you need to be familiar with [Kubernetes objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/).
 
-In Onyxia we use the `values.schema.json` file to know what options should be displayed to the user at [the service configuration step](https://user-images.githubusercontent.com/6702424/177571819-f2e1b4ef-ecd1-479b-a5a1-658d87d7c7c0.png) and what default value Onyxia should inject. &#x20;
+In Onyxia we use the `values.schema.json` file to know what options should be displayed to the user at [the service configuration step](https://user-images.githubusercontent.com/6702424/177571819-f2e1b4ef-ecd1-479b-a5a1-658d87d7c7c0.png) and what default value Onyxia should inject.
 
 ![https://helm.sh/docs/topics/charts/#the-chart-file-structure](<../.gitbook/assets/image (6).png>)
 
-Let's consider a sample of the `values.schema.json` of the InseeFrLab/helm-charts-datascience's Jupyter chart: &#x20;
+Let's consider a sample of the `values.schema.json` of the InseeFrLab/helm-charts-datascience's Jupyter chart:
 
 <pre class="language-javascript" data-title="values.schema.json"><code class="lang-javascript">"git": {
     "description": "Git user configuration",
@@ -182,22 +180,38 @@ And it translates into this:
 
 {% embed url="https://user-images.githubusercontent.com/6702424/177571819-f2e1b4ef-ecd1-479b-a5a1-658d87d7c7c0.png" %}
 
-Note the `"git.name"`, `"git.email"` and `"git.token"`, this enables [onyxia-web](https://github.com/InseeFrLab/onyxia-web) to pre fill the fields. &#x20;
+Note the `"git.name"`, `"git.email"` and `"git.token"`, this enables [onyxia-web](https://github.com/InseeFrLab/onyxia-web) to pre fill the fields.
 
-If the user took the time to fill its profile information, [onyxia-web](https://github.com/InseeFrLab/onyxia-web) know what is the Git **username**, **email** and **personal access token** of the user. &#x20;
+If the user took the time to fill its profile information, [onyxia-web](https://github.com/InseeFrLab/onyxia-web) know what is the Git **username**, **email** and **personal access token** of the user.
 
 ![The onyxia user profile](<../.gitbook/assets/image (7).png>)
 
-[Here are the values](https://github.com/InseeFrLab/onyxia-web/blob/main/src/core/ports/OnyxiaApiClient.ts#L212-L309) that you can use in the `overwriteDefaultWith` field :&#x20;
+[Here](https://github.com/InseeFrLab/onyxia/blob/main/src/core/ports/OnyxiaApi/XOnyxia.ts) is defined the structure of the context that you can use in the `overwriteDefaultWith` field:
 
 ```typescript
-export type OnyxiaValues = {
+export type XOnyxiaParams = {
+    /**
+     * This is where you can reference values from the onyxia context so that they
+     * are dynamically injected by the Onyxia launcher.
+     *
+     * Examples:
+     * "overwriteDefaultWith": "user.email"
+     * "overwriteDefaultWith": "{{project.id}}-{{k8s.randomSubdomain}}.{{k8s.domain}}"
+     */
+    overwriteDefaultWith?: string;
+    hidden?: boolean;
+    readonly?: boolean;
+    useRegionSliderConfig?: string;
+};
+
+export type XOnyxiaContext = {
     user: {
         idep: string;
         name: string;
         email: string;
         password: string;
         ip: string;
+        darkMode: boolean;
     };
     project: {
         id: string;
@@ -265,6 +279,12 @@ export type OnyxiaValues = {
         ingressClassName: string | undefined;
         ingress: boolean | undefined;
         route: boolean | undefined;
+        istio:
+            | {
+                  enabled: boolean;
+                  gateways: string[];
+              }
+            | undefined;
         randomSubdomain: string;
         initScriptUrl: string;
     };
@@ -279,6 +299,7 @@ export type OnyxiaValues = {
         | {
               cranProxyUrl: string | undefined;
               condaProxyUrl: string | undefined;
+              packageManagerUrl: string | undefined;
               pypiProxyUrl: string | undefined;
           }
         | undefined;
@@ -304,13 +325,13 @@ You can also concatenate string values using [mustache](https://mustache.github.
 }
 ```
 
-#### Defining  region scoped resources limit
+#### Defining region scoped resources limit
 
-You probably want to be able to define a limit to the amount of resources a user can request when launching a service. &#x20;
+You probably want to be able to define a limit to the amount of resources a user can request when launching a service.
 
-It's possible to do it at the catalog level but it's best to enable the person who is deploying Onyxia to define boundaries for his deployment regions.&#x20;
+It's possible to do it at the catalog level but it's best to enable the person who is deploying Onyxia to define boundaries for his deployment regions.
 
-This is the purpose of the `x-onyxia` param `useRegionSliderConfig`&#x20;
+This is the purpose of the `x-onyxia` param `useRegionSliderConfig`
 
 <pre class="language-yaml" data-title="onyxia/values.yaml"><code class="lang-yaml">onyxia:
 
@@ -436,8 +457,8 @@ This is the purpose of the `x-onyxia` param `useRegionSliderConfig`&#x20;
 }
 </code></pre>
 
-You now have all the relevent information to submit PR on the existing catalogs or even to create your own. &#x20;
+You now have all the relevent information to submit PR on the existing catalogs or even to create your own.
 
-Remember that a helm chart repository is nothing more than a GitHub repo with a special [github Action setup](https://github.com/marketplace/actions/helm-deploy) to publish the charts on GitHub Pages. &#x20;
+Remember that a helm chart repository is nothing more than a GitHub repo with a special [github Action setup](https://github.com/marketplace/actions/helm-deploy) to publish the charts on GitHub Pages.
 
-If you are looking for a repo to start from have a look at [this one](https://github.com/etalab/helm-charts-sill), it has a directory where you can put the icons of your services. &#x20;
+If you are looking for a repo to start from have a look at [this one](https://github.com/etalab/helm-charts-sill), it has a directory where you can put the icons of your services.
