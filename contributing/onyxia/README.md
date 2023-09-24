@@ -1,14 +1,14 @@
 ---
-description: The frontend
+description: The TypeScript App that runs in the browser.
 ---
 
-# 🐲 onyxia-web
+# 🐲 The Web Application
 
-This is the documentation for [InseeFrLab/onyxia-web](https://github.com/InseeFrLab/onyxia-web). &#x20;
+This is the documentation for [InseeFrLab/onyxia](https://github.com/InseeFrLab/onyxia-web). &#x20;
 
 ```bash
-git clone https://github.com/InseeFrLab/onyxia-web
-cd onyxia-web
+git clone https://github.com/InseeFrLab/onyxia
+cd onyxia
 git submodule update --init --recursive
 
 # Download the binary files (images, fonts, ect, you need git LFS)
