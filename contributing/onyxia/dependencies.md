@@ -252,20 +252,13 @@ Using [`import type`](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43ee
 
 ## For working on 🧠 of the App
 
-Anything contained in the [src/lib](https://github.com/InseeFrLab/onyxia-web/tree/main/src/lib) directory.
-
-### Redux Toolkit
-
-{% embed url="https://redux-toolkit.js.org" %}
-
-It's toolset for redux. No need to dig too deep. Getting familiar with the core concept of redux should be more than enough to get you started. Beyond that refer to the following library.
+Anything contained in the [src/core](https://github.com/InseeFrLab/onyxia/tree/main/src/core) directory.
 
 ### redux-clean-architecture 🐔
 
 {% embed url="https://github.com/garronej/clean-redux" %}
 
-This repo aims to be a guide on how to implement Clean Architecture using [`@reduxjs/toolkit`](https://redux-toolkit.js.org).\
-The NPM library `clean-redux` is a set of utils that you will need to achieve perfect type inference.
+The framework used to implement strict separation of concern betwen the UI and the Core and high modularity of the code. &#x20;
 
 ### EVT 🐔
 
