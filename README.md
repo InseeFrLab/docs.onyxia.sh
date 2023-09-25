@@ -12,7 +12,7 @@ TLDR. Here is how you can get an Onyxia instance running in a matter of seconds.
 helm repo add inseefrlab https://inseefrlab.github.io/helm-charts
 helm install onyxia inseefrlab/onyxia \
     --set ingress.enabled=true \
-    --set ingress.hosts[0].host=datalab.yourdomain.com
+    --set ingress.hosts[0].host=datalab.my-domain.net
 ```
 
 With this, you will obtain an instance operating in a degraded mode, which lacks features such as authentication, S3 explorer, secret management, etc. However, you will still have the capability to launch services from the catalog.
