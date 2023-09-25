@@ -4,7 +4,11 @@ description: Technologies at play in Onyxia-web
 
 # 🕸 Dependencies
 
-Modules marked by 🐔 are our own. It means that if you need a new feature it can be added in the better delays and your PR will be reviewed in priority over the one of the community.
+To find your way in Onyxia, the best approach is to start by getting a surface-level understanding of the libraries that are leveraged in the project.
+
+{% hint style="info" %}
+Modules marked by 🐔 are our own.
+{% endhint %}
 
 ## Typescript
 
@@ -34,7 +38,7 @@ Anything contained in the [src/ui](https://github.com/InseeFrLab/onyxia-web/tree
 
 {% embed url="https://github.com/InseeFrLab/onyxia-ui" %}
 
-The UI toolkit used in the project, you can find the setup of [onyxia-UI](https://github.com/InseeFrLab/onyxia-ui) in [onyxia-web](https://github.cm/InseeFrLab/onyxia-web) here: [src/app/theme.tsx](https://github.com/InseeFrLab/onyxia-web/blob/main/src/app/theme.tsx).
+The UI toolkit used in the project, you can find the setup of [onyxia-UI](https://github.com/InseeFrLab/onyxia-ui) in [onyxia-web](https://github.cm/InseeFrLab/onyxia-web) here: [src/ui/theme.tsx](https://github.com/InseeFrLab/onyxia/blob/main/src/ui/theme.tsx).
 
 #### [MUI](https://mui.com) integration
 
@@ -58,22 +62,22 @@ If you want to test some changes made to onyxia-ui in onyxia-web before releasin
 The setup to do that, starting from scratch
 
 ```bash
-cd ~/github #This is just a suggestion, clone wherever you see fit.
-git clone https://github.com/InseeFrLab/onyxia-ui
-cd onyxia-ui
-yarn && yarn build
-npx tsc -w
+cd ~/github
+git clone https//github.com/InseeFrLab/onyxia
+cd onyxia
+yarn
+yarn start
 ```
 
 On an other terminal:
 
 ```bash
-cd ~/github
-git clone https//github.com/InseeFrLab/onyxia-web
-cd onyxia-web
-yarn
-yarn link_inhouse_deps onyxia-ui
-yarn start
+cd ~/github #This is just a suggestion, clone wherever you see fit.
+git clone https://github.com/InseeFrLab/onyxia-ui
+cd onyxia-ui
+yarn && yarn build
+yarn yarn_link onyxia
+npx tsc -w
 ```
 
 Now you can make changes in `~/github/onyxia-ui/src`/ and see the changes directly in onyxia-web. You just need to reload the page.
@@ -128,10 +132,6 @@ To launch Storybook locally run the following command:
 ```bash
 yarn storybook
 ```
-
-{% hint style="success" %}
-The storybook is automatically published at [storybook.onyxia.dev](https://storybook.onyxia.dev) by the [CI workflow](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/.github/workflows/ci.yml#L40-L54) to [GitHub Pages](https://user-images.githubusercontent.com/6702424/139530499-60cf58b8-7eff-4692-9ee8-eeddb8e778ab.png).
-{% endhint %}
 
 {% hint style="info" %}
 We place the stories in [onyxia-web/src/stories](https://github.com/InseeFrLab/onyxia-web/tree/main/src/stories). The directory structure is a mirror of the [onyxia-web/src/app/components](https://github.com/InseeFrLab/onyxia-web/tree/main/src/app/components) directory.
@@ -241,6 +241,10 @@ For internalization and translation.
 ### create-react-app
 
 {% embed url="https://create-react-app.dev" %}
+
+{% hint style="warning" %}
+We plane to move to Vite when [Keycloakify](https://keycloakify.dev) will support it.
+{% endhint %}
 
 The project is a non-ejected [create-react-app](https://reactjs.org/docs/create-a-new-react-app.html) using [typescript template](https://create-react-app.dev/docs/getting-started#creating-a-typescript-app) (you can find [here](https://github.com/garronej/keycloakify-demo-app) the template repo that was used as a base for this project).
 
