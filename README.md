@@ -400,7 +400,7 @@ KEYCLOAK_PASSWORD=yyyyyy
 cat << EOF > ./keycloak-values.yaml
 image:
   # We use the legacy variant of the image until codecentric update it's helm chart
-  tag: "18.0.2-legacy"
+  tag: "19.0.3-legacy"
 replicas: 1
 extraInitContainers: |
   - name: realm-ext-provider
@@ -415,7 +415,8 @@ extraInitContainers: |
         # The version of the Keycloak theme and the version of onyxia-web don't need 
         # to match but you should update the theme from time to time.  
         # https://github.com/InseeFrLab/onyxia-web/releases
-        curl -L -f -S -o /extensions/onyxia-web.jar https://github.com/InseeFrLab/onyxia-web/releases/download/v0.56.6/standalone-keycloak-theme.jar
+        curl -L -f -S -o /extensions/onyxia.jar https://github.com/InseeFrLab/onyxia-web/releases/download/v2.29.4
+/keycloak-theme.jar
     volumeMounts:
       - name: extensions
         mountPath: /extensions
