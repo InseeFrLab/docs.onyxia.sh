@@ -2,8 +2,8 @@
 
 * [🏁 Install](README.md)
 * [🕹 User guide](user-guide.md)
+* [🔬 Catalog of services](catalog-of-services.md)
 * [👨💻 Contributing](contributing/README.md)
-  * [🔬 Catalog of services](contributing/catalog-of-services.md)
   * [🐲 The Web Application](contributing/onyxia/README.md)
     * [🕸 Dependencies](contributing/onyxia/dependencies.md)
     * [📐 Architecture](contributing/onyxia/architecture.md)
