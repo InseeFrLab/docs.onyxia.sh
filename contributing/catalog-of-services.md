@@ -6,15 +6,15 @@ description: Contributing to the helm charts
 
 Every Onyxia instance may or may not have it's own catalog. There is three default catalogs :
 
-* [InseeFrLab/helm-charts-interactive-services](https://github.com/inseefrlab/helm-charts-interactive-services)
+{% embed url="https://github.com/inseefrlab/helm-charts-interactive-services" %}
 
 This collection of charts help users to launch many IDE with various binary stacks (python , R) with or without GPU support. Docker images are built [here](https://github.com/inseefrlab/images-datascience) and help us to give a homogeneous stack.
 
-* [InseeFrLab/helm-charts-databases](https://github.com/inseefrlab/helm-charts-databases)
+{% embed url="https://github.com/inseefrlab/helm-charts-databases" %}
 
 This collection of charts help users to launch many databases system. Most of them are based on [bitnami/charts](https://github.com/bitnami/charts).
 
-* [InseeFrLab/helm-charts-automation](https://github.com/InseeFrLab/helm-charts-automation/)
+{% embed url="https://github.com/InseeFrLab/helm-charts-automation/" %}
 
 This collection of charts help users to start automation tools for their datascience activity.
 
