@@ -38,7 +38,7 @@ Anything contained in the [src/ui](https://github.com/InseeFrLab/onyxia-web/tree
 
 {% embed url="https://github.com/InseeFrLab/onyxia-ui" %}
 
-The UI toolkit used in the project, you can find the setup of [onyxia-UI](https://github.com/InseeFrLab/onyxia-ui) in [onyxia-web](https://github.cm/InseeFrLab/onyxia-web) here: [src/ui/theme.tsx](https://github.com/InseeFrLab/onyxia/blob/main/src/ui/theme.tsx).
+The UI toolkit used in the project, you can find the setup of [onyxia-UI](https://github.com/InseeFrLab/onyxia-ui) in [onyxia-web](https://github.cm/InseeFrLab/onyxia-web) here: [src/ui/theme.tsx](https://github.com/InseeFrLab/onyxia/blob/main/web/src/ui/theme.tsx).
 
 #### [MUI](https://mui.com) integration
 
@@ -46,54 +46,50 @@ The UI toolkit used in the project, you can find the setup of [onyxia-UI](https:
 
 Onyxia-UI offers a[ library of reusable components](https://ui.onyxia.dev/?path=/story/quick-start--page) but you can also use [MUI](https://mui.com) components in the project, their aspect will automatically be adapted to blend in with the theme.
 
-#### Where do I create new react components
+#### 🎨 Palettes
 
-When you create a new react component, you should ask yourself:
+We currently offers builtin support for [four color palettes](https://github.com/InseeFrLab/onyxia/blob/9ced438bf6bad76a85049d52220617070f6daa79/web/src/ui/theme.tsx#L76-L88):
 
-* Is it generic enough to be reused in other projects? If yes then it belongs to [Onyxia-UI](https://github.com/garronej/onyxia-ui). Example: [`<Button />`](https://github.com/InseeFrLab/onyxia-ui/blob/main/src/Button.tsx) (see it [live](https://ui.onyxia.dev/?path=/story/sandbox-button--vue-no-icon))
-* Will the component be used more than once? If it will then it should be placed in [src/app/components/shared](https://github.com/InseeFrLab/onyxia-web/tree/main/src/app/components/shared). Example [`<Header />`](https://github.com/InseeFrLab/onyxia-web/blob/main/src/app/components/shared/Header.tsx) (see it [live](https://storybook.onyxia.dev/?path=/story/shared-header--vue-user-logged-in)), because it is used [in the App](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/src/app/components/App/App.tsx#L2) and [in the login pages](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/src/app/components/KcApp/Template.tsx#L12).
-* Otherwise it's a page-specific component and belongs in a subdirectory of [src/app/components/pages](https://github.com/InseeFrLab/onyxia-web/tree/main/src/app/components/pages). Example: [`<MyServicesCards />`](https://github.com/InseeFrLab/onyxia-web/blob/main/src/app/components/pages/MyServices/MyServicesCards/MyServicesCard/MyServicesCard.tsx) (see it [live](https://storybook.onyxia.dev/?path=/story/pages-myservices-myservicescards-myservicescard-myservicescard--vue-regular\&args=width:379))
+* France: [datalab.sspcloud.fr?**THEME\_ID=france**](https://datalab.sspcloud.fr/?THEME\_ID=france)
+* Ultraviolet: [datalab.sspcloud.fr?**THEME\_ID=ultraviolet**](https://datalab.sspcloud.fr/?THEME\_ID=ultraviolet)
+* Verdant: [datalab.sspcloud?**THEME\_ID=verdant**](https://datalab.sspcloud.fr/?THEME\_ID=verdant)
+* Onyxia (default): [datalab.sspcloud.fr?**THEME\_ID=onyxia**](https://datalab.sspcloud.fr)
 
-{% hint style="info" %}
+You can also [provide your own palette](https://github.com/InseeFrLab/onyxia/blob/9ced438bf6bad76a85049d52220617070f6daa79/web/.env#L50-L71).
+
+#### 🔡 Fonts
+
+The fonts are loaded in the [public/index.html](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/public/index.html#L6-L115). It's important to keep it that way for Keycloakify.
+
+#### 🔡 Linking onyxia-ui in onyxia-web
+
 To release a new version of [Onyxia-UI](dependencies.md#typescript). You just need to bump the [package.json's version](https://github.com/InseeFrLab/onyxia-ui/blob/470fdb4e54e2b16051ff8b7442ea4d765d76ba92/package.json#L3) and push. [The CI](https://github.com/garronej/ts-ci) will automate publish [a new version on NPM](dependencies.md#typescript).
 
 If you want to test some changes made to onyxia-ui in onyxia-web before releasing a new version of onyxia-ui to NPM you can link locally onyxia-ui in onyxia-web.
 
-The setup to do that, starting from scratch
-
 ```bash
 cd ~/github
 git clone https//github.com/InseeFrLab/onyxia
-cd onyxia
-yarn
-yarn start
-```
+cd onyxia/web
+yarn install
 
-On an other terminal:
-
-```bash
-cd ~/github #This is just a suggestion, clone wherever you see fit.
-git clone https://github.com/InseeFrLab/onyxia-ui
-cd onyxia-ui
-yarn && yarn build
-yarn yarn_link onyxia
+cd ~/github/onyxia #This is just a suggestion, clone wherever you see fit.
+git clone https://github.com/InseeFrLab/onyxia-ui ui
+cd ui
+yarn install
+yarn build
+yarn yarn_link web
 npx tsc -w
+
+# Open a new terminal
+cd ~/github/onyxia/web
+yarn start
+
 ```
 
-Now you can make changes in `~/github/onyxia-ui/src`/ and see the changes directly in onyxia-web. You just need to reload the page.
-{% endhint %}
+Now you can make changes in `~/github/onyxia/ui/`and see the live updates. &#x20;
 
-#### Palettes
-
-We currently offers builtin support for [three color palettes](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/src/app/theme.tsx#L84-L93):
-
-* France: [datalab.sspcloud.fr?**THEME\_ID=france**](https://datalab.sspcloud.fr/?THEME\_ID=france)\*\*\*\*
-* Ultraviolet: [datalab.sspcloud.fr?**THEME\_ID=ultraviolet**](https://datalab.sspcloud.fr/?THEME\_ID=ultraviolet)\*\*\*\*
-* Onyxia (default): [datalab.sspcloud.fr?**THEME\_ID=onyxia**](https://datalab.sspcloud.fr)\*\*\*\*
-
-#### Fonts
-
-The fonts are loaded in the [public/index.html](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/public/index.html#L6-L115). It's important to keep it that way for Keycloakify.
+If you want to install/update some dependencies, you must remove the node\_modules, do you updates, then link again. &#x20;
 
 ### tss-react 🐔
 
@@ -119,27 +115,13 @@ It also asks to rotate the screen when the app is rendered in protrait mode. &#x
 
 {% embed url="https://storybook.js.org" %}
 
-It enables us to test the graphical components in isolation.
-
-Example:
-
-* Tested component: [src/app/components/App/Footer.tsx](https://github.com/InseeFrLab/onyxia-web/blob/main/src/ui/components/App/Footer.tsx)
-* Story for tested component: [src/stories/App/Footer.stories.tsx](https://github.com/InseeFrLab/onyxia-web/blob/main/src/stories/App/Footer.stories.tsx)
-* Live result: [storybook.onyxia.dev/?path=/story/app-footer--vue-1](https://storybook.onyxia.dev/?path=/story/app-footer--vue-1)
+It enables us to test the graphical components in isolation. [See sources](https://github.com/InseeFrLab/onyxia/tree/main/web/src/stories).
 
 To launch Storybook locally run the following command:
 
 ```bash
 yarn storybook
 ```
-
-{% hint style="info" %}
-We place the stories in [onyxia-web/src/stories](https://github.com/InseeFrLab/onyxia-web/tree/main/src/stories). The directory structure is a mirror of the [onyxia-web/src/app/components](https://github.com/InseeFrLab/onyxia-web/tree/main/src/app/components) directory.
-{% endhint %}
-
-{% hint style="info" %}
-We create a wrapper ([src/stories/getStory.tsx](https://github.com/InseeFrLab/onyxia-web/blob/main/src/stories/getStory.tsx)) that aims at reducing as much as possible the boilerplate required to create a new story.
-{% endhint %}
 
 {% embed url="https://youtu.be/2L7rtAOlqtc" %}
 Setting up a new story
@@ -212,25 +194,17 @@ It is very handy to be able to get the height and the width of components dynami
 
 It's a build tool that enables to implement the login and register pages that users see when they are redirected to Keycloak for authentication.
 
-If the app is being run on Keycloak the [`kcContext`](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/src/app/index.tsx#L7) isn't `undefined` and it means shat [we should render the login/register pages](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/src/app/index.tsx#L24-L30).
+If the app is being run on Keycloak the [`kcContext`](https://github.com/InseeFrLab/onyxia/blob/9ced438bf6bad76a85049d52220617070f6daa79/web/src/index.tsx#L3) isn't `undefined` and it means shat we should render the login/register pages.
 
-If you want to test, uncomment [this line](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/src/app/components/KcApp/kcContext.ts#L12) and run `yarn start`. You can also test the login pages in a local keycloak container by running `yarn keycloak`. All the instructions will be printed on the console.
+If you want to test, uncomment [this line](https://github.com/InseeFrLab/onyxia/blob/9ced438bf6bad76a85049d52220617070f6daa79/web/src/keycloak-theme/login/kcContext.ts#L53) and run `yarn start`. You can also test the login pages in a local keycloak container by running `yarn keycloak`. All the instructions will be printed on the console.
 
-The `keycloak-theme.jar` file is automatically [build](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/.github/workflows/ci.yml#L25-L29) and [uploaded as a GitHub release asset](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/.github/workflows/ci.yml#L162) by the CI. See [here](https://github.com/InseeFrLab/onyxia-web/releases/tag/v0.15.13).
+The `keycloak-theme.jar` file is automatically [build](https://github.com/InseeFrLab/onyxia/blob/9ced438bf6bad76a85049d52220617070f6daa79/.github/workflows/ci.yml#L90-L93) and [uploaded as a GitHub release asset](https://github.com/InseeFrLab/onyxia/blob/9ced438bf6bad76a85049d52220617070f6daa79/.github/workflows/ci.yml#L113) by the CI.&#x20;
 
 ### type-routes
 
 {% embed url="https://github.com/typehero/type-route" %}
 
 The library we use for routing. It's like [react-router](https://reactrouter.com) but type safe.
-
-Everything related to routing in the app is contained in the [`src/app/routes`](https://github.com/InseeFrLab/onyxia-web/tree/main/src/ui/routes) directory.
-
-We bend the framework a little bit in [formFieldsQueryParameters](https://github.com/InseeFrLab/onyxia-web/blob/main/src/ui/routes/formFieldsQueryParameters.ts) to implement the dynamic url of [the service configuration page](https://datalab.sspcloud.fr/launcher/inseefrlab-helm-charts-datascience/jupyter?s3.enabled=false\&resources.limits.memory=%C2%AB55Gi%C2%BB). See [the relevant discussion](https://github.com/typehero/type-route/issues/75) with the library author.
-
-This is a video to demonstrate how to setup a new page and add it to the `<Leftbar/>`.
-
-{% embed url="https://youtu.be/ZL9dY7mCW3s?t=1" %}
 
 ### i18nifty 🐔
 
@@ -249,10 +223,6 @@ We plane to move to Vite when [Keycloakify](https://keycloakify.dev) will suppor
 The project is a non-ejected [create-react-app](https://reactjs.org/docs/create-a-new-react-app.html) using [typescript template](https://create-react-app.dev/docs/getting-started#creating-a-typescript-app) (you can find [here](https://github.com/garronej/keycloakify-demo-app) the template repo that was used as a base for this project).
 
 We use [react-app-rewired](https://github.com/timarney/react-app-rewired) instead of the default `react-scripts` to be able to use custom Webpack plugins without having to eject the App. The custom webpack plugins that we use are defined here [/config-overrides.json](dependencies.md#setting-up-the-development-environnement). Currently we only one we use is [circular-dependency-plugins](https://www.npmjs.com/package/circular-dependency-plugin).
-
-{% hint style="info" %}
-Using [`import type`](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/src/app/components/App/App.tsx#L23) instead of just `import` when importing types definition helps getting rid of many require circles error.
-{% endhint %}
 
 ## For working on 🧠 of the App
 

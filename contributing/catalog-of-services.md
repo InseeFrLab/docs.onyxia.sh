@@ -186,7 +186,7 @@ If the user took the time to fill its profile information, [onyxia-web](https://
 
 ![The onyxia user profile](<../.gitbook/assets/image (7).png>)
 
-[Here](https://github.com/InseeFrLab/onyxia/blob/main/src/core/ports/OnyxiaApi/XOnyxia.ts) is defined the structure of the context that you can use in the `overwriteDefaultWith` field:
+[Here](https://github.com/InseeFrLab/onyxia/blob/main/web/src/core/ports/OnyxiaApi/XOnyxia.ts) is defined the structure of the context that you can use in the `overwriteDefaultWith` field:
 
 ```typescript
 export type XOnyxiaParams = {
@@ -461,4 +461,4 @@ You now have all the relevent information to submit PR on the existing catalogs 
 
 Remember that a helm chart repository is nothing more than a GitHub repo with a special [github Action setup](https://github.com/marketplace/actions/helm-deploy) to publish the charts on GitHub Pages.
 
-If you are looking for a repo to start from have a look at [this one](https://github.com/etalab/helm-charts-sill), it has a directory where you can put the icons of your services.
+If you are looking for a repo to start from have a look at [this one](https://github.com/codegouvfr/helm-charts), it has a directory where you can put the icons of your services.

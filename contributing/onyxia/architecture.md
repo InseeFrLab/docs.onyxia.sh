@@ -2,23 +2,19 @@
 
 ## Main rules
 
-* [`src/ui`](https://github.com/InseeFrLab/onyxia-web/tree/main/src/ui) contains the React application, it's the UI of the app.
-* [`src/core`](https://github.com/InseeFrLab/onyxia-web/tree/main/src/core) contains the 🧠 of the app.
+* [`src/ui`](https://github.com/InseeFrLab/onyxia/tree/main/web/src/ui) contains the React application, it's the UI of the app.
+* [`src/core`](https://github.com/InseeFrLab/onyxia/tree/main/web/src/core) contains the 🧠 of the app.
   * Nothing in the `src/core` directory should relate to React. A concept like react hooks for example is out of scope for the src/core directory.
   * `src/core` should never import anything from `src/ui`, even types.
   * It should be possible for example to port onyxia-web to Vue.js or React Native without changing anything to the `src/core` directory.
   * The goal of `src/core` is to expose an API that serves the UI.
   * The API exposed should be reactive. We should not expose to the UI functions that returns promises, instead, the functions we expose should update states and the UI should react to these states updates.
 
-{% hint style="warning" %}
-The `src/js` directory is legacy. It will be removed soon.
-{% endhint %}
-
 ## Architecture
 
-* Whenever we need to interact with the infrastructure we define a port in [`src/core/port`](https://github.com/InseeFrLab/onyxia-web/tree/main/src/core/ports). A port is only a type definition. In our case the infrastructure is: the Keycloak server, the Vault server, the Minio server and a Kubernetes API (Onyxia-API).
-* In [`src/core/adapters`](https://github.com/InseeFrLab/onyxia/tree/main/src/core/adapters) are the implementations of the ports. For each port we should have at least two implementations, a dummy and a real one. It enabled the app to still run, be it in degraded mode, if one piece of the infrastructure is missing. Say we don’t have a Vault server we should still be able to launch containers.
-* In [`src/lib/usecases`](https://github.com/InseeFrLab/onyxia-web/tree/main/src/core/usecases) we expose APIs for the UI to consume.
+* Whenever we need to interact with the infrastructure we define a port in [`src/core/port`](https://github.com/InseeFrLab/onyxia/tree/main/web/src/core/ports). A port is only a type definition. In our case the infrastructure is: the Keycloak server, the Vault server, the Minio server and a Kubernetes API (Onyxia-API).
+* In [`src/core/adapters`](https://github.com/InseeFrLab/onyxia/tree/main/web/src/core/adapters) are the implementations of the ports. For each port we should have at least two implementations, a dummy and a real one. It enabled the app to still run, be it in degraded mode, if one piece of the infrastructure is missing. Say we don’t have a Vault server we should still be able to launch containers.
+* In [`src/lib/usecases`](https://github.com/InseeFrLab/onyxia/tree/main/web/src/core/usecases) we expose APIs for the UI to consume.
 
 ## In practice
 
