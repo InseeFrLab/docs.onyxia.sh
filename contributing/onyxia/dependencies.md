@@ -2,7 +2,7 @@
 description: Technologies at play in Onyxia-web
 ---
 
-# 🕸 Dependencies
+# ⚙ Technical stack
 
 To find your way in Onyxia, the best approach is to start by getting a surface-level understanding of the libraries that are leveraged in the project.
 
