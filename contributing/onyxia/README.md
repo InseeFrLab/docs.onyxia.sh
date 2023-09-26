@@ -4,7 +4,7 @@ description: The TypeScript App that runs in the browser.
 
 # 🐲 The Web Application
 
-This is the documentation for [InseeFrLab/onyxia](https://github.com/InseeFrLab/onyxia-web). &#x20;
+This is the documentation for [InseeFrLab/onyxia -> web/](https://github.com/InseeFrLab/onyxia/tree/main/web). &#x20;
 
 ```bash
 git clone https://github.com/InseeFrLab/onyxia
