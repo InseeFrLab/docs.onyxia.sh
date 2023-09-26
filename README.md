@@ -18,7 +18,7 @@ ingress:
     - host: datalab.my-domain.net
 EOF
 
-helm install onyxia onyxia/onyxia --version "4.0.2" -f onyxia-values.yaml
+helm install onyxia onyxia/onyxia -f onyxia-values.yaml
 ```
 
 With this, you will obtain an instance operating in a degraded mode, which lacks features such as authentication, S3 explorer, secret management, etc. However, you will still have the capability to launch services from the catalog.

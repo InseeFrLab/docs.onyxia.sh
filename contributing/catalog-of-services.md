@@ -1,7 +1,3 @@
----
-description: Contributing to the helm charts
----
-
 # 🔬 Catalog of services
 
 Every Onyxia instance may or may not have it's own catalog. There is three default catalogs :

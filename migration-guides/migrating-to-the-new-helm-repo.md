@@ -19,8 +19,8 @@ If you use ArgoCD for deploying onyxia: &#x20;
  version: 1.0.0
  dependencies:
    - name: onyxia
--    version: 4.0.1
-+    version: 4.0.2
+-    version: 4.1.0
++    version: 4.1.1
 -    repository: https://inseefrlab.github.io/helm-charts/
 +    repository: https://inseefrlab.github.io/onyxia/
 </code></pre>
@@ -63,7 +63,7 @@ extraInitContainers: |
       - -c
       - |
 -       curl -L -f -S -o /extensions/onyxia.jar https://github.com/InseeFrLab/onyxia/releases/download/v2.29.4/keycloak-theme.jar
-+       curl -L -f -S -o /extensions/onyxia.jar https://github.com/InseeFrLab/onyxia/releases/download/v4.0.2/keycloak-theme.jar
++       curl -L -f -S -o /extensions/onyxia.jar https://github.com/InseeFrLab/onyxia/releases/download/v4.1.1/keycloak-theme.jar
     volumeMounts:
       - name: extensions
         mountPath: /extensions
