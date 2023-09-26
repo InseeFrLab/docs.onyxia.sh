@@ -9,10 +9,16 @@ description: Your Onyxia instance, today
 TLDR. Here is how you can get an Onyxia instance running in a matter of seconds.
 
 ```bash
-helm repo add inseefrlab https://inseefrlab.github.io/helm-charts
-helm install onyxia inseefrlab/onyxia \
-    --set ingress.enabled=true \
-    --set ingress.hosts[0].host=datalab.my-domain.net
+helm repo add onyxia https://inseefrlab.github.io/onyxia
+
+cat << EOF > ./onyxia-values.yaml
+ingress:
+  enabled: true
+  hosts:
+    - host: datalab.my-domain.net
+EOF
+
+helm install onyxia onyxia/onyxia --version "4.0.2" -f onyxia-values.yaml
 ```
 
 With this, you will obtain an instance operating in a degraded mode, which lacks features such as authentication, S3 explorer, secret management, etc. However, you will still have the capability to launch services from the catalog.
@@ -281,7 +287,7 @@ helm uninstall test-spa
 </details>
 
 ```bash
-helm repo add inseefrlab https://inseefrlab.github.io/helm-charts
+helm repo add onyxia https://inseefrlab.github.io/onyxia
 
 DOMAIN=my-domain.net
 
@@ -341,7 +347,7 @@ api:
     ]
 EOF
 
-helm install onyxia inseefrlab/onyxia -f onyxia-values.yaml
+helm install onyxia onyxia/onyxia -f onyxia-values.yaml
 ```
 
 You can now access `https://onyxia.my-domain.net` and start services. Congratulations! 🥳
