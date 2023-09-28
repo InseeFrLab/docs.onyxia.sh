@@ -18,7 +18,7 @@ You can always find the source of the catalog by clicking on the "contribute to 
 
 ![https://datalab.sspcloud.fr/catalog](<../.gitbook/assets/image (5).png>)
 
-If you take [this other instance](https://sill-demo.etalab.gouv.fr), it has only one catalog, [helm-charts-sill](https://github.com/etalab/helm-charts-sill).
+If you take [this other instance](https://onyxia-sill.lab.sspcloud.fr), it has only one catalog, [helm-charts-sill](https://github.com/etalab/helm-charts-sill).
 
 ![https://sill-demo.etalab.gouv.fr/catalog](<../.gitbook/assets/image (9).png>)
 
