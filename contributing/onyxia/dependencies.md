@@ -38,13 +38,13 @@ Anything contained in the [src/ui](https://github.com/InseeFrLab/onyxia-web/tree
 
 {% embed url="https://github.com/InseeFrLab/onyxia-ui" %}
 
-The UI toolkit used in the project, you can find the setup of [onyxia-UI](https://github.com/InseeFrLab/onyxia-ui) in [onyxia-web](https://github.cm/InseeFrLab/onyxia-web) here: [src/ui/theme.tsx](https://github.com/InseeFrLab/onyxia/blob/main/web/src/ui/theme.tsx).
+The UI toolkit used in the project, you can find the setup of [onyxia-UI](https://github.com/InseeFrLab/onyxia-ui) in onyxia-web here: [src/ui/theme.tsx](https://github.com/InseeFrLab/onyxia/blob/main/web/src/ui/theme.tsx).
 
 #### [MUI](https://mui.com) integration
 
 [Onyxia-UI](https://github.com/InseeFrLab/onyxia-ui) is fully compatible with [MUI](https://mui.com).
 
-Onyxia-UI offers a[ library of reusable components](https://ui.onyxia.dev/?path=/story/quick-start--page) but you can also use [MUI](https://mui.com) components in the project, their aspect will automatically be adapted to blend in with the theme.
+Onyxia-UI offers [a library of reusable components](https://inseefrlab.github.io/onyxia-ui) but you can also use [MUI](https://mui.com) components in the project, their aspect will automatically be adapted to blend in with the theme.
 
 #### 🎨 Palettes
 
