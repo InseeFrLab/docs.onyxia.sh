@@ -12,6 +12,8 @@ As a result you would now install Onyxia like this: &#x20;
 +helm install onyxia onyxia/onyxia
 ```
 
+In the following we assume the current version of Onyxia is 4.1.4 but you are encorging to use the latest version instead. [See releases](https://github.com/InseeFrLab/onyxia/releases).
+
 If you use ArgoCD for deploying onyxia: &#x20;
 
 <pre class="language-diff" data-title="apps/onyxia/Chart.yaml"><code class="lang-diff"><strong> apiVersion: v2
@@ -20,7 +22,7 @@ If you use ArgoCD for deploying onyxia: &#x20;
  dependencies:
    - name: onyxia
 -    version: 4.1.0
-+    version: 4.1.1
++    version: 4.1.4
 -    repository: https://inseefrlab.github.io/helm-charts/
 +    repository: https://inseefrlab.github.io/onyxia/
 </code></pre>
@@ -63,7 +65,7 @@ extraInitContainers: |
       - -c
       - |
 -       curl -L -f -S -o /extensions/onyxia.jar https://github.com/InseeFrLab/onyxia/releases/download/v2.29.4/keycloak-theme.jar
-+       curl -L -f -S -o /extensions/onyxia.jar https://github.com/InseeFrLab/onyxia/releases/download/v4.1.1/keycloak-theme.jar
++       curl -L -f -S -o /extensions/onyxia.jar https://github.com/InseeFrLab/onyxia/releases/download/v4.1.4/keycloak-theme.jar
     volumeMounts:
       - name: extensions
         mountPath: /extensions
