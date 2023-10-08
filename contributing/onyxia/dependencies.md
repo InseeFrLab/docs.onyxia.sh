@@ -78,7 +78,7 @@ git clone https://github.com/InseeFrLab/onyxia-ui ui
 cd ui
 yarn install
 yarn build
-yarn yarn_link web
+yarn link-in-web
 npx tsc -w
 
 # Open a new terminal
