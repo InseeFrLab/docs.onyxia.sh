@@ -314,34 +314,14 @@ api:
              "usernamePrefix":"oidc-",
              "groupNamespacePrefix":"projet-",
              "groupPrefix":"oidc-",
-             "authenticationMode":"admin",
+             "authenticationMode":"serviceAccount",
              "expose":{
                 "domain":"lab.$DOMAIN"
              },
              "monitoring":{
                 "URLPattern":"todo"
              },
-             "cloudshell":{
-                "catalogId":"inseefrlab-helm-charts-datascience",
-                "packageName":"cloudshell"
-             },
              "initScript":"https://inseefrlab.github.io/onyxia/onyxia-init.sh"
-          },
-          "data":{
-             "S3":{
-                "URL":"todo",
-                "monitoring":{
-                   "URLPattern":"todo"
-                }
-             }
-          },
-          "auth":{
-             "type":"openidconnect"
-          },
-          "location":{
-             "lat":48.8164,
-             "long":2.3174,
-             "name":"Montrouge (France)"
           }
        }
     ]
@@ -616,8 +596,6 @@ Don't forget as well to remplace the terms of services of the [sspcloud](https:/
      - host: onyxia.my-domain.net
  web:
 +  env:
-+    KEYCLOAK_REALM: datalab
-+    KEYCLOAK_URL: https://auth.lab.my-domain.net/auth
 +    TERMS_OF_SERVICES: |
 +      { 
 +        "en": "https://www.sspcloud.fr/tos_en.md", 
@@ -627,8 +605,9 @@ Don't forget as well to remplace the terms of services of the [sspcloud](https:/
    env:
      security.cors.allowed_origins: "http://localhost:3000"
 +    authentication.mode: openidconnect
-+    keycloak.realm: datalab
-+    keycloak.auth-server-url: https://auth.lab.my-domain.net/auth
++    oidc.issuer-uri: "https://auth.lab.my-domain.net/auth/realms/datalab"
++    oidc.clientID: "onyxia"
++    oidc.audience: "onyxia"
    regions:
      [
         {
@@ -643,34 +622,14 @@ Don't forget as well to remplace the terms of services of the [sspcloud](https:/
               "usernamePrefix":"oidc-",
               "groupNamespacePrefix":"projet-",
               "groupPrefix":"oidc-",
-              "authenticationMode":"admin",
+              "authenticationMode":"serviceAccount",
               "expose":{
                  "domain":"lab.my-domain.net"
               },
               "monitoring":{
                  "URLPattern":"todo"
               },
-              "cloudshell":{
-                 "catalogId":"inseefrlab-helm-charts-datascience",
-                 "packageName":"cloudshell"
-              },
               "initScript":"https://inseefrlab.github.io/onyxia/onyxia-init.sh"
-           },
-           "data":{
-              "S3":{
-                 "URL":"todo",
-                 "monitoring":{
-                    "URLPattern":"todo"
-                 }
-              }
-           },
-           "auth":{
-              "type":"openidconnect"
-           },
-           "location":{
-              "lat":48.8164,
-              "long":2.3174,
-              "name":"Montrouge (France)"
            }
         }
      ]
