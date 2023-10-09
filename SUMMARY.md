@@ -6,6 +6,7 @@
 * [🔓 Security consideration](security-consideration.md)
 * [⬆ Migration guides](migration-guides/README.md)
   * [⬆ Migrating to the new helm repo](migration-guides/migrating-to-the-new-helm-repo.md)
+* [⬆ v4 -> v5](v4-greater-than-v5.md)
 * [👨💻 Technical doc](contributing/README.md)
   * [🖥 The Web Application](contributing/onyxia/README.md)
     * [⚙ Technical stack](contributing/onyxia/dependencies.md)
