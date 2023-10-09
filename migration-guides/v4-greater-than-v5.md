@@ -19,6 +19,13 @@ onyxia:
 -      KEYCLOAK_REALM: sspcloud
    api:
      env:
+-      keycloak.resource: onyxia
+-      keycloak.realm: sspcloud
+-      keycloak.auth-server-url: https://auth.lab.sspcloud.fr/auth
+-      keycloak.ssl-required: external
+-      keycloak.public-client: "true"
+-      keycloak.enable-basic-auth: "true"
+-      keycloak.bearer-only: "true"
 +      oidc.issuer-uri: "https://auth.lab.sspcloud.fr/auth/realms/sspcloud"
 +      oidc.clientID: "onyxia"
 +      oidc.audience: "onyxia"
