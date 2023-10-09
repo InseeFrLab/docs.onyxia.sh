@@ -140,13 +140,13 @@ This command will open your configured text editor, go to line `56` and add:
       - --default-ssl-certificate=ingress-nginx/onyxia-tls
 ```
 
-![](<.gitbook/assets/image (1) (2).png>)
+![](<.gitbook/assets/image (13).png>)
 {% endtab %}
 
 {% tab title="Test on your machine" %}
 If you are on a Mac or Window computer you can install [Docker desktop](https://www.docker.com/products/docker-desktop/) then enable Kubernetes.
 
-![Enable Kubernetes in Docker desktop](<.gitbook/assets/image (5) (1).png>)
+![Enable Kubernetes in Docker desktop](<.gitbook/assets/image (1).png>)
 
 {% hint style="info" %}
 Docker desktop isn't available on Linux, you can use [Kind](https://kind.sigs.k8s.io/) instead.
@@ -255,7 +255,7 @@ Through out this guide we make as if everything was instantaneous. In reality if
 
 Use `kubectl get pods` to see if your pods are up and ready.
 
-<img src=".gitbook/assets/image (1).png" alt="" data-size="original">
+<img src=".gitbook/assets/image (23).png" alt="" data-size="original">
 {% endhint %}
 
 <details>
@@ -264,7 +264,7 @@ Use `kubectl get pods` to see if your pods are up and ready.
 
 To make sure that your Kubernetes cluster is correctly configured let's deploy a test web app on it before deploying Onyxia.
 
-<img src=".gitbook/assets/image (8).png" alt="The hello world SPA deployed" data-size="original">
+<img src=".gitbook/assets/image (16).png" alt="The hello world SPA deployed" data-size="original">
 
 ```bash
 DOMAIN=my-domain.net

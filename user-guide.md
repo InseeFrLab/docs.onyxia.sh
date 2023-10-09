@@ -42,17 +42,17 @@ Users can edit various parameters. Onyxia do some assertion based on the charts 
 
 
 
-<figure><img src=".gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
 
 After launching a service, notes are shown to the user. He can retrieve those notes on the README button. Charts administrator should explain how to connect to the services (url , account) and what happens on deletion.
 
-<figure><img src=".gitbook/assets/image (2) (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (21).png" alt=""><figcaption></figcaption></figure>
 
 ## File browser
 
 Users can manage their files on S3. There is no support for rename in S3 so don't be surprise. Onyxia is educational. Any action on the S3 browser in the UI is written in a console with a cli.
 
-<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption><p>s3 browser</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption><p>s3 browser</p></figcaption></figure>
 
 User can do the following S3 actions :&#x20;
 
@@ -68,10 +68,10 @@ Our advice is to never download file to your container but directly ingest in me
 
 Users can mange their secrets on Vault. There is also a cli console.
 
-<figure><img src=".gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (27).png" alt=""><figcaption></figcaption></figure>
 
 Onyxia use only a key value v2 secret engine in Vault. Users can store some secrets there and inject them in their services if configured by the helm chart.
 
-<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (20).png" alt=""><figcaption></figcaption></figure>
 
 Of course, in our default catalags there are all the necessary tools to connect to Vault.

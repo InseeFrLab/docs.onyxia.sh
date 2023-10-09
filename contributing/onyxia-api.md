@@ -2,7 +2,7 @@
 description: The backend REST API in Java
 ---
 
-# 🐉 The REST API
+# 🔌 The REST API
 
 This is the documentation for [InseeFrLab/onyxia -> api/](https://github.com/InseeFrLab/onyxia/tree/main/api). &#x20;
 
