@@ -2,7 +2,7 @@
 
 * [🏁 Install](README.md)
 * [🕹 User guide](user-guide.md)
-* [🔬 Catalog of services](contributing/catalog-of-services.md)
+* [🔬 Catalog of services](catalog-of-services.md)
 * [🔓 Security consideration](security-consideration.md)
 * [⬆ Migration guides](migration-guides/README.md)
   * [⬆ v4 -> v5](migration-guides/v4-greater-than-v5.md)
