@@ -481,6 +481,10 @@ You can now login to the **administration console** of **https://auth.lab.my-dom
    5. On the tab **Localization**
       1. _Internationalization_: **Enabled**
       2. _Supported locales_: \<Select the languages you wish to support>
+   6. On the tab **Token**
+      1. SSO Session Idle: 14 days - This setting and the following two are so that when the user click "remember me" when he logs in, he dosen't have to loggin again for the next two weeks. &#x20;
+      2. SSO Session Idle Remember Me: 14 days
+      3. SSO Session Max Remember Me: 14 days
 2. Create a client called "onyxia"
    1. _Root URL_: **https://onyxia.my-domain.net/**
    2. _Valid redirect URIs_: **https://onyxia.my-domain.net/\***
