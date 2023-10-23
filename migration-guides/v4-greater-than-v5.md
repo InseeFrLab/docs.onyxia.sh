@@ -71,7 +71,7 @@ onyxia:
 -               "clientId": "onyxia-vault",
 -             }
 +             "oidcConfiguration": {
-+               "URL": "https://auth.lab.sspcloud.fr/auth/realms/sspcloud",
++               "issuerURI": "https://auth.lab.sspcloud.fr/auth/realms/sspcloud",
 +               "clientID": "onyxia-vault"
 +             }
          }
