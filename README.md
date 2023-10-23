@@ -4,7 +4,7 @@ description: Your Onyxia instance, today
 
 # 🏁 Install
 
-## Oneliner
+Oneliner
 
 TLDR. Here is how you can get an Onyxia instance running in a matter of seconds.
 
@@ -344,33 +344,9 @@ At the moment there is no authentication process, everyone can access our platfo
 
 Let's setup Keycloak to enable users to create account and login to our Onyxia.
 
-<details>
-
-<summary>Notes if you already have a Keycloak server</summary>
-
-If you already have a Keycloak server it is up to you to pick from this guide what is rellevent to you.
-
-Main takeway is that you probably want to load the Onyxia custom Keycloak theme and enable `-Dkeycloak.profile=preview` in order to be able to enforce that usernames are well formatted and define an accept list of email domains allowed to create account on your Onyxia instance.
-
-You probably want to enable [Terms and Conditions as required actions](https://docs.keycloakify.dev/terms-and-conditions).
-
-That out of the way, note that you can configure onyxia-web to integrate with your existing Keycloak server, you just need to set some dedicated environment variable in the `values.yaml` of the onyxia helm chart. Example:
-
-```yaml
- web:
-  env:
-    # Available env are documented here: https://github.com/InseeFrLab/onyxia-web/blob/main/.env
-    KEYCLOAK_URL: https://auth.lab.my-domain.net/auth
-    KEYCLOAK_CLIENT_ID: onyxia
-    KEYCLOAK_REALM: datalab
-    JWT_EMAIL_CLAIM: email
-    JWT_FAMILY_NAME_CLAIM: family_name
-    JWT_FIRST_NAME_CLAIM: given_name
-    JWT_USERNAME_CLAIM: preferred_username
-    JWT_LOCALE_CLAIM: locale
-```
-
-</details>
+{% hint style="success" %}
+Note that in this instalation guide we make you use Keycloak but you can use any identity server that is Open ID Connect compliant. &#x20;
+{% endhint %}
 
 For deploying our Keycloak we use [codecentric's helm chart](https://github.com/codecentric/helm-charts/tree/master/charts/keycloak).
 
