@@ -299,8 +299,6 @@ ingress:
   hosts:
     - host: onyxia.$DOMAIN
 api:
-  env:
-    security.cors.allowed_origins: "http://localhost:3000"
   regions: 
     [
        {
@@ -603,7 +601,6 @@ Don't forget as well to remplace the terms of services of the [sspcloud](https:/
 +      }
  api:
    env:
-     security.cors.allowed_origins: "http://localhost:3000"
 +    authentication.mode: openidconnect
 +    oidc.issuer-uri: "https://auth.lab.my-domain.net/auth/realms/datalab"
 +    oidc.clientID: "onyxia"
@@ -800,7 +797,6 @@ S3 storage is configured inside a region in Onyxia api. You have some options to
       { "en": "https://www.sspcloud.fr/tos_en.md", "fr": "https://www.sspcloud.fr/tos_fr.md" }
  api:
    env:
-     security.cors.allowed_origins: "http://localhost:3000"
     authentication.mode: openidconnect
     keycloak.realm: datalab
     keycloak.auth-server-url: https://auth.lab.my-domain.net/auth
