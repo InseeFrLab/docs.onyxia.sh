@@ -14,7 +14,7 @@ Under construction
       FONT: |
         { 
           "fontFamily": "Marianne", 
-          "dirUrl": "%PUPLIC_URL%/fonts/Marianne", 
+          "dirUrl": "%PUBLIC_URL%/fonts/Marianne", 
           "400": "Marianne-Regular.woff2",
           "400-italic": "Marianne-Regular_Italic.woff2",
           "500": "Marianne-Medium.woff2",
@@ -55,7 +55,7 @@ web:
       FONT: |
         { 
           "fontFamily": "Geist", 
-          "dirUrl": "%PUPLIC_URL%/fonts/Geist", 
+          "dirUrl": "%PUBLIC_URL%/fonts/Geist", 
           "400": "Geist-Regular.woff2",
           "500": "Geist-Medium.woff2",
           "600": "Geist-SemiBold.woff2",
