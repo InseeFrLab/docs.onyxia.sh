@@ -343,7 +343,7 @@ At the moment there is no authentication process, everyone can access our platfo
 Let's setup Keycloak to enable users to create account and login to our Onyxia.
 
 {% hint style="success" %}
-Note that in this instalation guide we make you use Keycloak but you can use any identity server that is Open ID Connect compliant. &#x20;
+Note that in this instalation guide we make you use Keycloak but you can use any identity server that is Open ID Connect compliant.
 {% endhint %}
 
 For deploying our Keycloak we use [codecentric's helm chart](https://github.com/codecentric/helm-charts/tree/master/charts/keycloak).
@@ -456,7 +456,7 @@ You can now login to the **administration console** of **https://auth.lab.my-dom
       1. _Internationalization_: **Enabled**
       2. _Supported locales_: \<Select the languages you wish to support>
    6. On the tab **Token**
-      1. SSO Session Idle: 14 days - This setting and the following two are so that when the user click "remember me" when he logs in, he dosen't have to loggin again for the next two weeks. &#x20;
+      1. SSO Session Idle: 14 days - This setting and the following two are so that when the user click "remember me" when he logs in, he dosen't have to loggin again for the next two weeks.
       2. SSO Session Idle Remember Me: 14 days
       3. SSO Session Max Remember Me: 14 days
 2. Create a client called "onyxia"
