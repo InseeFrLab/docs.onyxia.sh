@@ -3,8 +3,6 @@
 The primary breaking change in this release pertains to Keycloak configuration. With this update, you're no longer limited to using Keycloak; any OIDC-compliant identity provider is now supported.\
 To accommodate this new feature, you'll need to make some adjustments to the configuration of your Onyxia instance.
 
-
-
 {% hint style="info" %}
 You don't need to specify the `issuerURI` in multiple locations as we have done here.\
 If you're using just one identity server (You have only one Keycloak server for example), you can set the `issuerURI` solely in `api->env->oidc.issuer-uri`.
@@ -71,7 +69,7 @@ onyxia:
 -               "clientId": "onyxia-vault",
 -             }
 +             "oidcConfiguration": {
-+               "URL": "https://auth.lab.sspcloud.fr/auth/realms/sspcloud",
++               "issuerURI": "https://auth.lab.sspcloud.fr/auth/realms/sspcloud",
 +               "clientID": "onyxia-vault"
 +             }
          }

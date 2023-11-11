@@ -1,10 +1,12 @@
 # Table of contents
 
 * [🏁 Install](README.md)
+* [🎨 Theme](theme.md)
 * [🕹 User guide](user-guide.md)
 * [🔬 Catalog of services](catalog-of-services.md)
 * [🔓 Security consideration](security-consideration.md)
 * [⬆ Migration guides](migration-guides/README.md)
+  * [⬆ v5 -> v6](migration-guides/v5-greater-than-v6.md)
   * [⬆ v4 -> v5](migration-guides/v4-greater-than-v5.md)
   * [⬆ Migrating to the new helm repo](migration-guides/migrating-to-the-new-helm-repo.md)
 * [👨💻 Technical doc](contributing/README.md)

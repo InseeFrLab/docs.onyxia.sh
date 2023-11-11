@@ -10,14 +10,6 @@ To find your way in Onyxia, the best approach is to start by getting a surface-l
 Modules marked by 🐔 are our own.
 {% endhint %}
 
-## Typescript
-
-We are fully committed on keeping everything type safe. If you are a seasoned developer but not fully comfortable with TypeScript yet a good way to get you quickly up to speed is to go through the [What's new section](https://www.typescriptlang.org/docs/handbook/release-notes/overview.html) of the official website.
-
-{% hint style="info" %}
-You can skip anything related to `class` we don't do OOP in the project.
-{% endhint %}
-
 ### tsafe 🐔
 
 {% embed url="https://www.tsafe.dev" %}
@@ -233,6 +225,12 @@ Anything contained in the [src/core](https://github.com/InseeFrLab/onyxia/tree/m
 {% embed url="https://github.com/garronej/clean-redux" %}
 
 The framework used to implement strict separation of concern betwen the UI and the Core and high modularity of the code. &#x20;
+
+### oidc-spa 🐔
+
+{% embed url="https://github.com/garronej/oidc-spa" %}
+
+For everything related to user authentication.&#x20;
 
 ### EVT 🐔
 

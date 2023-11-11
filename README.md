@@ -4,7 +4,7 @@ description: Your Onyxia instance, today
 
 # 🏁 Install
 
-## Oneliner
+Oneliner
 
 TLDR. Here is how you can get an Onyxia instance running in a matter of seconds.
 
@@ -342,33 +342,9 @@ At the moment there is no authentication process, everyone can access our platfo
 
 Let's setup Keycloak to enable users to create account and login to our Onyxia.
 
-<details>
-
-<summary>Notes if you already have a Keycloak server</summary>
-
-If you already have a Keycloak server it is up to you to pick from this guide what is rellevent to you.
-
-Main takeway is that you probably want to load the Onyxia custom Keycloak theme and enable `-Dkeycloak.profile=preview` in order to be able to enforce that usernames are well formatted and define an accept list of email domains allowed to create account on your Onyxia instance.
-
-You probably want to enable [Terms and Conditions as required actions](https://docs.keycloakify.dev/terms-and-conditions).
-
-That out of the way, note that you can configure onyxia-web to integrate with your existing Keycloak server, you just need to set some dedicated environment variable in the `values.yaml` of the onyxia helm chart. Example:
-
-```yaml
- web:
-  env:
-    # Available env are documented here: https://github.com/InseeFrLab/onyxia-web/blob/main/.env
-    KEYCLOAK_URL: https://auth.lab.my-domain.net/auth
-    KEYCLOAK_CLIENT_ID: onyxia
-    KEYCLOAK_REALM: datalab
-    JWT_EMAIL_CLAIM: email
-    JWT_FAMILY_NAME_CLAIM: family_name
-    JWT_FIRST_NAME_CLAIM: given_name
-    JWT_USERNAME_CLAIM: preferred_username
-    JWT_LOCALE_CLAIM: locale
-```
-
-</details>
+{% hint style="success" %}
+Note that in this instalation guide we make you use Keycloak but you can use any identity server that is Open ID Connect compliant.
+{% endhint %}
 
 For deploying our Keycloak we use [codecentric's helm chart](https://github.com/codecentric/helm-charts/tree/master/charts/keycloak).
 
@@ -479,6 +455,10 @@ You can now login to the **administration console** of **https://auth.lab.my-dom
    5. On the tab **Localization**
       1. _Internationalization_: **Enabled**
       2. _Supported locales_: \<Select the languages you wish to support>
+   6. On the tab **Token**
+      1. SSO Session Idle: 14 days - This setting and the following two are so that when the user click "remember me" when he logs in, he dosen't have to loggin again for the next two weeks.
+      2. SSO Session Idle Remember Me: 14 days
+      3. SSO Session Max Remember Me: 14 days
 2. Create a client called "onyxia"
    1. _Root URL_: **https://onyxia.my-domain.net/**
    2. _Valid redirect URIs_: **https://onyxia.my-domain.net/\***
