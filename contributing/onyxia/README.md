@@ -11,10 +11,10 @@ git clone https://github.com/InseeFrLab/onyxia
 cd onyxia/web
 
 yarn install
-#Setup the var envs to tell the app to connect to the sspcloud
-#Fill up with your own value to run the web app against your onyxia API.
-cp .env.local-sample.yaml .env.local.yaml
 
 # To stat the app locally
 yarn start
+
+# If you want to test against your own Onyxia instance edit the .env.local.yaml
+# file (created automatically the first time you run `yarn start`)
 ```
