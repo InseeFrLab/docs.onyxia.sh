@@ -13,7 +13,7 @@ cd onyxia/web
 yarn install
 #Setup the var envs to tell the app to connect to the sspcloud
 #Fill up with your own value to run the web app against your onyxia API.
-cp .env.local.sample .env.local
+cp .env.local-sample.yaml .env.local.yaml
 
 # To stat the app locally
 yarn start
