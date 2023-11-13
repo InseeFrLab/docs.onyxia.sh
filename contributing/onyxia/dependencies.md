@@ -38,21 +38,6 @@ The UI toolkit used in the project, you can find the setup of [onyxia-UI](https:
 
 Onyxia-UI offers [a library of reusable components](https://inseefrlab.github.io/onyxia-ui) but you can also use [MUI](https://mui.com) components in the project, their aspect will automatically be adapted to blend in with the theme.
 
-#### 🎨 Palettes
-
-We currently offers builtin support for [four color palettes](https://github.com/InseeFrLab/onyxia/blob/9ced438bf6bad76a85049d52220617070f6daa79/web/src/ui/theme.tsx#L76-L88):
-
-* France: [datalab.sspcloud.fr?**THEME\_ID=france**](https://datalab.sspcloud.fr/?THEME\_ID=france)
-* Ultraviolet: [datalab.sspcloud.fr?**THEME\_ID=ultraviolet**](https://datalab.sspcloud.fr/?THEME\_ID=ultraviolet)
-* Verdant: [datalab.sspcloud?**THEME\_ID=verdant**](https://datalab.sspcloud.fr/?THEME\_ID=verdant)
-* Onyxia (default): [datalab.sspcloud.fr?**THEME\_ID=onyxia**](https://datalab.sspcloud.fr)
-
-You can also [provide your own palette](https://github.com/InseeFrLab/onyxia/blob/9ced438bf6bad76a85049d52220617070f6daa79/web/.env#L50-L71).
-
-#### 🔡 Fonts
-
-The fonts are loaded in the [public/index.html](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/public/index.html#L6-L115). It's important to keep it that way for Keycloakify.
-
 #### 🔡 Linking onyxia-ui in onyxia-web
 
 To release a new version of [Onyxia-UI](dependencies.md#typescript). You just need to bump the [package.json's version](https://github.com/InseeFrLab/onyxia-ui/blob/470fdb4e54e2b16051ff8b7442ea4d765d76ba92/package.json#L3) and push. [The CI](https://github.com/garronej/ts-ci) will automate publish [a new version on NPM](dependencies.md#typescript).
