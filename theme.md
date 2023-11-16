@@ -6,6 +6,20 @@ description: >-
 
 # 🎨 Theme and branding
 
+{% hint style="info" %}
+A video tutoriel is in production&#x20;
+{% endhint %}
+
+The full documentation of the avalable parameter can be found here: &#x20;
+
+{% embed url="https://github.com/InseeFrLab/onyxia/blob/main/web/.env" %}
+
+Make sure to checkout the version of this document that matches the Onyxia version that you are deploying. [See releases](https://github.com/InseeFrLab/onyxia/releases).
+
+## Default looks
+
+Here are two base look that you can use a starting point of your configuration. &#x20;
+
 ### France
 
 ```yaml
