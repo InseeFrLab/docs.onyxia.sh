@@ -1,21 +1,20 @@
 # ⬆ v6 -> v7
 
-In this major version a lot of the parameters of the webapp have been updated/refined.  \
-Here is the changes you need to apply to your values.json to migrate smoothly. &#x20;
+In this major version a lot of the parameters of the webapp have been updated/refined.\
+Here is the changes you need to apply to your values.json to migrate smoothly.
 
-## The `THEME_ID` parameter has been removed.  
+## The `THEME_ID` parameter has been removed.
 
-Onyxia is now fully customizable instead of just letting you pick
-within a handful of predefined themes. 
+Onyxia is now fully customizable instead of just letting you pick within a handful of predefined themes.
 
-### If you where using the `france` theme:  
+### If you where using the `france` theme:
 
 {% code title="values.yaml" %}
 ```diff
  onyxia:
    web:
      env:
--      THEME_ID=france
+-      THEME_ID: france
 +      FONT: |
 +        { 
 +          fontFamily: "Marianne", 
@@ -50,18 +49,18 @@ within a handful of predefined themes.
 +            greyVariant4: "#747474"
 +          }
 +        }
-+      SOCIAL_MEDIA_IMAGE=%PUBLIC_URL%/preview-france.png
++      SOCIAL_MEDIA_IMAGE: %PUBLIC_URL%/preview-france.png
 ```
 {% endcode %}
 
-### If you where using the `ultraviolet` theme:  
+### If you where using the `ultraviolet` theme:
 
 {% code title="values.yaml" %}
 ```diff
  onyxia:
    web:
      env:
--      THEME_ID=ultraviolet
+-      THEME_ID: ultraviolet
 +      PALETTE_OVERRIDE: |
 +        {
 +          focus: {
@@ -86,18 +85,18 @@ within a handful of predefined themes.
 +            greyVariant4: "#747474"
 +          }
 +        }
-+      SOCIAL_MEDIA_IMAGE=%PUBLIC_URL%/preview-ultraviolet.png
++      SOCIAL_MEDIA_IMAGE: %PUBLIC_URL%/preview-ultraviolet.png
 ```
 {% endcode %}
 
-### If you where using the `verdant` theme:  
+### If you where using the `verdant` theme:
 
 {% code title="values.yaml" %}
 ```diff
  onyxia:
    web:
      env:
--      THEME_ID=verdant
+-      THEME_ID: verdant
 +      PALETTE_OVERRIDE: |
 +        focus: {
 +            main: "#1F8D49",
@@ -134,9 +133,8 @@ within a handful of predefined themes.
 
 ## Links in the header and the left bar
 
-In addition to the parameter `EXTRA_LEFTBAR_ITEMS` having being renamed to `LEFTBAR_LINKS`
-the `iconId` property has been renamed `icon` and you can now use any icon from [the Material Design library](https://mui.com/material-ui/material-icons) or even provide your own icons.  
-Please refer to [the new documentation of the `HEADER_LINKS` parameter](https://github.com/InseeFrLab/onyxia/blob/v7.0.0/web/.env).  
+In addition to the parameter `EXTRA_LEFTBAR_ITEMS` having being renamed to `LEFTBAR_LINKS` the `iconId` property has been renamed `icon` and you can now use any icon from [the Material Design library](https://mui.com/material-ui/material-icons) or even provide your own icons.\
+Please refer to [the new documentation of the `HEADER_LINKS` parameter](https://github.com/InseeFrLab/onyxia/blob/v7.0.0/web/.env).
 
 {% code title="values.yaml" %}
 ```diff
