@@ -59,8 +59,8 @@ Here are two base look that you can use a starting point of your configuration. 
             greyVariant4: "#747474"
           }
         }
-      SOCIAL_MEDIA_IMAGE: %PUBLIC_URL%/preview-france.png
-      HOMEPAGE_MAIN_ASSET: false
+      SOCIAL_MEDIA_IMAGE: "%PUBLIC_URL%/preview-france.png"
+      HOMEPAGE_MAIN_ASSET: "false"
 ```
 
 ### Ultraviolet
@@ -103,8 +103,8 @@ web:
             greyVariant4: "#747474"
           }
         }
-      SOCIAL_MEDIA_IMAGE: %PUBLIC_URL%/preview-ultraviolet.png
-      HOMEPAGE_MAIN_ASSET: %PUBLIC_URL%/illustrations/projets.png
+      SOCIAL_MEDIA_IMAGE: "%PUBLIC_URL%/preview-ultraviolet.png"
+      HOMEPAGE_MAIN_ASSET: "%PUBLIC_URL%/illustrations/projets.png"
       HOMEPAGE_MAIN_ASSET_SCALE_FACTOR: "1.5"
       HOMEPAGE_MAIN_ASSET_Y_OFFSET: "-50px"
       HOMEPAGE_MAIN_ASSET_X_OFFSET: "430px"
