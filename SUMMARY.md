@@ -1,7 +1,7 @@
 # Table of contents
 
 * [🏁 Install](README.md)
-* [🎨 Theme](theme.md)
+* [🎨 Theme and branding](theme.md)
 * [🕹 User guide](user-guide.md)
 * [🔬 Catalog of services](catalog-of-services.md)
 * [🔓 Security consideration](security-consideration.md)

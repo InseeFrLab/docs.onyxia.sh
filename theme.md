@@ -1,10 +1,10 @@
-# 🎨 Theme
+---
+description: >-
+  Customize your Onyxia instance with your assets and your colors, make it your
+  own!
+---
 
-###
-
-{% hint style="danger" %}
-Under construction
-{% endhint %}
+# 🎨 Theme and branding
 
 ### France
 
