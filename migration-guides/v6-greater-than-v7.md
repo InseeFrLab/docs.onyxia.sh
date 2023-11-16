@@ -7,5 +7,7 @@ Here is the changes you need to apply to your values.json to migrate smoothly. &
 
 {% code title="values.yaml" %}
 ```diff
++ok
+-nok
 ```
 {% endcode %}
