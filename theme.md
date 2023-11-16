@@ -22,6 +22,8 @@ Here are two base look that you can use a starting point of your configuration. 
 
 ### France
 
+👉 Theme preview
+
 ```yaml
   web:
     env:
