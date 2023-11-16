@@ -59,6 +59,7 @@ Here are two base look that you can use a starting point of your configuration. 
             greyVariant4: "#747474"
           }
         }
+      SOCIAL_MEDIA_IMAGE: %PUBLIC_URL%/preview-france.png
       HOMEPAGE_MAIN_ASSET: false
 ```
 
