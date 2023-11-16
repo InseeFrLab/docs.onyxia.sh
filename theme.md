@@ -103,6 +103,7 @@ web:
             greyVariant4: "#747474"
           }
         }
+      SOCIAL_MEDIA_IMAGE: %PUBLIC_URL%/preview-ultraviolet.png
       HOMEPAGE_MAIN_ASSET: %PUBLIC_URL%/illustrations/projets.png
       HOMEPAGE_MAIN_ASSET_SCALE_FACTOR: "1.5"
       HOMEPAGE_MAIN_ASSET_Y_OFFSET: "-50px"
