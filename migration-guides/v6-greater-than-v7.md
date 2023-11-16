@@ -49,7 +49,7 @@ Onyxia is now fully customizable instead of just letting you pick within a handf
 +            greyVariant4: "#747474"
 +          }
 +        }
-+      SOCIAL_MEDIA_IMAGE: %PUBLIC_URL%/preview-france.png
++      SOCIAL_MEDIA_IMAGE: "%PUBLIC_URL%/preview-france.png"
 ```
 {% endcode %}
 
@@ -85,7 +85,7 @@ Onyxia is now fully customizable instead of just letting you pick within a handf
 +            greyVariant4: "#747474"
 +          }
 +        }
-+      SOCIAL_MEDIA_IMAGE: %PUBLIC_URL%/preview-ultraviolet.png
++      SOCIAL_MEDIA_IMAGE: "%PUBLIC_URL%/preview-ultraviolet.png"
 ```
 {% endcode %}
 
