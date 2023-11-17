@@ -7,10 +7,10 @@ description: >-
 # 🎨 Theme and branding
 
 {% hint style="info" %}
-A video tutoriel is in production&#x20;
+A video tutoriel is in production
 {% endhint %}
 
-The full documentation of the avalable parameter can be found here: &#x20;
+The full documentation of the avalable parameter can be found here:
 
 {% embed url="https://github.com/InseeFrLab/onyxia/blob/main/web/.env" %}
 
@@ -18,11 +18,11 @@ Make sure to checkout the version of this document that matches the Onyxia versi
 
 ## Default looks
 
-Here are two base look that you can use a starting point of your configuration. &#x20;
+Here are two base look that you can use a starting point of your configuration.
 
 ### France
 
-👉 [Theme preview](https://datalab.sspcloud.fr?FONT=%7B%20%0A%20%20fontFamily%3A%20%22Marianne%22%2C%20%0A%20%20dirUrl%3A%20%22%25PUBLIC_URL%25%2Ffonts%2FMarianne%22%2C%20%0A%20%20%22400%22%3A%20%22Marianne-Regular.woff2%22%2C%0A%20%20%22400-italic%22%3A%20%22Marianne-Regular_Italic.woff2%22%2C%0A%20%20%22500%22%3A%20%22Marianne-Medium.woff2%22%2C%0A%20%20%22700%22%3A%20%22Marianne-Bold.woff2%22%2C%0A%20%20%22700-italic%22%3A%20%22Marianne-Bold_Italic.woff2%22%0A%7D%0A&PALETTE_OVERRIDE=%7B%0A%20%20focus%3A%20%7B%0A%20%20%20%20main%3A%20%22%23000091%22%2C%0A%20%20%20%20light%3A%20%22%239A9AFF%22%2C%0A%20%20%20%20light2%3A%20%22%23E5E5F4%22%0A%20%20%7D%2C%0A%20%20dark%3A%20%7B%0A%20%20%20%20main%3A%20%22%232A2A2A%22%2C%0A%20%20%20%20light%3A%20%22%23383838%22%2C%0A%20%20%20%20greyVariant1%3A%20%22%23161616%22%2C%0A%20%20%20%20greyVariant2%3A%20%22%239C9C9C%22%2C%0A%20%20%20%20greyVariant3%3A%20%22%23CECECE%22%2C%0A%20%20%20%20greyVariant4%3A%20%22%23E5E5E5%22%0A%20%20%7D%2C%0A%20%20light%3A%20%7B%0A%20%20%20%20main%3A%20%22%23F1F0EB%22%2C%0A%20%20%20%20light%3A%20%22%23FDFDFC%22%2C%0A%20%20%20%20greyVariant1%3A%20%22%23E6E6E6%22%2C%0A%20%20%20%20greyVariant2%3A%20%22%23C9C9C9%22%2C%0A%20%20%20%20greyVariant3%3A%20%22%239E9E9E%22%2C%0A%20%20%20%20greyVariant4%3A%20%22%23747474%22%0A%20%20%7D%0A%7D%0A&HOMEPAGE_MAIN_ASSET=false&HOMEPAGE_MAIN_ASSET_X_OFFSET=0&HOMEPAGE_MAIN_ASSET_Y_OFFSET=0&HOMEPAGE_MAIN_ASSET_SCALE_FACTOR=1&HEADER_TEXT_FOCUS=Datalab)
+👉 [Theme preview](https://datalab.sspcloud.fr/?FONT=%7B%20%0A%20%20fontFamily%3A%20%22Marianne%22%2C%20%0A%20%20dirUrl%3A%20%22%25PUBLIC\_URL%25%2Ffonts%2FMarianne%22%2C%20%0A%20%20%22400%22%3A%20%22Marianne-Regular.woff2%22%2C%0A%20%20%22400-italic%22%3A%20%22Marianne-Regular\_Italic.woff2%22%2C%0A%20%20%22500%22%3A%20%22Marianne-Medium.woff2%22%2C%0A%20%20%22700%22%3A%20%22Marianne-Bold.woff2%22%2C%0A%20%20%22700-italic%22%3A%20%22Marianne-Bold\_Italic.woff2%22%0A%7D%0A\&PALETTE\_OVERRIDE=%7B%0A%20%20focus%3A%20%7B%0A%20%20%20%20main%3A%20%22%23000091%22%2C%0A%20%20%20%20light%3A%20%22%239A9AFF%22%2C%0A%20%20%20%20light2%3A%20%22%23E5E5F4%22%0A%20%20%7D%2C%0A%20%20dark%3A%20%7B%0A%20%20%20%20main%3A%20%22%232A2A2A%22%2C%0A%20%20%20%20light%3A%20%22%23383838%22%2C%0A%20%20%20%20greyVariant1%3A%20%22%23161616%22%2C%0A%20%20%20%20greyVariant2%3A%20%22%239C9C9C%22%2C%0A%20%20%20%20greyVariant3%3A%20%22%23CECECE%22%2C%0A%20%20%20%20greyVariant4%3A%20%22%23E5E5E5%22%0A%20%20%7D%2C%0A%20%20light%3A%20%7B%0A%20%20%20%20main%3A%20%22%23F1F0EB%22%2C%0A%20%20%20%20light%3A%20%22%23FDFDFC%22%2C%0A%20%20%20%20greyVariant1%3A%20%22%23E6E6E6%22%2C%0A%20%20%20%20greyVariant2%3A%20%22%23C9C9C9%22%2C%0A%20%20%20%20greyVariant3%3A%20%22%239E9E9E%22%2C%0A%20%20%20%20greyVariant4%3A%20%22%23747474%22%0A%20%20%7D%0A%7D%0A\&HOMEPAGE\_MAIN\_ASSET=false\&HOMEPAGE\_MAIN\_ASSET\_X\_OFFSET=0\&HOMEPAGE\_MAIN\_ASSET\_Y\_OFFSET=0\&HOMEPAGE\_MAIN\_ASSET\_SCALE\_FACTOR=1\&HEADER\_TEXT\_FOCUS=Datalab)
 
 ```yaml
   web:
@@ -67,7 +67,7 @@ Here are two base look that you can use a starting point of your configuration. 
 
 ### Ultraviolet
 
-👉 [Theme preview](https://datalab.sspcloud.fr?FONT=%7B%20%0A%20%20fontFamily%3A%20%22Geist%22%2C%20%0A%20%20dirUrl%3A%20%22%25PUBLIC_URL%25%2Ffonts%2FGeist%22%2C%20%0A%20%20%22400%22%3A%20%22Geist-Regular.woff2%22%2C%0A%20%20%22500%22%3A%20%22Geist-Medium.woff2%22%2C%0A%20%20%22600%22%3A%20%22Geist-SemiBold.woff2%22%2C%0A%20%20%22700%22%3A%20%22Geist-Bold.woff2%22%0A%7D%0A&PALETTE_OVERRIDE=%7B%0A%20%20focus%3A%20%7B%0A%20%20%20%20main%3A%20%22%23067A76%22%2C%0A%20%20%20%20light%3A%20%22%230AD6CF%22%2C%0A%20%20%20%20light2%3A%20%22%23AEE4E3%22%0A%20%20%7D%2C%0A%20%20dark%3A%20%7B%0A%20%20%20%20main%3A%20%22%232D1C3A%22%2C%0A%20%20%20%20light%3A%20%22%234A3957%22%2C%0A%20%20%20%20greyVariant1%3A%20%22%2322122E%22%2C%0A%20%20%20%20greyVariant2%3A%20%22%23493E51%22%2C%0A%20%20%20%20greyVariant3%3A%20%22%23918A98%22%2C%0A%20%20%20%20greyVariant4%3A%20%22%23C0B8C6%22%0A%20%20%7D%2C%0A%20%20light%3A%20%7B%0A%20%20%20%20main%3A%20%22%23F7F5F4%22%2C%0A%20%20%20%20light%3A%20%22%23FDFDFC%22%2C%0A%20%20%20%20greyVariant1%3A%20%22%23E6E6E6%22%2C%0A%20%20%20%20greyVariant2%3A%20%22%23C9C9C9%22%2C%0A%20%20%20%20greyVariant3%3A%20%22%239E9E9E%22%2C%0A%20%20%20%20greyVariant4%3A%20%22%23747474%22%0A%20%20%7D%0A%7D%0A&HOMEPAGE_MAIN_ASSET=%25PUBLIC_URL%25%2Fillustrations%2Fprojets.png&HOMEPAGE_MAIN_ASSET_X_OFFSET=430px&HOMEPAGE_MAIN_ASSET_Y_OFFSET=-50px&HOMEPAGE_MAIN_ASSET_SCALE_FACTOR=1.5&HEADER_TEXT_FOCUS=Datalab)
+👉 [Theme preview](https://datalab.sspcloud.fr/?FONT=%7B%20%0A%20%20fontFamily%3A%20%22Geist%22%2C%20%0A%20%20dirUrl%3A%20%22%25PUBLIC\_URL%25%2Ffonts%2FGeist%22%2C%20%0A%20%20%22400%22%3A%20%22Geist-Regular.woff2%22%2C%0A%20%20%22500%22%3A%20%22Geist-Medium.woff2%22%2C%0A%20%20%22600%22%3A%20%22Geist-SemiBold.woff2%22%2C%0A%20%20%22700%22%3A%20%22Geist-Bold.woff2%22%0A%7D%0A\&PALETTE\_OVERRIDE=%7B%0A%20%20focus%3A%20%7B%0A%20%20%20%20main%3A%20%22%23067A76%22%2C%0A%20%20%20%20light%3A%20%22%230AD6CF%22%2C%0A%20%20%20%20light2%3A%20%22%23AEE4E3%22%0A%20%20%7D%2C%0A%20%20dark%3A%20%7B%0A%20%20%20%20main%3A%20%22%232D1C3A%22%2C%0A%20%20%20%20light%3A%20%22%234A3957%22%2C%0A%20%20%20%20greyVariant1%3A%20%22%2322122E%22%2C%0A%20%20%20%20greyVariant2%3A%20%22%23493E51%22%2C%0A%20%20%20%20greyVariant3%3A%20%22%23918A98%22%2C%0A%20%20%20%20greyVariant4%3A%20%22%23C0B8C6%22%0A%20%20%7D%2C%0A%20%20light%3A%20%7B%0A%20%20%20%20main%3A%20%22%23F7F5F4%22%2C%0A%20%20%20%20light%3A%20%22%23FDFDFC%22%2C%0A%20%20%20%20greyVariant1%3A%20%22%23E6E6E6%22%2C%0A%20%20%20%20greyVariant2%3A%20%22%23C9C9C9%22%2C%0A%20%20%20%20greyVariant3%3A%20%22%239E9E9E%22%2C%0A%20%20%20%20greyVariant4%3A%20%22%23747474%22%0A%20%20%7D%0A%7D%0A\&HOMEPAGE\_MAIN\_ASSET=%25PUBLIC\_URL%25%2Fillustrations%2Fprojets.png\&HOMEPAGE\_MAIN\_ASSET\_X\_OFFSET=430px\&HOMEPAGE\_MAIN\_ASSET\_Y\_OFFSET=-50px\&HOMEPAGE\_MAIN\_ASSET\_SCALE\_FACTOR=1.5\&HEADER\_TEXT\_FOCUS=Datalab)
 
 ```yaml
 web:
@@ -106,8 +106,4 @@ web:
           }
         }
       SOCIAL_MEDIA_IMAGE: "%PUBLIC_URL%/preview-ultraviolet.png"
-      HOMEPAGE_MAIN_ASSET: "%PUBLIC_URL%/illustrations/projets.png"
-      HOMEPAGE_MAIN_ASSET_SCALE_FACTOR: "1.5"
-      HOMEPAGE_MAIN_ASSET_Y_OFFSET: "-50px"
-      HOMEPAGE_MAIN_ASSET_X_OFFSET: "430px"
 ```
