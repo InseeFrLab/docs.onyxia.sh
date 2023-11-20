@@ -14,7 +14,7 @@ The full documentation of the avalable parameter can be found here:
 
 {% embed url="https://github.com/InseeFrLab/onyxia/blob/main/web/.env" %}
 
-Note that your custom assets are suposed to be imported to your Onyxia instance via the use of the `CUSTOM_RESOURCES` parameter, url of a ZIP archive that should contain you assets. An example is given at the top of the [`.env`](https://github.com/InseeFrLab/onyxia/blob/main/web/.env) file.&#x20;
+Note that your custom assets are imported into your Onyxia instance via the use of the `CUSTOM_RESOURCES` parameter, url of a ZIP archive that should contain you assets. An example is given at the top of the [`.env`](https://github.com/InseeFrLab/onyxia/blob/main/web/.env) file.&#x20;
 
 Make sure to checkout the version of this document that matches the Onyxia version that you are deploying. [See releases](https://github.com/InseeFrLab/onyxia/releases).
 
