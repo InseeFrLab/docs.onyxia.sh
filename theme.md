@@ -16,6 +16,14 @@ The full documentation of the avalable parameter can be found here:
 
 Note that your custom assets are imported into your Onyxia instance via the use of the `CUSTOM_RESOURCES` parameter, url of a ZIP archive that should contain you assets. An example is given at the top of the [`.env`](https://github.com/InseeFrLab/onyxia/blob/main/web/.env) file.&#x20;
 
+{% hint style="info" %}
+Onyxia is configured to make the the browser cache assets so they are not re-downloaded each time the user access the app.&#x20;
+
+If you update some of your asset but keep the same URL, you can force the browser of your users to download the new version by adding a query parameter to the URL. Eample:&#x20;
+
+`HEADER_LOGO: "%PUBLIC_URL%/custom-resources/logo.svg?v=2"`
+{% endhint %}
+
 Make sure to checkout the version of this document that matches the Onyxia version that you are deploying. [See releases](https://github.com/InseeFrLab/onyxia/releases).
 
 ## Default looks
