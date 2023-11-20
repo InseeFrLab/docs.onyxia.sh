@@ -387,6 +387,8 @@ extraVolumes: |
   - name: extensions
     emptyDir: {}
 extraEnv: |
+  - name: ALLOWED_ASSET_ORIGIN
+    value: "https://onyxia.$DOMAIN"
   - name: KEYCLOAK_USER
     value: $KEYCLOAK_USER
   - name: KEYCLOAK_PASSWORD

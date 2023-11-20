@@ -145,3 +145,8 @@ Please refer to [the new documentation of the `HEADER_LINKS` parameter](https://
 +      LEFTBAR_LINKS: |
 ```
 {% endcode %}
+
+### Assets must now be bundled
+
+You must now bundle your assets such as the terms of services inside your onyxia instance. The newer version of Onyxia won't fetch resource from arbitrary URLs.  \
+See `CUSTOM_RESOURCES` in [the .env file](https://github.com/InseeFrLab/onyxia/blob/main/web/.env).
