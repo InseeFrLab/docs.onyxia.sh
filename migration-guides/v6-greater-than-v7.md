@@ -150,3 +150,8 @@ Please refer to [the new documentation of the `HEADER_LINKS` parameter](https://
 
 You must now bundle your assets such as the terms of services inside your onyxia instance. The newer version of Onyxia won't fetch resource from arbitrary URLs.  \
 See `CUSTOM_RESOURCES` in [the .env file](https://github.com/InseeFrLab/onyxia/blob/main/web/.env).
+
+### Keycloak Theme
+
+If you are using the Onyxia Keycloak theme and your instance is public you might want to fill up the `ONYXIA_` prefixed environement variable in your Keycloak envs.  \
+See [install doc](../#enabling-user-authentication).
