@@ -388,7 +388,7 @@ extraVolumes: |
     emptyDir: {}
 extraEnv: |
   - name: ONYXIA_RESOURCES_ALLOWED_ORIGINS
-    value: "https://onyxia.$DOMAIN, http://localhost"
+    value: "https://onyxia.$DOMAIN, http://localhost, http://127.0.0.1"
 # The following values are transported automatically from your
 # Onyxia instance over to the login pages via url parameters, however,
 # if you want to prevent thoses value from being potentially
