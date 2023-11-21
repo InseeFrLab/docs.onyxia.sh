@@ -387,19 +387,19 @@ extraVolumes: |
   - name: extensions
     emptyDir: {}
 extraEnv: |
-  - name: ALLOWED_ASSET_ORIGIN
-    value: "https://onyxia.$DOMAIN"
+  - name: ONYXIA_RESOURCES_ALLOWED_ORIGINS
+    value: "https://onyxia.$DOMAIN, http://localhost"
 # The following values are transported automatically from your
 # Onyxia instance over to the login pages via url parameters, however,
 # if you want to prevent thoses value from being potentially
 # hijacked by a third party you can hard code them here.  
-# - name: HEADER_TEXT_BOLD
-#   value: "SSP Cloud"
-# - name: HEADER_TEXT_FOCUS
+# - name: ONYXIA_HEADER_TEXT_BOLD
+#   value: "My organization"
+# - name: ONYXIA_HEADER_TEXT_FOCUS
 #   value: "Datalab"
-# - name: PALETTE_OVERRIDE
+# - name: ONYXIA_PALETTE_OVERRIDE
 #   value: "{}"
-# - name: TAB_TITLE
+# - name: ONYXIA_TAB_TITLE
 #   value: "Onyxia"
   - name: KEYCLOAK_USER
     value: $KEYCLOAK_USER
