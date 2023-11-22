@@ -6,20 +6,18 @@ description: >-
 
 # 🎨 Theme and branding
 
-{% hint style="info" %}
-A video tutoriel is in production
-{% endhint %}
+{% embed url="https://youtu.be/NrVuVXsbloA" %}
 
 The full documentation of the avalable parameter can be found here:
 
 {% embed url="https://github.com/InseeFrLab/onyxia/blob/main/web/.env" %}
 
-Note that your custom assets are imported into your Onyxia instance via the use of the `CUSTOM_RESOURCES` parameter, url of a ZIP archive that should contain you assets. An example is given at the top of the [`.env`](https://github.com/InseeFrLab/onyxia/blob/main/web/.env) file.&#x20;
+Note that your custom assets are imported into your Onyxia instance via the use of the `CUSTOM_RESOURCES` parameter, url of a ZIP archive that should contain you assets. An example is given at the top of the [`.env`](https://github.com/InseeFrLab/onyxia/blob/main/web/.env) file.
 
 {% hint style="info" %}
-Onyxia is configured to make the the browser cache assets so they are not re-downloaded each time the user access the app.&#x20;
+Onyxia is configured to make the the browser cache assets so they are not re-downloaded each time the user access the app.
 
-If you update some of your asset but keep the same URL, you can force the browser of your users to download the new version by adding a query parameter to the URL. Eample:&#x20;
+If you update some of your asset but keep the same URL, you can force the browser of your users to download the new version by adding a query parameter to the URL. Eample:
 
 `HEADER_LOGO: "%PUBLIC_URL%/custom-resources/logo.svg?v=2"`
 {% endhint %}
