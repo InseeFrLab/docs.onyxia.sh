@@ -4,7 +4,7 @@ description: Your Onyxia instance, today
 
 # 🏁 Install
 
-Oneliner
+## Oneliner
 
 TLDR. Here is how you can get an Onyxia instance running in a matter of seconds.
 
