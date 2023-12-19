@@ -654,7 +654,7 @@ Complete the content of client "minio" with the following values.
 2. _Valid Redirect URIs_ (two values are required): **https://minio.lab.my-domain.net/\*** and **https://minio-console.lab.my-domain.net/\***
 3. _Web origins_: **\***
 
-Save the content, a new tab called Credentials must be appear. Navigate to Credentials tab and copy the secret value for the next section.
+Save the content, a new tab called Credentials must be appear. Navigate to Credentials tab and **copy the secret value for the next section (**`KEYCLOAK_MINIO_CLIENT_SECRET`**)**.
 
 Navigate to Mappers tab and create a protocol Mapper.
 
@@ -673,12 +673,13 @@ Complete the content of Mapper "policy" with the following values.
 
 We recommand you to follow [MinIO documentation](https://min.io/docs/minio/linux/administration/identity-access-management/oidc-access-management.html#minio-external-identity-management-openid) for this installation and you must activate OIDC authentification. We will use the official Helm in this tutorial. All Helm configuration values can be found within this [link](https://github.com/minio/minio/blob/master/helm/minio/values.yaml).
 
-> Replace `COPY_SECRET_FROM_KEYCLOAK_MINIO_CLIENT` by the secret value defined into the "minio" Keycloak client (see previous section).
-
 ```bash
 helm repo add minio https://charts.min.io/
  
 DOMAIN=my-domain.net
+# Replace xxxxx by the secret value defined 
+# into the "minio" Keycloak client (see previous section)
+KEYCLOAK_MINIO_CLIENT_SECRET=xxxxxxxx
 
 cat << EOF > ./minio-values.yaml
 ## replicas: 16
@@ -713,7 +714,7 @@ oidc:
   redirectUri: "https://minio-console.lab.$DOMAIN/oauth_callback"
   claimPrefix: ""
   comment: ""
-  clientSecret: COPY_SECRET_FROM_KEYCLOAK_MINIO_CLIENT
+  clientSecret: KEYCLOAK_MINIO_CLIENT_SECRET
 policies:
   - name: stsonly
     statements:
@@ -773,7 +774,7 @@ Create the second Mapper called "audience-minio".
 
 #### Update Onyxia
 
-S3 storage is configured inside a region in Onyxia api. You have some options to configure this storage and let inform Onyxia web all needed informations how to generate those tokens : keycloak parameters to access storage API, duration of STS tokens, bucket name with a standard prefix and a claim in the user JWT token to generate a unique identifiant for this bucket name, whether Onyxia-web should try to to create this bucket silently or not. There is also options for projects. You should look all options for the version of your need on [github](https://github.com/InseeFrLab/onyxia-api/blob/master/docs/region-configuration.md#s3)
+S3 storage is configured inside a region in Onyxia api. You have some options to configure this storage and  inform Onyxia web all needed informations about how to generate those tokens : keycloak parameters to access storage API, duration of STS tokens, bucket name with a standard prefix and a claim in the user JWT token to generate a unique identifiant for this bucket name, whether Onyxia-web should try to to create this bucket silently or not. There is also options for projects. You should look all options for the version of your need on [github](https://github.com/InseeFrLab/onyxia-api/blob/master/docs/region-configuration.md#s3)
 
 <pre class="language-diff"><code class="lang-diff">serviceAccount:
   clusterAdmin: true
