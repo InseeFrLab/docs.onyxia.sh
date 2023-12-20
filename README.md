@@ -340,13 +340,13 @@ If you are unsure about how to supply these variables, refer to the later sectio
 
 At the moment there is no authentication process, everyone can access our platform and and start services.
 
-Let's setup Keycloak to enable users to create account and login to our Onyxia.
+Let's setup Keycloakx to enable users to create account and login to our Onyxia.
 
 {% hint style="success" %}
-Note that in this instalation guide we make you use Keycloak but you can use any identity server that is Open ID Connect compliant.
+Note that in this instalation guide we make you use Keycloakx but you can use any identity server that is Open ID Connect compliant.
 {% endhint %}
 
-For deploying our Keycloak we use [codecentric's helm chart](https://github.com/codecentric/helm-charts/tree/master/charts/keycloak).
+For deploying our Keycloakx we use [codecentric's helm chart](https://github.com/codecentric/helm-charts/tree/master/charts/keycloakx).
 
 ```bash
 helm repo add codecentric https://codecentric.github.io/helm-charts
@@ -357,10 +357,9 @@ POSTGRESQL_PASSWORD=xxxxx #Replace by a strong password, you will never need it.
 KEYCLOAK_USER=admin
 KEYCLOAK_PASSWORD=yyyyyy 
 
-cat << EOF > ./keycloak-values.yaml
+cat << EOF > ./keycloakx-values.yaml
 image:
-  # We use the legacy variant of the image until codecentric update it's helm chart
-  tag: "19.0.3-legacy"
+  tag: "2.3.0"
 replicas: 1
 extraInitContainers: |
   - name: realm-ext-provider
@@ -443,7 +442,7 @@ postgresql:
   postgresqlPassword: $POSTGRESQL_PASSWORD
 EOF
 
-helm install keycloak codecentric/keycloak -f keycloak-values.yaml
+helm install keycloak codecentric/keycloakx -f keycloakx-values.yaml
 ```
 
 You can now login to the **administration console** of **https://auth.lab.my-domain.net** and login using the credentials you have defined with `KEYCLOAK_USER` and `KEYCLOAK_PASSWORD`.
@@ -577,9 +576,13 @@ Update the `onyxia-values.yaml` file that you created previously, don't forget t
 
 Don't forget as well to remplace the terms of services of the [sspcloud](https://www.sspcloud.fr) by your own terms of services. CORS should be enabled on those `.md` links (`Access-Control-Allow-Origin: *`).
 
+Please note you can select an existing service account or let onyxia create one, with or without clusterAdmin rights.
+
 ```diff
 +serviceAccount:
-+  clusterAdmin: true
++  create: false
++  clusterAdmin: false
++  name:
  ingress:
    enabled: true
    annotations:
