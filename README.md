@@ -576,7 +576,7 @@ Update the `onyxia-values.yaml` file that you created previously, don't forget t
 
 Don't forget as well to remplace the terms of services of the [sspcloud](https://www.sspcloud.fr) by your own terms of services. CORS should be enabled on those `.md` links (`Access-Control-Allow-Origin: *`).
 
-Please note you can select an existing service account or let onyxia create one, with or without clusterAdmin rights.
+Please note you can specify if a service account should be created, with or without clusterAdmin rights.
 
 ```diff
 +serviceAccount:
