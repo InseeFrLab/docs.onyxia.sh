@@ -4,7 +4,7 @@ description: The backend REST API in Java
 
 # 🔌 The REST API
 
-This is the documentation for [InseeFrLab/onyxia -> api/](https://github.com/InseeFrLab/onyxia/tree/main/api). &#x20;
+This is the documentation for [InseeFrLab/onyxia -> api/](https://github.com/InseeFrLab/onyxia-api). &#x20;
 
 It's the part of the App that runs in the clusters. It handles the things that can't be done directly from the frontend. &#x20;
 
