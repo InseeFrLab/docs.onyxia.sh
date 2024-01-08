@@ -6,6 +6,7 @@
 * [🔬 Catalog of services](catalog-of-services.md)
 * [🔓 Security consideration](security-consideration.md)
 * [⬆ Migration guides](migration-guides/README.md)
+  * [⬆ v7->v8](migration-guides/v7-greater-than-v8.md)
   * [⬆ v6 -> v7](migration-guides/v6-greater-than-v7.md)
   * [⬆ v5 -> v6](migration-guides/v5-greater-than-v6.md)
   * [⬆ v4 -> v5](migration-guides/v4-greater-than-v5.md)
