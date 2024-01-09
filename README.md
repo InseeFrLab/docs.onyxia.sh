@@ -774,9 +774,16 @@ Create the second Mapper called "audience-minio".
 
 #### Update Onyxia
 
-S3 storage is configured inside a region in Onyxia api. You have some options to configure this storage and  inform Onyxia web all needed informations about how to generate those tokens : keycloak parameters to access storage API, duration of STS tokens, bucket name with a standard prefix and a claim in the user JWT token to generate a unique identifiant for this bucket name, whether Onyxia-web should try to to create this bucket silently or not. There is also options for projects. You should look all options for the version of your need on [github](https://github.com/InseeFrLab/onyxia-api/blob/master/docs/region-configuration.md#s3)
+S3 storage is configured inside a region in Onyxia api. You have some options to configure this storage and  inform Onyxia web all needed informations. \
+\
+This configuration have two differents section ; one for configuring the storage directory of the users and one for configuring if Onyxia can dynamically create tokens with an STS endpoint.
 
-<pre class="language-diff"><code class="lang-diff">serviceAccount:
+When configuring the workingDirectory, there are two modes : 'multi' where each user has their own buckets, and 'shared' where users just have a subpath inside a specific bucket.
+
+You should look all options for the version of your need on [github](https://github.com/InseeFrLab/onyxia-api/blob/master/docs/region-configuration.md#s3)
+
+```diff
+serviceAccount:
   clusterAdmin: true
  ingress:
    enabled: true
@@ -822,25 +829,23 @@ S3 storage is configured inside a region in Onyxia api. You have some options to
               "initScript":"https://inseefrlab.github.io/onyxia/onyxia-init.sh"
            },
            "data":{
-              "S3":{
-<strong>-                "URL":"todo",
-</strong>+                "type": "minio",
-+                "URL": "https://minio.lab.my-domain.net",
-+                "region": "us-east-1",
-+                "bucketPrefix": "oidc-",
-+                "groupBucketPrefix": "projet-",
-+                "bucketClaim": "preferred_username",
-+                "defaultDurationSeconds": 86400,
-+                "keycloakParams":
-+                {
-+                      "URL": "https://auth.lab.my-domain.net/auth",
-+                      "realm": "datalab",
-+                      "clientId": "onyxia-minio",
++                  "URL": "https://minio.my-domain.net",
++                  "region": "us-east-1",
++                  "pathStyleAccess": "true",
++                  "sts": {
++                      "durationSeconds": 86400,
++                      "oidcConfiguration":
++                      {
++                        "issuerURI": "https://auth.my-domain.net/auth/realms/datalab",
++                        "clientID": "minio",
++                      },
++                  },            
++                  "workingDirectory": {
++                      "bucketMode": "multi",
++                      "bucketNamePrefix": "user-",
++                      "bucketNamePrefixGroup": "projet-",
++                  },
 +                },
-+                "acceptBucketCreation": true,
-                 "monitoring":{
-                    "URLPattern":"minio"
-                 }
               }
            },
            "auth":{
@@ -853,7 +858,7 @@ S3 storage is configured inside a region in Onyxia api. You have some options to
            }
         }
      ]
-</code></pre>
+```
 
 ```bash
 helm upgrade onyxia inseefrlab/onyxia -f onyxia-values.yaml
