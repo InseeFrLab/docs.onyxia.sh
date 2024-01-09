@@ -828,7 +828,8 @@ serviceAccount:
               },
               "initScript":"https://inseefrlab.github.io/onyxia/onyxia-init.sh"
            },
-           "data":{
++           "data":{
++                "S3" : {
 +                  "URL": "https://minio.my-domain.net",
 +                  "region": "us-east-1",
 +                  "pathStyleAccess": "true",
@@ -837,7 +838,7 @@ serviceAccount:
 +                      "oidcConfiguration":
 +                      {
 +                        "issuerURI": "https://auth.my-domain.net/auth/realms/datalab",
-+                        "clientID": "minio",
++                        "clientID": "onyxia-minio",
 +                      },
 +                  },            
 +                  "workingDirectory": {
@@ -846,8 +847,7 @@ serviceAccount:
 +                      "bucketNamePrefixGroup": "projet-",
 +                  },
 +                },
-              }
-           },
++            },
            "auth":{
               "type":"openidconnect"
            },
