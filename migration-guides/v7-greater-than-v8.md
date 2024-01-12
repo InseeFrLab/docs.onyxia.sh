@@ -12,7 +12,7 @@ The new S3 region parameter specification
 
 This is the DIFF you have to apply to your Onyxia configuration assuming you have a typical MinIO integration configured:   &#x20;
 
-{% code title="values.yaml" %}
+{% code title="onyxia-values.yaml" %}
 ```diff
  onyxia:
    ...
@@ -50,3 +50,7 @@ This is the DIFF you have to apply to your Onyxia configuration assuming you hav
 
 ```
 {% endcode %}
+
+```bash
+helm upgrade onyxia inseefrlab/onyxia -f onyxia-values.yaml
+```

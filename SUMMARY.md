@@ -1,6 +1,9 @@
 # Table of contents
 
 * [🏁 Install](README.md)
+  * [Page 1](readme/page-1.md)
+  * [🛳 Kubernetes](readme/kubernetes.md)
+  * [🐉 Onyxia installation](readme/onyxia-installation.md)
 * [🎨 Theme and branding](theme.md)
 * [🕹 User guide](user-guide.md)
 * [🔬 Catalog of services](catalog-of-services.md)
