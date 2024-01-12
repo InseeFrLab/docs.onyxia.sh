@@ -636,7 +636,7 @@ Now your users should be able to create account, log-in, and start services on t
 
 ### S3 Storage
 
-Onyxia-web use [AWS Security Token Service API](https://docs.aws.amazon.com/STS/latest/APIReference/welcome.html) to get token and empowered user with storage features. We support any S3 storage compatible with this API. In this context, we are using [MinIO](https://min.io/), which is compatible with the Amazon S3 storage service and we demonstrate how to integrate it with Keycloak.
+Onyxia uses [AWS Security Token Service API](https://docs.aws.amazon.com/STS/latest/APIReference/welcome.html) to optain S3 tokens on behaf of your users. We support any S3 storage compatible with this API. In this context, we are using [MinIO](https://min.io/), which is compatible with the Amazon S3 storage service and we demonstrate how to integrate it with Keycloak.
 
 #### Create a Keycloak client for Accessing Keycloak
 
@@ -680,6 +680,17 @@ DOMAIN=my-domain.net
 # Replace xxxxx by the secret value defined 
 # into the "minio" Keycloak client (see previous section)
 KEYCLOAK_MINIO_CLIENT_SECRET=xxxxxxxx
+# Make sure this match with what you have specified as oidc.username-claim
+# In your onyxia-api configuration.  
+# See: https://github.com/InseeFrLab/onyxia-api?tab=readme-ov-file#authentication-configuration
+# If you haven't specified this parameter, leave preferred_username, it's
+# the Keycloak's default.  
+# You have also to make sure that the onyxia-minio client that you will
+# create later on has a preffered_username claim in it's OIDC Access Tocken JWT
+# (and that the value of this claim matches the Onyxia username of course).  
+# As long as your onyxia and onyxia-minio client shares the same Keycloak realm
+# it will be the case.  
+OIDC_USERNAME_CLAIM=preferred_username
 
 cat << EOF > ./minio-values.yaml
 ## replicas: 16
@@ -714,13 +725,13 @@ oidc:
   redirectUri: "https://minio-console.lab.$DOMAIN/oauth_callback"
   claimPrefix: ""
   comment: ""
-  clientSecret: KEYCLOAK_MINIO_CLIENT_SECRET
+  clientSecret: $KEYCLOAK_MINIO_CLIENT_SECRET
 policies:
   - name: stsonly
     statements:
       - resources:
-          - 'arn:aws:s3:::oidc-${jwt:preferred_username}'
-          - 'arn:aws:s3:::oidc-${jwt:preferred_username}/*'
+          - 'arn:aws:s3:::oidc-${jwt:$OIDC_USERNAME_CLAIM}'
+          - 'arn:aws:s3:::oidc-${jwt:$OIDC_USERNAME_CLAIM}/*'
         actions:
           - "s3:*"
 EOF
@@ -747,10 +758,10 @@ Complete the content of client "onyxia-minio" with the following values.
 1. _Access Type_: **public**
 2. _Valid Redirect URIs_: **https://onyxia.my-domain.net/\***
 3. _Web origins_: **\***
-4. Advanced Settings\
-   1\. Access Token Lifespan : 7 days\
-   2\. Client Session Idle : 7 days\
-   3\. Client Session Max: 7 days
+4. In the **Advanced** tab:\
+   1\. Access Token Lifespan : **7 days**\
+   2\. Client Session Idle : **7 days**\
+   3\. Client Session Max: **7 days**
 
 Save the content and navigate to Mappers tab and create two protocol Mappers.
 
@@ -782,6 +793,7 @@ When configuring the workingDirectory, there are two modes : 'multi' where each 
 
 You should look all options for the version of your need on [github](https://github.com/InseeFrLab/onyxia-api/blob/master/docs/region-configuration.md#s3)
 
+{% code title="onyxia-values.yaml" %}
 ```diff
 serviceAccount:
   clusterAdmin: true
@@ -828,11 +840,10 @@ serviceAccount:
               },
               "initScript":"https://inseefrlab.github.io/onyxia/onyxia-init.sh"
            },
-+           "data":{
++          "data": {
 +                "S3" : {
-+                  "URL": "https://minio.my-domain.net",
-+                  "region": "us-east-1",
-+                  "pathStyleAccess": "true",
++                  "URL": "https://minio.lab.my-domain.net",
++                  "pathStyleAccess": true,
 +                  "sts": {
 +                      "durationSeconds": 86400,
 +                      "oidcConfiguration":
@@ -840,7 +851,7 @@ serviceAccount:
 +                        "issuerURI": "https://auth.my-domain.net/auth/realms/datalab",
 +                        "clientID": "onyxia-minio",
 +                      },
-+                  },            
++                  },
 +                  "workingDirectory": {
 +                      "bucketMode": "multi",
 +                      "bucketNamePrefix": "user-",
@@ -859,6 +870,7 @@ serviceAccount:
         }
      ]
 ```
+{% endcode %}
 
 ```bash
 helm upgrade onyxia inseefrlab/onyxia -f onyxia-values.yaml

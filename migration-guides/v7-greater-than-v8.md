@@ -14,34 +14,39 @@ This is the DIFF you have to apply to your Onyxia configuration assuming you hav
 
 {% code title="values.yaml" %}
 ```diff
-    regions: [
-        {    
-            //...
-            "data": {
-              "S3": {
--                 "type": "minio",
-                  "URL": "https://minio.lab.my-domain.net",
-                  "region": "us-east-1",
--                 "bucketClaim": "preferred_username",
--                 "defaultDurationSeconds": 86400,
--                 "oidcConfiguration": {
--                     "clientID": "onyxia-minio"
--                 },
-+                 "sts": {
-+                     "durationSeconds": 86400,
-+                     "oidcConfiguration": {
-+                        "clientID": "onyxia-minio"
-+                     }
-+                  },
--                 "bucketPrefix": "user-",
--                 "groupBucketPrefix": "projet-",
-+                 "workingDirectory": {
-+                     "bucketMode": "multi",
-+                     "bucketNamePrefix": "user-",
-+                     "bucketNamePrefixGroup": "projet-"
-+                 }
-              },
-              //...
+ onyxia:
+   ...
+   api:
+     ...
+     regions:
+       [
+         {
+           ...
+           "data": {
+             "S3": {
+-              "type": "minio",
+               "URL": "https://minio.lab.my-domain.net",
+               "region": "us-east-1",
+-              "bucketClaim": "preferred_username",
+-              "defaultDurationSeconds": 86400,
+-              "oidcConfiguration": {
+-                "clientID": "onyxia-minio"
+-              },
++              "sts": {
++                "durationSeconds": 86400,
++                "oidcConfiguration": {
++                  "clientID": "onyxia-minio"
++                }
++              },
+-              "bucketPrefix": "user-",
+-              "groupBucketPrefix": "projet-",
++              "workingDirectory": {
++                "bucketMode": "multi",
++                "bucketNamePrefix": "user-",
++                "bucketNamePrefixGroup": "projet-"
++              }
+             },
+             ...
 
 ```
 {% endcode %}
