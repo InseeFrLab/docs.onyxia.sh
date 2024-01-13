@@ -19,7 +19,7 @@ Whether you are a Kubernetes veteran or a beginner with cloud technologies, this
 
 ## Oneliner
 
-If you are already familiar with  Kubernetes and Helm. Here is how you can get an Onyxia instance running in a matter of seconds.
+If you are already familiar with Kubernetes and Helm, here's how you can get an Onyxia instance up and running in just a matter of seconds.
 
 ```bash
 helm repo add onyxia https://inseefrlab.github.io/onyxia
@@ -28,13 +28,15 @@ cat << EOF > ./onyxia-values.yaml
 ingress:
   enabled: true
   hosts:
-    - host: datalab.my-domain.net
+    - host: onyxia.my-domain.net
 EOF
 
 helm install onyxia onyxia/onyxia -f onyxia-values.yaml
+
+# Navigate to https://onyxia.my-domain.net
 ```
 
-With this minimal configuration yield and Onyxia instance operating in a degraded mode, which lacks features such as authentication, S3 explorer, secret management, etc. However, you will still have the capability to launch services from the catalog.
+With this minimal configuration, you'll have an Onyxia instance operating in a degraded mode, which lacks features such as authentication, S3 explorer, secret management, etc. However, you will still retain the capability to launch services from the catalog.
 
 ## Step by step installation guide
 
