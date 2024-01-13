@@ -4,6 +4,7 @@
   * [🛳 Kubernetes](readme/kubernetes.md)
   * [🐉 Onyxia installation](readme/onyxia-installation.md)
   * [🔑 User authentication](readme/user-authentication.md)
+  * [...rest](readme/...rest.md)
 * [🎨 Theme and branding](theme.md)
 * [🕹 User guide](user-guide.md)
 * [🔬 Catalog of services](catalog-of-services.md)
