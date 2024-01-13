@@ -49,3 +49,8 @@ You can now login to **https://argocd.lab.my-domain.net** using: &#x20;
 
 * username: **admin**
 * password: **\<the output of the previous command (without the `%` at the end)>**
+
+### Setting up your GitOps GitHub Repository
+
+{% embed url="https://app.tango.us/app/embed/316721db-a2d7-4cc2-9e66-0be86f979a28" %}
+
