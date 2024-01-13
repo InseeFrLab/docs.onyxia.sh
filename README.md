@@ -38,9 +38,9 @@ helm install onyxia onyxia/onyxia -f onyxia-values.yaml
 With this minimal configuration, you'll have an Onyxia instance operating in a degraded mode, which lacks features such as authentication, S3 explorer, secret management, etc. However, you will still retain the capability to launch services from the catalog.
 {% endhint %}
 
-Whether you are a Kubernetes veteran or a beginner with cloud technologies, this guide aims to guide you through the instantiation and configuration of an Onyxia instance. Let's dive right in!
+Whether you are a Kubernetes veteran or a beginner with cloud technologies, this guide aims to guide you through the instantiation and configuration of an Onyxia instance with it's full range of features enabled. Let's dive right in! 🤿
 
-First let's make sure we have a suitable deployment environement to work with: &#x20;
+First let's make sure we have a suitable deployment environement to work with!&#x20;
 
 {% content-ref url="readme/kubernetes.md" %}
 [kubernetes.md](readme/kubernetes.md)
