@@ -15,8 +15,7 @@ layout:
 
 # 🏁 Install
 
-Whether you are a Kubernetes veteran or a beginner with cloud technologies, this guide aims to guide you through the instantiation and configuration of an Onyxia instance. Let's dive right in!
-
+{% hint style="info" %}
 ## Oneliner
 
 If you are already familiar with Kubernetes and Helm, here's how you can get an Onyxia instance up and running in just a matter of seconds.
@@ -37,10 +36,9 @@ helm install onyxia onyxia/onyxia -f onyxia-values.yaml
 ```
 
 With this minimal configuration, you'll have an Onyxia instance operating in a degraded mode, which lacks features such as authentication, S3 explorer, secret management, etc. However, you will still retain the capability to launch services from the catalog.
+{% endhint %}
 
-## Step by step installation guide
-
-Let's see how to instanciate an Onyxia instance with it's full range of feature! &#x20;
+Whether you are a Kubernetes veteran or a beginner with cloud technologies, this guide aims to guide you through the instantiation and configuration of an Onyxia instance. Let's dive right in!
 
 First let's make sure we have a suitable deployment environement to work with: &#x20;
 
