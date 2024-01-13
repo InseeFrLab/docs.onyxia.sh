@@ -1,5 +1,5 @@
 ---
-description: Your Onyxia instance, today
+description: Convinced by Onyxia? Let's see how you can get your own instance today!
 layout:
   title:
     visible: true
@@ -14,6 +14,8 @@ layout:
 ---
 
 # 🏁 Install
+
+Whether you are a Kubernetes veteran or a beginner with cloud technologies, this guide aims to guide you through the instantiation and configuration of an Onyxia instance. Let's dive right in!
 
 ## Oneliner
 
