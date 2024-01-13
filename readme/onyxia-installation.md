@@ -94,13 +94,7 @@ api:
           "authenticationMode": "serviceAccount",
           "expose":{
             "domain":"lab.$DOMAIN"
-          },
-          "monitoring":{
-            "URLPattern":"todo"
-          },
-          // This script will be run at startup by the services containers
-          // (example Jupyter Notbook)
-          "initScript":"https://inseefrlab.github.io/onyxia/onyxia-init.sh"
+          }
         }
       }
     ]
