@@ -195,6 +195,9 @@ You may need to delegate your DNS Servers to one of the supported [DNS service p
 Now we want to create a Kubernetes secret containing our newly obtained certificate:
 
 ```bash
+# First let's make sure we connect to our local Kube cluser
+kubectl config use-context docker-desktop
+
 kubectl create namespace ingress-nginx
 DOMAIN=my-domain.net
 sudo kubectl create secret tls onyxia-tls \
@@ -222,8 +225,8 @@ helm install ingress-nginx ingress-nginx \
 {% endtab %}
 {% endtabs %}
 
-Next step is to install the Onyxia Helm package on your cluster. &#x20;
+Now that we have a Kubernetes cluster  ready to use let's levrage ArgoCD and GitOps practices to deploy and monitor the core services of you Onyxia Datalab. &#x20;
 
-{% content-ref url="onyxia-installation.md" %}
-[onyxia-installation.md](onyxia-installation.md)
+{% content-ref url="gitops.md" %}
+[gitops.md](gitops.md)
 {% endcontent-ref %}

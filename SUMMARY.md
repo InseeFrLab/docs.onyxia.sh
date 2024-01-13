@@ -2,6 +2,7 @@
 
 * [🏁 Install](README.md)
   * [🛳 Kubernetes](readme/kubernetes.md)
+  * [⚙ GitOps](readme/gitops.md)
   * [🐉 Onyxia installation](readme/onyxia-installation.md)
   * [🔑 User authentication](readme/user-authentication.md)
   * [...rest](readme/...rest.md)

@@ -37,38 +37,6 @@ Use `kubectl get pods` to see if your pods are up and ready.
 <img src="../.gitbook/assets/image (23).png" alt="" data-size="original">
 {% endhint %}
 
-<details>
-
-<summary>(Optional) Make sure that your cluster is ready for Onyxia</summary>
-
-To make sure that your Kubernetes cluster is correctly configured let's deploy a test web app on it before deploying Onyxia.
-
-<img src="../.gitbook/assets/image (16).png" alt="The hello world SPA deployed" data-size="original">
-
-```bash
-DOMAIN=my-domain.net
-
-cat << EOF > ./test-spa-values.yaml
-ingress:
-  enabled: true
-  annotations:
-    kubernetes.io/ingress.class: nginx
-  hosts:
-    - host: test-spa.lab.$DOMAIN
-EOF
-
-helm repo add etalab https://etalab.github.io/helm-charts
-helm install test-spa etalab/keycloakify-demo-app -f test-spa-values.yaml
-echo "Navigate to https://test-spa.lab.$DOMAIN, see the Hello World"
-helm uninstall test-spa
-```
-
-</details>
-
-{% hint style="success" %}
-Note that your region configuration can include comments 💬! &#x20;
-{% endhint %}
-
 ```bash
 helm repo add onyxia https://inseefrlab.github.io/onyxia
 
