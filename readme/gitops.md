@@ -2,7 +2,7 @@
 description: Let's install ArgoCD to manage and monitor your Onyxia Datalab deployment!
 ---
 
-# ⚙ GitOps
+# 🐙 GitOps
 
 {% hint style="info" %}
 At this stage of this installation process we assumes that: &#x20;
@@ -49,4 +49,3 @@ You can now login to **https://argocd.lab.my-domain.net** using: &#x20;
 
 * username: **admin**
 * password: **\<the output of the previous command (without the `%` at the end)>**
-
