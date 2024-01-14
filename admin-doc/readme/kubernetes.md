@@ -132,7 +132,7 @@ This command will open your configured text editor, go to line `56` and add:
 {% tab title="Test on your machine" %}
 If you are on a Mac or Window computer you can install [Docker desktop](https://www.docker.com/products/docker-desktop/) then enable Kubernetes.
 
-![Enable Kubernetes in Docker desktop](<../../.gitbook/assets/image (1).png>)
+<figure><img src="../../.gitbook/assets/image (34).png" alt=""><figcaption><p>Enabling Kubernetes in the Docker desktop App</p></figcaption></figure>
 
 {% hint style="info" %}
 Docker desktop isn't available on Linux, you can use [Kind](https://kind.sigs.k8s.io/) instead.
@@ -140,7 +140,7 @@ Docker desktop isn't available on Linux, you can use [Kind](https://kind.sigs.k8
 
 **Port Forwarding**
 
-You'll need to [forward the TCP ports 80 and 443 to your local machine](https://user-images.githubusercontent.com/6702424/174459930-23fb577c-11a2-49ef-a082-873f4139aca1.png). It's done from the administration panel of your domestic internet Box. If you're on a corporate network, no luck for you I'm afraid.
+You'll need to [forward the TCP ports 80 and 443 to your local machine](https://user-images.githubusercontent.com/6702424/174459930-23fb577c-11a2-49ef-a082-873f4139aca1.png). It's done from the administration panel of your domestic internet Box. If you're on a corporate network you'll have to [test onyxia on a remote Kubernetes cluster](kubernetes.md#provisioning-a-cluster-on-aws-gcp-or-azure).
 
 **DNS**
 
@@ -150,15 +150,15 @@ Get [your internet box routable IP](http://monip.org/) and create the following 
 
 ```dns-zone-file
 datalab.my-domain.net A <YOUR_IP>
-*.lab.my-domain.net  A <YOUR_IP>
+*.lab.my-domain.net   A <YOUR_IP>
 ```
 
 {% hint style="success" %}
 If you have DDNS domain you can create `CNAME` instead example:
 
 ```
-onyxia.my-domain.net CNAME jhon-doe-home.ddns.net.
-*.lab.my-domain.net  CNAME jhon-doe-home.ddnc.net.
+datalab.my-domain.net CNAME jhon-doe-home.ddns.net.
+*.lab.my-domain.net   CNAME jhon-doe-home.ddnc.net.
 ```
 {% endhint %}
 
