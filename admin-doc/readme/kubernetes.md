@@ -15,7 +15,7 @@ layout:
 
 # 🛳 Kubernetes
 
-First you'll need a Kubernetes cluster. If you have one already you can skip and directly go to the [Onyxia instalation section](broken-reference).
+First you'll need a Kubernetes cluster. If you have one already you can skip and directly go to [the Onyxia instalation section](gitops.md).
 
 {% tabs %}
 {% tab title="Provisioning a cluster on AWS, GCP or Azure" %}
@@ -225,7 +225,7 @@ helm install ingress-nginx ingress-nginx \
 {% endtab %}
 {% endtabs %}
 
-Now that we have a Kubernetes cluster  ready to use let's levrage ArgoCD and GitOps practices to deploy and monitor the core services of you Onyxia Datalab. &#x20;
+Now that we have a Kubernetes cluster  ready to use let's levrage ArgoCD and GitOps practices to deploy and monitor the core services of our Onyxia Datalab. &#x20;
 
 {% content-ref url="gitops.md" %}
 [gitops.md](gitops.md)
