@@ -4,17 +4,17 @@ description: Onyxia Project Core Team Future Developments Roadmap
 
 # 🛣 Roadmap
 
-### Data Explorer Evolution
+Want to know what we are up to? &#x20;
 
-Transforming the existing file browser into a comprehensive data explorer is a central aspect of our development roadmap. This enhancement aims to provide data scientists with immediate access to the initial rows of various file formats (including but not limited to parquet, CSV, and JSON) directly via the Onyxia-web interface. This will effectively integrate a basic SQL engine, DuckDB Wasm, for swift data access and manipulation.
+You can checkout open GitHub issues and Pull Request:
 
-### Accessibility Improvement
+{% embed url="https://github.com/InseeFrLab/onyxia/issues?q=is%3Aopen+assignee%3Agarronej" %}
+Open Issues and Pull Request assigned to @garronej
+{% endembed %}
 
-Enhancing accessibility is a vital and immediate priority for the Onyxia project. Currently, the platform lacks certain accessibility features which we plan to implement in the immediate future.
+Or you can ask us on Slack, we're very prompt to respond! &#x20;
 
-### Expanded S3 Management Options
-
-As it stands, the Onyxia project does not have the capacity to set quotas for S3 buckets or create custom policies. These responsibilities are currently delegated to other administrators. However, we are in the process of developing an S3 operator that will simplify the process of onboarding onto S3, thereby reducing dependency on external administrators.
-
-
+{% embed url="https://join.slack.com/t/3innovation/shared_invite/zt-1hnzukjcn-6biCSmVy4qvyDGwbNI~sWg" %}
+Onyxia Community Slack Server
+{% endembed %}
 

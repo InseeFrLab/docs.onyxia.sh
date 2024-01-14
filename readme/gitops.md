@@ -1,5 +1,5 @@
 ---
-description: Let's install ArgoCD to manage and monitor your Onyxia Datalab deployment!
+description: Let's install ArgoCD to manage and monitor our Onyxia Datalab deployment!
 ---
 
 # 🐙 GitOps
