@@ -17,8 +17,6 @@ We can proceed with manually installing various services via Helm to set up the 
 Let's install ArgoCD on the our cluster. &#x20;
 
 ```bash
-helm repo add argo https://argoproj.github.io/argo-helm
-
 DOMAIN=my-domain.net
 
 cat << EOF > ./argocd-values.yaml
@@ -28,7 +26,7 @@ server:
   ingress:
     enabled: true
     annotations:
-      kubernetes.io/ingress.class: nginx
+      kubernetes.io/ingress.class: "nginx"
       nginx.ingress.kubernetes.io/ssl-passthrough: "true"
     hosts:
       - argocd.lab.$DOMAIN
@@ -37,13 +35,15 @@ server:
           - argocd.lab.$DOMAIN
 EOF
 
-helm install argocd argo/argo-cd -f argocd-values.yaml
+helm install argocd argo-cd \
+  --repo https://argoproj.github.io/argo-helm \
+  -f ./argocd-values.yaml
 ```
 
 Now you have to get the password that have been automatically generated to protect ArgoCD's admin console, running this command will print the password:
 
 ```bash
-kubectl -n default get secret argocd-initial-admin-secret \
+kubectl get secret argocd-initial-admin-secret \
   -o jsonpath="{.data.password}" | base64 -d
 ```
 
@@ -52,9 +52,11 @@ You can now login to **https://argocd.lab.my-domain.net** using: &#x20;
 * username: **admin**
 * password: **\<the output of the previous command (without the `%` at the end)>**
 
+<figure><img src="../../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
 
+Now that we have an ArgoCD we want to connect it to a Git repository that will describe what services we want to be running on our cluster. &#x20;
 
-### Setting up your GitOps GitHub Repository
+Let's fork the onyxia-ops GitHub repo and use it to deploy an Onyxia instance! &#x20;
 
 {% embed url="https://app.tango.us/app/embed/316721db-a2d7-4cc2-9e66-0be86f979a28" %}
 
