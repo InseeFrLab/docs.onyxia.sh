@@ -52,7 +52,7 @@ You can now login to **https://argocd.lab.my-domain.net** using: &#x20;
 * username: **admin**
 * password: **\<the output of the previous command (without the `%` at the end)>**
 
-<figure><img src="../../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Now that we have an ArgoCD we want to connect it to a Git repository that will describe what services we want to be running on our cluster. &#x20;
 
@@ -63,7 +63,29 @@ Let's fork the onyxia-ops GitHub repo and use it to deploy an Onyxia instance!\
 
 At this point you should have a very bare bone Onyxia instance that you can use to launch services. &#x20;
 
+What's great, is that now, if you want to update the configuration of your Onyxia instance you only have to commit the change to your GitOps repo, ArgoCD will takes charge of restarting the service for you with the new configuration.  \
+To put that to the test try to modify your Onyxia configuration
 
+{% code title="apps/onyxia/values.yaml" %}
+```diff
+ onyxia:
+   ingress:
+     enabled: true
+     annotations:
+       kubernetes.io/ingress.class: nginx
+     hosts:
+       - host: datalab.demo-domain.ovh
++  web:
++    env:
++      HEADER_TEXT_BOLD: My Organization
+   api:
+     regions: [...]
+```
+{% endcode %}
+
+After a few seconds, if you reload **https://datalab.my-domain.net** you should witness the update!
+
+<figure><img src="../../.gitbook/assets/image (3).png" alt="" width="375"><figcaption><p>"My Organization" no appears in the Header</p></figcaption></figure>
 
 Next step is to see how to enable your user to authenticate themselvs to your datalab!
 
