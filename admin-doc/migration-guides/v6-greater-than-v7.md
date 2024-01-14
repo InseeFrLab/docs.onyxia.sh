@@ -154,4 +154,4 @@ See `CUSTOM_RESOURCES` in [the .env file](https://github.com/InseeFrLab/onyxia/b
 ### Keycloak Theme
 
 If you are using the Onyxia Keycloak theme and your instance is public you might want to fill up the `ONYXIA_` prefixed environement variable in your Keycloak envs.  \
-See [install doc](../#enabling-user-authentication).
+See [install doc](../../#enabling-user-authentication).

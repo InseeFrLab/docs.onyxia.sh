@@ -42,6 +42,6 @@ Whether you are a Kubernetes veteran or a beginner with cloud technologies, this
 
 First let's make sure we have a suitable deployment environement to work with!&#x20;
 
-{% content-ref url="readme/kubernetes.md" %}
-[kubernetes.md](readme/kubernetes.md)
+{% content-ref url="admin-doc/readme/kubernetes.md" %}
+[kubernetes.md](admin-doc/readme/kubernetes.md)
 {% endcontent-ref %}

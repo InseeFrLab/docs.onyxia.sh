@@ -126,13 +126,13 @@ This command will open your configured text editor, go to line `56` and add:
       - --default-ssl-certificate=ingress-nginx/onyxia-tls
 ```
 
-![](<../.gitbook/assets/image (13).png>)
+![](<../../.gitbook/assets/image (13).png>)
 {% endtab %}
 
 {% tab title="Test on your machine" %}
 If you are on a Mac or Window computer you can install [Docker desktop](https://www.docker.com/products/docker-desktop/) then enable Kubernetes.
 
-![Enable Kubernetes in Docker desktop](<../.gitbook/assets/image (1).png>)
+![Enable Kubernetes in Docker desktop](<../../.gitbook/assets/image (1).png>)
 
 {% hint style="info" %}
 Docker desktop isn't available on Linux, you can use [Kind](https://kind.sigs.k8s.io/) instead.

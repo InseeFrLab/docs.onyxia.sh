@@ -16,11 +16,11 @@ This collection of charts help users to start automation tools for their datasci
 
 You can always find the source of the catalog by clicking on the "contribute to the... " link.
 
-![https://datalab.sspcloud.fr/catalog](<.gitbook/assets/image (12).png>)
+![https://datalab.sspcloud.fr/catalog](<../.gitbook/assets/image (12).png>)
 
 If you take [this other instance](https://onyxia-sill.lab.sspcloud.fr), it has only one catalog, [helm-charts-sill](https://github.com/etalab/helm-charts-sill).
 
-![https://sill-demo.etalab.gouv.fr/catalog](<.gitbook/assets/image (25).png>)
+![https://sill-demo.etalab.gouv.fr/catalog](<../.gitbook/assets/image (25).png>)
 
 The available catalogs in a given Onyxia instance are configured at install time, example with datalab.sspcloud.fr:
 
@@ -89,7 +89,7 @@ In order to contribute you have to be familiar with [Helm](https://helm.sh/) and
 
 In Onyxia we use the `values.schema.json` file to know what options should be displayed to the user at [the service configuration step](https://user-images.githubusercontent.com/6702424/177571819-f2e1b4ef-ecd1-479b-a5a1-658d87d7c7c0.png) and what default value Onyxia should inject.
 
-![https://helm.sh/docs/topics/charts/#the-chart-file-structure](<.gitbook/assets/image (19).png>)
+![https://helm.sh/docs/topics/charts/#the-chart-file-structure](<../.gitbook/assets/image (19).png>)
 
 Let's consider a sample of the `values.schema.json` of the InseeFrLab/helm-charts-datascience's Jupyter chart:
 
@@ -180,7 +180,7 @@ Note the `"git.name"`, `"git.email"` and `"git.token"`, this enables [onyxia-web
 
 If the user took the time to fill its profile information, [onyxia-web](https://github.com/InseeFrLab/onyxia-web) know what is the Git **username**, **email** and **personal access token** of the user.
 
-![The onyxia user profile](<.gitbook/assets/image (8).png>)
+![The onyxia user profile](<../.gitbook/assets/image (8).png>)
 
 [Here](https://github.com/InseeFrLab/onyxia/blob/main/web/src/core/ports/OnyxiaApi/XOnyxia.ts) is defined the structure of the context that you can use in the `overwriteDefaultWith` field:
 
