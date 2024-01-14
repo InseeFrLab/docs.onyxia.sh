@@ -9,7 +9,7 @@ At this stage of this installation process we assumes that: &#x20;
 
 * You have a Kubernetes cluster and `kubectl` configured
 * **datalab.my-domain.net** and **\*.lab.my-domain.net**'sDNS are pointing to your cluster's external address. **my-domain.net** being a domain that you own**.**
-* You have an ingress-ngnix configured with a default TLS certificate for **\*.lab.my-domain.net** and **datalab.my-domain.net**.   &#x20;
+* You have an ingress-ngnix configured with a default TLS certificate for both **datalab.my-domain.net and \*.lab.my-domain.net**.   &#x20;
 {% endhint %}
 
 We can proceed with manually installing various services via Helm to set up the datalab. However, it's more convenient and reproducible to maintain a Git repository that outlines the required services that we need for our datalab, allowing [ArgoCD](https://argo-cd.readthedocs.io/en/stable/) to handle the deployment for us. &#x20;
