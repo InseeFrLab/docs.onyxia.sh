@@ -56,7 +56,18 @@ You can now login to **https://argocd.lab.my-domain.net** using: &#x20;
 
 Now that we have an ArgoCD we want to connect it to a Git repository that will describe what services we want to be running on our cluster. &#x20;
 
-Let's fork the onyxia-ops GitHub repo and use it to deploy an Onyxia instance! &#x20;
+Let's fork the onyxia-ops GitHub repo and use it to deploy an Onyxia instance!\
 
-{% embed url="https://app.tango.us/app/embed/316721db-a2d7-4cc2-9e66-0be86f979a28" %}
+
+{% embed url="https://app.tango.us/app/embed/55af08f3-43b0-4b5d-84b7-dfb75f6983c9" %}
+
+At this point you should have a very bare bone Onyxia instance that you can use to launch services. &#x20;
+
+
+
+Next step is to see how to enable your user to authenticate themselvs to your datalab!
+
+{% content-ref url="user-authentication.md" %}
+[user-authentication.md](user-authentication.md)
+{% endcontent-ref %}
 
