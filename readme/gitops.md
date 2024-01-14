@@ -8,11 +8,13 @@ description: Let's install ArgoCD to manage and monitor your Onyxia Datalab depl
 At this stage of this installation process we assumes that: &#x20;
 
 * You have a Kubernetes cluster and `kubectl` configured
-* **onyxia.my-domain.net** and **\*.lab.my-domain.net** are pointing to your cluster's external address. **my-domain.net** being a domain that you own. You can customise "**onyxia**" and "**lab**" to your liking, for example you could chose **datalab.my-domain.net** and **\*.kub.my-domain.net**.
-* You have an ingress-ngnix configured with a default TLS certificate for **\*.lab.my-domain.net** and **onyxia.my-domain.net**. (We are still working on making the default catalogs works with other ingress controllers). &#x20;
+* **datalab.my-domain.net** and **\*.lab.my-domain.net**'sDNS are pointing to your cluster's external address. **my-domain.net** being a domain that you own**.**
+* You have an ingress-ngnix configured with a default TLS certificate for **\*.lab.my-domain.net** and **datalab.my-domain.net**.   &#x20;
 {% endhint %}
 
-Let's set up ArgoCD on your cluster. ArgoCD enables you to monitor what's operating in your cluster and declaratively outline what should be deployed, along with the deployment methods. This approach marks a significant advancement over the imperative execution of commands, as it enhances the portability and replicability of your deployments. &#x20;
+We can proceed with manually installing various services via Helm to set up the datalab. However, it's more convenient and reproducible to maintain a Git repository that outlines the required services that we need for our datalab, allowing [ArgoCD](https://argo-cd.readthedocs.io/en/stable/) to handle the deployment for us. &#x20;
+
+Let's install ArgoCD on the our cluster. &#x20;
 
 ```bash
 helm repo add argo https://argoproj.github.io/argo-helm
@@ -49,6 +51,8 @@ You can now login to **https://argocd.lab.my-domain.net** using: &#x20;
 
 * username: **admin**
 * password: **\<the output of the previous command (without the `%` at the end)>**
+
+
 
 ### Setting up your GitOps GitHub Repository
 

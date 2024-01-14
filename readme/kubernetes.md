@@ -66,7 +66,7 @@ If you see `<pending>`, wait a few seconds and try again.
 Once you have the address, create the following DNS records:
 
 ```dns-zone-file
-onyxia.my-domain.net CNAME xxx.elb.eu-west-1.amazonaws.com. 
+datalab.my-domain.net CNAME xxx.elb.eu-west-1.amazonaws.com. 
 *.lab.my-domain.net  CNAME xxx.elb.eu-west-1.amazonaws.com. 
 ```
 
@@ -74,10 +74,10 @@ If the address you got was an IPv4 (`x.x.x.x`), create a `A` record instead of a
 
 If the address you got was ans IPv6 (`y:y:y:y:y:y:y:y`), create a `AAAA` record.
 
-**https://onyxia.my-domain.net** will be the URL for your instance of Onyxia. The URL of the services created by Onyxia are going to look like: **https://\<something>.lab.my-domain.net**
+**https://datalab.my-domain.net** will be the URL for your instance of Onyxia. The URL of the services created by Onyxia are going to look like: **https://\<something>.lab.my-domain.net**
 
 {% hint style="info" %}
-You can customise "**onyxia**" and "**lab**" to your liking, for example you could chose **datalab.my-domain.net** and **\*.kub.my-domain.net**.
+You can customise "**datalab**" and "**lab**" to your liking, for example you could chose **onyxia.my-domain.net** and **\*.kub.my-domain.net**.
 {% endhint %}
 
 **SSL**
@@ -93,7 +93,7 @@ brew install certbot #On Mac, lookup how to install certbot for your OS
 sudo certbot certonly --manual --preferred-challenges dns
 
 # When asked for the domains you wish to optains a certificate for enter:
-#   onyxia.my-domain.net *.lab.my-domain.net
+#   datalab.my-domain.net *.lab.my-domain.net
 ```
 
 {% hint style="info" %}
@@ -110,8 +110,8 @@ Now we want to create a Kubernetes secret containing our newly obtained certific
 DOMAIN=my-domain.net
 sudo kubectl create secret tls onyxia-tls \
     -n ingress-nginx \
-    --key /etc/letsencrypt/live/onyxia.$DOMAIN/privkey.pem \
-    --cert /etc/letsencrypt/live/onyxia.$DOMAIN/fullchain.pem
+    --key /etc/letsencrypt/live/datalab.$DOMAIN/privkey.pem \
+    --cert /etc/letsencrypt/live/datalab.$DOMAIN/fullchain.pem
 ```
 
 Lastly, we want to tell our ingress controller to use this TLS certificate, to do so run:
@@ -149,7 +149,7 @@ Let's assume you own the domain name **my-domain.net,** for the rest of the guid
 Get [your internet box routable IP](http://monip.org/) and create the following DNS records:
 
 ```dns-zone-file
-onyxia.my-domain.net A <YOUR_IP>
+datalab.my-domain.net A <YOUR_IP>
 *.lab.my-domain.net  A <YOUR_IP>
 ```
 
@@ -167,7 +167,7 @@ _**https://onyxia.my-domain.net**_ will be the URL for your instance of Onyxia.
 The URL of the services created by Onyxia are going to look like: _**https://xxx.lab.my-domain.net**_
 
 {% hint style="info" %}
-You can customise "**onyxia**" and "**lab**" to your liking, for example you could chose **datalab.my-domain.net** and **\*.kub.my-domain.net**.
+You can customise "**datalab**" and "**lab**" to your liking, for example you could chose **onyxia.my-domain.net** and **\*.kub.my-domain.net**.
 {% endhint %}
 
 **SSL**
@@ -181,7 +181,7 @@ brew install certbot #On Mac, lookup how to install certbot for your OS
 sudo certbot certonly --manual --preferred-challenges dns
 
 # When asked for the domains you wish to optains a certificate for enter:
-#   onyxia.my-domain.net *.lab.my-domain.net
+#   datalab.my-domain.net *.lab.my-domain.net
 ```
 
 {% hint style="info" %}
@@ -202,8 +202,8 @@ kubectl create namespace ingress-nginx
 DOMAIN=my-domain.net
 sudo kubectl create secret tls onyxia-tls \
     -n ingress-nginx \
-    --key /etc/letsencrypt/live/onyxia.$DOMAIN/privkey.pem \
-    --cert /etc/letsencrypt/live/onyxia.$DOMAIN/fullchain.pem
+    --key /etc/letsencrypt/live/datalab.$DOMAIN/privkey.pem \
+    --cert /etc/letsencrypt/live/datalab.$DOMAIN/fullchain.pem
 ```
 
 **Ingress controller**
