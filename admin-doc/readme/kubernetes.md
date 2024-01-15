@@ -162,7 +162,7 @@ datalab.my-domain.net CNAME jhon-doe-home.ddns.net.
 ```
 {% endhint %}
 
-_**https://onyxia.my-domain.net**_ will be the URL for your instance of Onyxia.
+_**https://datalab.my-domain.net**_ will be the URL for your instance of Onyxia.
 
 The URL of the services created by Onyxia are going to look like: _**https://xxx.lab.my-domain.net**_
 
