@@ -311,3 +311,9 @@ helm upgrade onyxia inseefrlab/onyxia -f onyxia-values.yaml
 ```
 
 Now your users should be able to create account, log-in, and start services on their own Kubernetes namespace.
+
+Next step in the installation proccess it to enable all the S3 related features of Onyxia: &#x20;
+
+{% content-ref url="data-s3.md" %}
+[data-s3.md](data-s3.md)
+{% endcontent-ref %}

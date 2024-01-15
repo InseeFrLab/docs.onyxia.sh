@@ -261,6 +261,6 @@ Congratulation, all the S3 related features of Onyxia are now enabled in your in
 
 Next step in the installation process is to setup Vault to provide a way to your user so store secret and also to provide something that Onyxia can use as a persistance layer for user configurations. &#x20;
 
-{% content-ref url="vault.md" %}
-[vault.md](vault.md)
+{% content-ref url="...rest.md" %}
+[...rest.md](...rest.md)
 {% endcontent-ref %}
