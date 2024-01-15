@@ -10,6 +10,7 @@
   * [🔓 Vault](admin-doc/readme/...rest.md)
 * [🎨 Theme and branding](admin-doc/theme.md)
 * [🔬 Catalog of services](admin-doc/catalog-of-services.md)
+* [👥 Setting up group projects](admin-doc/setting-up-group-projects.md)
 * [🔓 Security consideration](admin-doc/security-consideration.md)
 * [⬆ Migration guides](admin-doc/migration-guides/README.md)
   * [⬆ v7->v8](admin-doc/migration-guides/v7-greater-than-v8.md)

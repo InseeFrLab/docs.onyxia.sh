@@ -1,3 +1,7 @@
+---
+description: Unserstand how Onyxia catalogs works and potentially create your own!
+---
+
 # 🔬 Catalog of services
 
 Every Onyxia instance may or may not have it's own catalog. There is three default catalogs :
