@@ -14,7 +14,7 @@ At this stage of this installation process we assumes that:
 
 We can proceed with manually installing various services via Helm to set up the datalab. However, it's more convenient and reproducible to maintain a Git repository that outlines the required services that we need for our datalab, allowing [ArgoCD](https://argo-cd.readthedocs.io/en/stable/) to handle the deployment for us.
 
-To clarify, using ArgoCD is merely an approach that we recommend, but it is by no means a requirement. Feel free to manually helm install the different services using the values.yaml from [InseeFrLab/onyxia-ops](https://github.com/InseeFrLab/onyxia-ops)!
+To clarify, using ArgoCD is merely an approach that we recommend, but it is by no means a requirement. Feel free to manually helm install the different services using the `values.yaml` from [InseeFrLab/onyxia-ops](https://github.com/InseeFrLab/onyxia-ops)!
 
 Let's install ArgoCD on the our cluster.
 
