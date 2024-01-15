@@ -1,0 +1,61 @@
+---
+description: Let's use hashicorp Vault for storing the user secrets.
+layout:
+  title:
+    visible: true
+  description:
+    visible: true
+  tableOfContents:
+    visible: true
+  outline:
+    visible: true
+  pagination:
+    visible: false
+---
+
+# 🔓 Vault
+
+{% hint style="info" %}
+Vault is also used by Onyxia as the persistance layer for all savec configuration. If you don't have a vault all user setings are stored in the local storage.
+{% endhint %}
+
+Onyxia-web use vault as a storage for two kinds of secrets :\
+1\. secrets or information generate by Onyxia to store differents values (ui preferences for example)\
+2\. user secrets\
+\
+Vault must be configured with JWT or OIDC authentification methods.
+
+As vault need to be initialized with a master key, It can't be directly configured with all parameters such as oidc or access policies and roles. So first step we create a vault with dev mode (do not use this in production and do your initialization with any of the recommanded configuration : shamir, gcp, another vault)
+
+```bash
+helm repo add hashicorp https://helm.releases.hashicorp.com
+ 
+DOMAIN=my-domain.net
+
+cat << EOF > ./vault-values.yaml
+server:
+  dev:
+    enabled: true
+    # Set VAULT_DEV_ROOT_TOKEN_ID value
+    devRootToken: "root"
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    hosts:
+      - host: "vault.lab.$DOMAIN"
+    tls:
+      - hosts:
+          - vault.lab.$DOMAIN
+EOF
+
+helm install vault hashicorp/vault -f vault-values.yaml
+```
+
+Create a client called "vault"
+
+1. _Root URL_: **https://vault.lab.my-domain.net/**
+2. _Valid redirect URIs_: **https://vault.lab.my-domain.net/\***
+3. _Web origins_: **\***
+
+TODO; [Refer to the legacy documentation.](https://github.com/InseeFrLab/onyxia/tree/main/step-by-step#set-up-authentication-openidconnect)

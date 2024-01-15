@@ -1,5 +1,16 @@
 ---
 description: Using Keycloak to enable user authentication
+layout:
+  title:
+    visible: true
+  description:
+    visible: true
+  tableOfContents:
+    visible: true
+  outline:
+    visible: true
+  pagination:
+    visible: false
 ---
 
 # 🔑 User authentication
@@ -10,13 +21,10 @@ Let's setup Keycloak to enable users to create account and login to our Onyxia.
 Note that in this instalation guide we make you use Keycloak but you can use any identity server that is Open ID Connect compliant.
 {% endhint %}
 
-For deploying our Keycloak we use [codecentric's Keycloakx Helm chart](https://github.com/codecentric/helm-charts/tree/master/charts/keycloakx) and [Bitnami's PostgressSQL Helm chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql). &#x20;
-
-```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
-```
-
-
+{% hint style="danger" %}
+This install of Keycloak is very deprecated! \
+We will update is soon.
+{% endhint %}
 
 ```bash
 helm repo add codecentric https://codecentric.github.io/helm-charts
@@ -58,7 +66,7 @@ extraVolumes: |
     emptyDir: {}
 extraEnv: |
   - name: ONYXIA_RESOURCES_ALLOWED_ORIGINS
-    value: "https://onyxia.$DOMAIN, http://localhost, http://127.0.0.1"
+    value: "https://datalab.$DOMAIN, http://localhost, http://127.0.0.1"
 # The following values are transported automatically from your
 # Onyxia instance over to the login pages via url parameters, however,
 # if you want to prevent thoses value from being potentially
@@ -144,8 +152,8 @@ You can now login to the **administration console** of **https://auth.lab.my-dom
       2. SSO Session Idle Remember Me: 14 days
       3. SSO Session Max Remember Me: 14 days
 2. Create a client called "onyxia"
-   1. _Root URL_: **https://onyxia.my-domain.net/**
-   2. _Valid redirect URIs_: **https://onyxia.my-domain.net/\***
+   1. _Root URL_: **https://datalab.my-domain.net/**
+   2. _Valid redirect URIs_: **https://datalab.my-domain.net/\***
    3. _Web origins_: **\***
    4. Login theme: **onyxia-web**
 3. In **Authentication** (on the left panel) -> Tab **Required Actions** enable and set as default action **Therms and Conditions.**
