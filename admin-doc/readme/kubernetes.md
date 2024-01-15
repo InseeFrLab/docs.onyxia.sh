@@ -67,7 +67,7 @@ Once you have the address, create the following DNS records:
 
 ```dns-zone-file
 datalab.my-domain.net CNAME xxx.elb.eu-west-1.amazonaws.com. 
-*.lab.my-domain.net  CNAME xxx.elb.eu-west-1.amazonaws.com. 
+*.lab.my-domain.net   CNAME xxx.elb.eu-west-1.amazonaws.com. 
 ```
 
 If the address you got was an IPv4 (`x.x.x.x`), create a `A` record instead of a CNAME.
