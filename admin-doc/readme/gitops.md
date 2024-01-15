@@ -5,16 +5,18 @@ description: Let's install ArgoCD to manage and monitor our Onyxia Datalab deplo
 # 🐙 GitOps
 
 {% hint style="info" %}
-At this stage of this installation process we assumes that: &#x20;
+At this stage of this installation process we assumes that:
 
 * You have a Kubernetes cluster and `kubectl` configured
-* **datalab.my-domain.net** and **\*.lab.my-domain.net**'sDNS are pointing to your cluster's external address. **my-domain.net** being a domain that you own**.**
-* You have an ingress-ngnix configured with a default TLS certificate for both **datalab.my-domain.net and \*.lab.my-domain.net**.   &#x20;
+* **datalab.my-domain.net** and **\*.lab.my-domain.net**'sDNS are pointing to your cluster's external address. **my-domain.net** being a domain that you own.
+* You have an ingress-ngnix configured with a default TLS certificate for both **datalab.my-domain.net and \*.lab.my-domain.net**.
 {% endhint %}
 
-We can proceed with manually installing various services via Helm to set up the datalab. However, it's more convenient and reproducible to maintain a Git repository that outlines the required services that we need for our datalab, allowing [ArgoCD](https://argo-cd.readthedocs.io/en/stable/) to handle the deployment for us. &#x20;
+We can proceed with manually installing various services via Helm to set up the datalab. However, it's more convenient and reproducible to maintain a Git repository that outlines the required services that we need for our datalab, allowing [ArgoCD](https://argo-cd.readthedocs.io/en/stable/) to handle the deployment for us.
 
-Let's install ArgoCD on the our cluster. &#x20;
+To clarify, using ArgoCD is merely an approach that we recommend, but it is by no means a requirement. Feel free to manually helm install the different services using the values.yaml from [InseeFrLab/onyxia-ops](https://github.com/InseeFrLab/onyxia-ops)!
+
+Let's install ArgoCD on the our cluster.
 
 ```bash
 DOMAIN=my-domain.net
@@ -47,23 +49,26 @@ kubectl get secret argocd-initial-admin-secret \
   -o jsonpath="{.data.password}" | base64 -d
 ```
 
-You can now login to **https://argocd.lab.my-domain.net** using: &#x20;
+You can now login to **https://argocd.lab.my-domain.net** using:
 
 * username: **admin**
 * password: **\<the output of the previous command (without the `%` at the end)>**
 
 <figure><img src="../../.gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-Now that we have an ArgoCD we want to connect it to a Git repository that will describe what services we want to be running on our cluster. &#x20;
+Now that we have an ArgoCD we want to connect it to a Git repository that will describe what services we want to be running on our cluster.
 
-Let's fork the onyxia-ops GitHub repo and use it to deploy an Onyxia instance!\
+Let's fork the onyxia-ops GitHub repo and use it to deploy an Onyxia instance!
 
+{% hint style="info" %}
+Note that in this guide, we use GitHub, but feel free to fork the [InseeFrLab/onyxia-ops](https://github.com/InseeFrLab/onyxia-ops) repository on GitLab or any other forge. You'll need to slightly adapt the instructions, but you should be able to follow along!&#x20;
+{% endhint %}
 
 {% embed url="https://app.tango.us/app/embed/55af08f3-43b0-4b5d-84b7-dfb75f6983c9" %}
 
-At this point you should have a very bare bone Onyxia instance that you can use to launch services. &#x20;
+At this point you should have a very bare bone Onyxia instance that you can use to launch services.
 
-What's great, is that now, if you want to update the configuration of your Onyxia instance you only have to commit the change to your GitOps repo, ArgoCD will takes charge of restarting the service for you with the new configuration.  \
+What's great, is that now, if you want to update the configuration of your Onyxia instance you only have to commit the change to your GitOps repo, ArgoCD will takes charge of restarting the service for you with the new configuration.\
 To put that to the test try to modify your Onyxia configuration
 
 {% code title="apps/onyxia/values.yaml" %}
@@ -92,4 +97,3 @@ Next step is to see how to enable your user to authenticate themselvs to your da
 {% content-ref url="user-authentication.md" %}
 [user-authentication.md](user-authentication.md)
 {% endcontent-ref %}
-
