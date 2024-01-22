@@ -134,6 +134,11 @@ If you are on a Mac or Window computer you can install [Docker desktop](https://
 
 <figure><img src="../../.gitbook/assets/image (34).png" alt=""><figcaption><p>Enabling Kubernetes in the Docker desktop App</p></figcaption></figure>
 
+{% hint style="warning" %}
+WARNING: If you are folowing this installating guide on an Apple Sillicon Mac, be aware that many of the services that comes by default with Onyxia like Jupyter RStudio and VSCode won't run because we do not yet compile our datacience stack for the ARM64 architecture.  \
+If you would like to see this change please [sumit an issue about it](https://github.com/InseeFrLab/helm-charts-interactive-services/issues).
+{% endhint %}
+
 {% hint style="info" %}
 Docker desktop isn't available on Linux, you can use [Kind](https://kind.sigs.k8s.io/) instead.
 {% endhint %}
