@@ -205,9 +205,9 @@ We use [react-app-rewired](https://github.com/timarney/react-app-rewired) instea
 
 Anything contained in the [src/core](https://github.com/InseeFrLab/onyxia/tree/main/src/core) directory.
 
-### redux-clean-architecture 🐔
+### clean-architecture 🐔
 
-{% embed url="https://github.com/garronej/clean-redux" %}
+{% embed url="https://github.com/garronej/clean-architecture" %}
 
 The framework used to implement strict separation of concern betwen the UI and the Core and high modularity of the code. &#x20;
 

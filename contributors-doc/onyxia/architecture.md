@@ -21,7 +21,7 @@
 Let's say we want to create a new page in onyxia-web where users can type in a repo name and get the current number of stars the repo has on GitHub.
 
 {% hint style="info" %}
-UPDATE: This video remain relevant but please not that the clean archi setup have been considerably improved in latest releases. [A dedicated repo](https://github.com/garronej/clean-redux) have been created to explain it in detail.
+UPDATE: This video remain relevant but please not that the clean archi setup have been considerably improved in latest releases. [A dedicated repo](https://github.com/garronej/clean-architecture) have been created to explain it in detail.
 
 Main take-way is that `app` have been renamed `ui` and `lib` have been renamed `core`.
 {% endhint %}
