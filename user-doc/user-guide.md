@@ -64,6 +64,10 @@ Of course, in our default catalags there are all the necessary tools to connect 
 
 Our advice is to never download file to your container but directly ingest in memory the data.
 
+{% embed url="https://youtu.be/Fg4drnvgd20" %}
+Connecting to an external S3
+{% endembed %}
+
 ## Secret browser
 
 Users can mange their secrets on Vault. There is also a cli console.
