@@ -39,6 +39,7 @@ EOF
 
 helm install argocd argo-cd \
   --repo https://argoproj.github.io/argo-helm \
+  --version 5.55.0 \
   -f ./argocd-values.yaml
 ```
 
