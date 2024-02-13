@@ -33,7 +33,7 @@ You can stop after the [configure kubectl section](https://learn.hashicorp.com/t
 
 **Ingress controller**
 
-Deploy an ingress controller on your cluster:
+Let's install ingress-ngnix on our newly created cluster:
 
 {% hint style="warning" %}
 The following command is [for AWS](https://kubernetes.github.io/ingress-nginx/deploy/#aws).
@@ -120,13 +120,17 @@ Lastly, we want to tell our ingress controller to use this TLS certificate, to d
 kubectl edit deployment ingress-nginx-controller -n ingress-nginx
 ```
 
-This command will open your configured text editor, go to line `56` and add:
+This command will open your configured text editor, go to containers -> args and add:&#x20;
 
 ```
       - --default-ssl-certificate=ingress-nginx/onyxia-tls
+      - --watch-ingress-without-class
 ```
 
-![](<../../.gitbook/assets/image (13).png>)
+<figure><img src="../../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+Save and quit. Done :tada:\
+We installed the ingress-nginx in our cluster, (but note that any other ingress controller could have been used as well). The configuration was adjusted to handle all ingress objects, even those lacking a specified class, and to employ our SSL certificate for our wildcard certificate. This strategy facilitated an effortless SSL termination, managed by the reverse proxy for both **\*.lab.my-domain.net** and **datalab.my-domain.net**, thus removing any additional SSL configuration concerns.
 {% endtab %}
 
 {% tab title="Test on your machine" %}
@@ -213,13 +217,14 @@ sudo kubectl create secret tls onyxia-tls \
 
 **Ingress controller**
 
-We'll install [ingress-nginx](https://kubernetes.github.io/ingress-nginx/) in our cluster ~~but any other ingress controller will do~~.
+We will install ingress-nginx in our cluster, although any other ingress controller would be suitable as well. The configuration will be set up to handle all ingress objects, including those without a specified class, and to utilize our SSL certificate for our wildcard certificate. This approach ensures a straightforward SSL termination managed by the reverse proxy for both **\*.lab.my-domain.net** and **datalab.my-domain.net**, eliminating any further concerns regarding SSL setup.
 
 ```bash
 cat << EOF > ./ingress-nginx-values.yaml
 controller:
   extraArgs:
     default-ssl-certificate: "ingress-nginx/onyxia-tls"
+  watchIngressWithoutClass: true
 EOF
 
 helm install ingress-nginx ingress-nginx \

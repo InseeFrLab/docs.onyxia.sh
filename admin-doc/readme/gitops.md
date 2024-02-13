@@ -28,18 +28,15 @@ server:
   ingress:
     ingressClassName: nginx
     enabled: true
-    annotations:
-      nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-    hosts:
-      - argocd.lab.$DOMAIN
-    tls:
+    hostname: argocd.lab.$DOMAIN
+    extraTls:
       - hosts:
           - argocd.lab.$DOMAIN
 EOF
 
 helm install argocd argo-cd \
   --repo https://argoproj.github.io/argo-helm \
-  --version 5.55.0 \
+  --version 6.0.9 \
   -f ./argocd-values.yaml
 ```
 
@@ -56,7 +53,7 @@ You can now login to **https://argocd.lab.my-domain.net** using:
 * username: **admin**
 * password: **\<the output of the previous command (without the `%` at the end)>**
 
-<figure><img src="../../.gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Now that we have an ArgoCD we want to connect it to a Git repository that will describe what services we want to be running on our cluster.
 
@@ -78,8 +75,6 @@ To put that to the test try to modify your Onyxia configuration
  onyxia:
    ingress:
      enabled: true
-     annotations:
-       kubernetes.io/ingress.class: nginx
      hosts:
        - host: datalab.demo-domain.ovh
 +  web:
