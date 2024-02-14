@@ -29,6 +29,10 @@ Before anything open [`apps/keycloak/values.yaml`](https://github.com/InseeFrLab
 
 {% embed url="https://app.tango.us/app/embed/dbb21e90-db2c-41f4-b2ab-5f8b9f4d33c0" %}
 
+{% hint style="info" %}
+Try to remember, when you [update Onyxia in `apps/onyxia/Chart.yaml`](https://github.com/InseeFrLab/onyxia-ops/blob/bad75636d72c20c48f1b34ec08593df83ee6c9a6/apps/onyxia/Chart.yaml#L6) to also update [the Onyxia theme in `apps/keycloak/values.yaml`](https://github.com/InseeFrLab/onyxia-ops/blob/bad75636d72c20c48f1b34ec08593df83ee6c9a6/apps/keycloak/values.yaml#L69).
+{% endhint %}
+
 ### Configuring Keycloak
 
 You can now login to the **administration console** of **https://auth.lab.my-domain.net/auth/** and login using username: keycloak and password: \<the one you've wrote down earlier>.
