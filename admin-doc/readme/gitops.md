@@ -53,7 +53,7 @@ You can now login to **https://argocd.lab.my-domain.net** using:
 * username: **admin**
 * password: **\<the output of the previous command (without the `%` at the end)>**
 
-<figure><img src="../../.gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Now that we have an ArgoCD we want to connect it to a Git repository that will describe what services we want to be running on our cluster.
 
@@ -92,9 +92,10 @@ To put that to the test try to modify your Onyxia configuration by setting up a 
 ```
 {% endcode %}
 
-After a few seconds, if you reload **https://datalab.my-domain.net** you should see the message!
+After a few seconds, if you reload **https://datalab.my-domain.net** you should see the message!\
 
-<figure><img src="../../.gitbook/assets/image (35).png" alt="" width="359"><figcaption></figcaption></figure>
+
+<figure><img src="../../.gitbook/assets/image.png" alt="" width="354"><figcaption></figcaption></figure>
 
 Next step is to see how to enable your user to authenticate themselvs to your datalab!
 
