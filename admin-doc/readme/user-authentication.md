@@ -25,7 +25,7 @@ Note that in this instalation guide we make you use Keycloak but you can use any
 
 We're going to install Keycloak just like we installed Onyxia. &#x20;
 
-Before anything open `apps/keycloak/values.yaml` in your onyxia-ops repo and [change the passwords](#user-content-fn-1)[^1]. Also write down the `keycloak.auth.adminPassword`, you'll need it to connect to the Keycloak console. &#x20;
+Before anything open [`apps/keycloak/values.yaml`](https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/keycloak/values.yaml) in your onyxia-ops repo and [change the passwords](#user-content-fn-1)[^1]. Also write down the [`keycloak.auth.adminPassword`](https://github.com/InseeFrLab/onyxia-ops/blob/bad75636d72c20c48f1b34ec08593df83ee6c9a6/apps/keycloak/values.yaml#L11), you'll need it to connect to the Keycloak console. &#x20;
 
 {% embed url="https://app.tango.us/app/embed/dbb21e90-db2c-41f4-b2ab-5f8b9f4d33c0" %}
 
