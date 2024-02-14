@@ -9,7 +9,7 @@ At this stage of this installation process we assumes that:
 
 * You have a Kubernetes cluster and `kubectl` configured
 * **datalab.my-domain.net** and **\*.lab.my-domain.net**'s DNS are pointing to your cluster's external address. **my-domain.net** being a domain that you own.
-* You have an ingress-ngnix configured with a default TLS certificate for both **datalab.my-domain.net** and **\*.lab.my-domain.net**.
+* Your ingress-nginx is set up with a default TLS certificate that covers both **datalab.my-domain.net** and **\*.lab.my-domain.net**, processing all ingress objects, [even those that do not have a class specified](#user-content-fn-1)[^1].&#x20;
 {% endhint %}
 
 We can proceed with manually installing various services via Helm to set up the datalab. However, it's more convenient and reproducible to maintain a Git repository that outlines the required services that we need for our datalab, allowing [ArgoCD](https://argo-cd.readthedocs.io/en/stable/) to handle the deployment for us.
@@ -26,7 +26,7 @@ server:
   extraArgs:
     - --insecure
   ingress:
-    ingressClassName: nginx
+    #ingressClassName: nginx
     enabled: true
     hostname: argocd.lab.$DOMAIN
     extraTls:
@@ -68,7 +68,7 @@ Note that in this guide, we use GitHub, but feel free to fork the [InseeFrLab/on
 At this point you should have a very bare bone Onyxia instance that you can use to launch services.
 
 What's great, is that now, if you want to update the configuration of your Onyxia instance you only have to commit the change to your GitOps repo, ArgoCD will takes charge of restarting the service for you with the new configuration.\
-To put that to the test try to modify your Onyxia configuration
+To put that to the test try to modify your Onyxia configuration by setting up a global alert that will be shown as a banner in Onyxia. &#x20;
 
 {% code title="apps/onyxia/values.yaml" %}
 ```diff
@@ -77,20 +77,29 @@ To put that to the test try to modify your Onyxia configuration
      enabled: true
      hosts:
        - host: datalab.demo-domain.ovh
-+  web:
-+    env:
-+      HEADER_TEXT_BOLD: My Organization
+   web:
+     env:
++      GLOBAL_ALERT: |
++       {
++         severity: "success",
++         message: {
++           en: "A **big** announcement! [Check it out](https://example.com)!",
++           fr: "Une annonce **importante**! [Regardez](https://example.com)!"
++         }
++       }
    api:
      regions: [...]
 ```
 {% endcode %}
 
-After a few seconds, if you reload **https://datalab.my-domain.net** you should witness the update!
+After a few seconds, if you reload **https://datalab.my-domain.net** you should see the message!
 
-<figure><img src="../../.gitbook/assets/image (3).png" alt="" width="375"><figcaption><p>"My Organization" no appears in the Header</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (35).png" alt="" width="359"><figcaption></figcaption></figure>
 
 Next step is to see how to enable your user to authenticate themselvs to your datalab!
 
 {% content-ref url="user-authentication.md" %}
 [user-authentication.md](user-authentication.md)
 {% endcontent-ref %}
+
+[^1]: This simplifies the process but is not a requirement of Onyxia. Should your ingress controller filter ingress objects based on a specific class name, be mindful of the various `ingressClassName: nginx` entries commented out in the chart configurations. To adapt to this setup, simply edit/uncomment those lines.
