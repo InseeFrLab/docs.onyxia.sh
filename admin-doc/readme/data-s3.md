@@ -111,8 +111,8 @@ policies:
   - name: stsonly
     statements:
       - resources:
-          - 'arn:aws:s3:::oidc-${jwt:$OIDC_USERNAME_CLAIM}'
-          - 'arn:aws:s3:::oidc-${jwt:$OIDC_USERNAME_CLAIM}/*'
+          - 'arn:aws:s3:::user-${jwt:$OIDC_USERNAME_CLAIM}'
+          - 'arn:aws:s3:::user-${jwt:$OIDC_USERNAME_CLAIM}/*'
         actions:
           - "s3:*"
 EOF
