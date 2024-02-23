@@ -2,15 +2,18 @@
 description: Onyxia Project Core Team Future Developments Roadmap
 ---
 
-# 🛣 Roadmap
+# 🛣️ Roadmap
 
 Want to know what we are up to? &#x20;
 
-You can checkout open GitHub issues and Pull Request:
+Checkup our Milestones on GitHub: &#x20;
 
-{% embed url="https://github.com/InseeFrLab/onyxia/issues?q=is%3Aopen+assignee%3Agarronej" %}
-Open Issues and Pull Request assigned to @garronej
+{% embed url="https://github.com/InseeFrLab/onyxia/milestones" %}
+Onyxia project GitHub Milestones
 {% endembed %}
+
+Do not hesitate to vote or comment on the issues that are the most important to you.  \
+We prioritarize our work based on comunity feedback! &#x20;
 
 Or you can ask us on Slack, we're very prompt to respond! &#x20;
 
