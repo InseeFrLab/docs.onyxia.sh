@@ -164,7 +164,15 @@ Now our Keycloak server is fully configured we just need to update our Onyxia de
 
 ### Updating our Onyxia configuration
 
-In your GitOps repo you now want to overwrite the content of apps/onyxia/values.yaml by apps/onyxia.values-keycloak-enabled.yaml.  (`mv onyxia.values-keycloak-enabled.yaml onyxia.values.yaml`)
+In your GitOps repo you now want to update your onyxia configuration. &#x20;
+
+```bash
+git clone https://github.com/<your-github-org>/onyxia-ops
+cd apps/onyxia
+mv values-keycloak-enabled.yaml.yaml values.yaml
+git commit -am "update"
+git push
+```
 
 {% embed url="https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/onyxia/values-keycloak-enabled.yaml" %}
 
