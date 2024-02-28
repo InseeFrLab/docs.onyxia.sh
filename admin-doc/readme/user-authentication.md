@@ -119,7 +119,7 @@ In your GitOps repo you now want to update your onyxia configuration. &#x20;
 git clone https://github.com/<your-github-org>/onyxia-ops
 cd onyxia-ops
 cd apps/onyxia
-mv values-keycloak-enabled.yaml.yaml values.yaml
+mv values-keycloak-enabled.yaml values.yaml
 git commit -am "Enable keycloak"
 git push
 ```

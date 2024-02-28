@@ -66,7 +66,7 @@ Diff of the changes applied to the Onyxia configuration: &#x20;
 
 Congratulation, all the S3 related features of Onyxia are now enabled in your instance! Now if you navigate to your Onyxia instance you should have `My Files` in the left menu. &#x20;
 
-
+<figure><img src="../../.gitbook/assets/image (37).png" alt=""><figcaption></figcaption></figure>
 
 Next step in the installation process is to setup Vault to provide a way to your user so store secret and also to provide something that Onyxia can use as a persistance layer for user configurations.
 
