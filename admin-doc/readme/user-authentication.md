@@ -21,7 +21,7 @@ Let's setup Keycloak to enable users to create account and login to our Onyxia.
 Note that in this instalation guide we make you use Keycloak but you can use any identity server that is Open ID Connect compliant.
 {% endhint %}
 
-### Installing Keycloak on your cluster
+### Deploying Keycloak
 
 We're going to install Keycloak just like we installed Onyxia. &#x20;
 
@@ -106,58 +106,7 @@ Now you can edit the file as suggested in the following DIFF snippet. Be mindful
         }
       }
     },
-    {
-      "name": "firstName",
-      "displayName": "${firstName}",
-      "required": {
-        "roles": [
-          "user"
-        ]
-      },
-      "permissions": {
-        "view": [
-          "admin",
-          "user"
-        ],
-        "edit": [
-          "admin",
-          "user"
-        ]
-      },
-      "validations": {
-        "length": {
-          "max": 255
-        },
-        "person-name-prohibited-characters": {}
-      }
-    },
-    {
-      "name": "lastName",
-      "displayName": "${lastName}",
-      "required": {
-        "roles": [
-          "user"
-        ]
-      },
-      "permissions": {
-        "view": [
-          "admin",
-          "user"
-        ],
-        "edit": [
-          "admin",
-          "user"
-        ]
-      },
-      "validations": {
-        "length": {
-          "max": 255
-        },
-        "person-name-prohibited-characters": {}
-      }
-    }
-  ]
-}
+...
 ```
 
 Now our Keycloak server is fully configured we just need to update our Onyxia deployment to let it know about it.
@@ -170,17 +119,13 @@ In your GitOps repo you now want to update your onyxia configuration. &#x20;
 git clone https://github.com/<your-github-org>/onyxia-ops
 cd apps/onyxia
 mv values-keycloak-enabled.yaml.yaml values.yaml
-git commit -am "update"
+git commit -am "Enable keycloak"
 git push
 ```
 
 Here is the DIFF of the onyxia configuration: &#x20;
 
-
-
 {% @github-files/github-code-block %}
-
-
 
 Now your users should be able to create account, log-in, and start services on their own Kubernetes namespace.
 
