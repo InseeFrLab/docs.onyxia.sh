@@ -13,7 +13,7 @@ layout:
     visible: false
 ---
 
-# 🗃 Data (S3)
+# 🗃️ Data (S3)
 
 ### S3 Storage
 
@@ -21,34 +21,9 @@ Onyxia uses [AWS Security Token Service API](https://docs.aws.amazon.com/STS/lat
 
 #### Create a Keycloak client for Accessing Keycloak
 
-Before configuring MinIO, let's create a new client for Keycloak (from the previous existing "datalab" realm).
+Before configuring MinIO, let's create a new Keycloak client (from the previous existing "datalab" realm).
 
-Create a client called "minio".
-
-1. _Client ID_: **minio**
-2. _Client Protocol_: **openid-connect**
-3. _Root URL_: **https://minio.lab.my-domain.net/**
-
-Complete the content of client "minio" with the following values.
-
-1. _Access Type_: **confidential**
-2. _Valid Redirect URIs_ (two values are required): **https://minio.lab.my-domain.net/\*** and **https://minio-console.lab.my-domain.net/\***
-3. _Web origins_: **\***
-
-Save the content, a new tab called Credentials must be appear. Navigate to Credentials tab and **copy the secret value for the next section (**`KEYCLOAK_MINIO_CLIENT_SECRET`**)**.
-
-Navigate to Mappers tab and create a protocol Mapper.
-
-1. _Name_: **policy**
-2. _Mapper Type_: **Hardcoded claim**
-
-Complete the content of Mapper "policy" with the following values.
-
-1. _Token Claim Name_: **policy**
-2. _Claim value_: **stsonly**
-3. _Add to ID token_: **on**
-4. _Add to access token_: **on**
-5. _Add to userinfo_: **on**
+{% embed url="https://app.tango.us/app/embed/1c5c0975-93f0-48c6-b8d9-edceb397e34c" %}
 
 #### Install MinIO
 
@@ -128,51 +103,21 @@ MinIO is now deployed and is accessible on the console url.
 
 Before configuring the onyxia region to create tokens we should go back to Keycloak and create a new client to enable onyxia-web to request token for MinIO. This client is a little bit more complexe than other if you want to manage durations (here 7 days) and this client should have a claim name policy and with a value of stsonly according to our last deployment of MinIO.
 
-From "datalab" realm, create a client called "onyxia-minio"
-
-1. _Client ID_: **onyxia-minio**
-2. _Client Protocol_: **openid-connect**
-3. _Root URL_: **https://onyxia.my-domain.net/**
-
-Complete the content of client "onyxia-minio" with the following values.
-
-1. _Access Type_: **public**
-2. _Valid Redirect URIs_: **https://onyxia.my-domain.net/\***
-3. _Web origins_: **\***
-4. In the **Advanced** tab:\
-   1\. Access Token Lifespan : **7 days**\
-   2\. Client Session Idle : **7 days**\
-   3\. Client Session Max: **7 days**
-
-Save the content and navigate to Mappers tab and create two protocol Mappers.
-
-Create the first Mapper called "policy".
-
-1. _Token Name_: **policy**
-2. _Mapper Type_: **Hardcoded claim**
-3. _Token Claim Name_: **policy**
-4. _Claim value_: **stsonly**
-5. _Add to ID token_: **on**
-6. _Add to access token_: **on**
-7. _Add to userinfo_: **on**
-
-Create the second Mapper called "audience-minio".
-
-1. _Token Name_: **audience-minio**
-2. _Mapper Type_: **Audience**
-3. \_Included Custom Audience \_: **minio**
-4. _Add to ID token_: **on**
-5. _Add to access token_: **on**
+{% embed url="https://app.tango.us/app/embed/2e382be2-5d73-4cc8-8682-1b86b0e1de58" %}
 
 #### Update Onyxia
 
-S3 storage is configured inside a region in Onyxia api. You have some options to configure this storage and  inform Onyxia web all needed informations. \
+S3 storage is configured inside a region in onyxia-api. You have some options to configure this storage and inform Onyxia web all needed informations.\
 \
 This configuration have two differents section ; one for configuring the storage directory of the users and one for configuring if Onyxia can dynamically create tokens with an STS endpoint.
 
 When configuring the workingDirectory, there are two modes : 'multi' where each user has their own buckets, and 'shared' where users just have a subpath inside a specific bucket.
 
 You should look all options for the version of your need on [github](https://github.com/InseeFrLab/onyxia-api/blob/master/docs/region-configuration.md#s3)
+
+Now let's update our Onyxia configuration to let it know that there is now a S3 server available on the cluster. We'll just need to add a data section to our region configuration: &#x20;
+
+
 
 {% code title="onyxia-values.yaml" %}
 ```diff
@@ -257,9 +202,9 @@ serviceAccount:
 helm upgrade onyxia inseefrlab/onyxia -f onyxia-values.yaml
 ```
 
-Congratulation, all the S3 related features of Onyxia are now enabled in your instance! &#x20;
+Congratulation, all the S3 related features of Onyxia are now enabled in your instance!
 
-Next step in the installation process is to setup Vault to provide a way to your user so store secret and also to provide something that Onyxia can use as a persistance layer for user configurations. &#x20;
+Next step in the installation process is to setup Vault to provide a way to your user so store secret and also to provide something that Onyxia can use as a persistance layer for user configurations.
 
 {% content-ref url="...rest.md" %}
 [...rest.md](...rest.md)

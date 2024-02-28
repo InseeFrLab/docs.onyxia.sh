@@ -174,7 +174,9 @@ git commit -am "update"
 git push
 ```
 
-{% embed url="https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/onyxia/values-keycloak-enabled.yaml" %}
+Here is the DIFF of the onyxia configuration: &#x20;
+
+{% embed url="https://github.com/InseeFrLab/onyxia-ops/commit/37faa6390c9bc8c1efddfd3488dc06b38427b424" %}
 
 Now your users should be able to create account, log-in, and start services on their own Kubernetes namespace.
 
