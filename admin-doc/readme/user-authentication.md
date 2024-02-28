@@ -111,12 +111,13 @@ Now you can edit the file as suggested in the following DIFF snippet. Be mindful
 
 Now our Keycloak server is fully configured we just need to update our Onyxia deployment to let it know about it.
 
-### Updating our Onyxia configuration
+### Updating the Onyxia configuration
 
 In your GitOps repo you now want to update your onyxia configuration. &#x20;
 
 ```bash
 git clone https://github.com/<your-github-org>/onyxia-ops
+cd onyxia-ops
 cd apps/onyxia
 mv values-keycloak-enabled.yaml.yaml values.yaml
 git commit -am "Enable keycloak"
