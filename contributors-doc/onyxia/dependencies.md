@@ -2,7 +2,7 @@
 description: Technologies at play in Onyxia-web
 ---
 
-# ⚙ Technical stack
+# ⚙️ Technical stack
 
 To find your way in Onyxia, the best approach is to start by getting a surface-level understanding of the libraries that are leveraged in the project.
 
@@ -104,11 +104,11 @@ yarn storybook
 Setting up a new story
 {% endembed %}
 
-### cra-envs 🐔
-
-{% embed url="https://github.com/garronej/cra-envs" %}
+### vite-envs 🐔
 
 We need to be able to do:
+
+{% embed url="https://github.com/garronej/vite-envs" %}
 
 ```bash
 docker run --env OIDC_URL="https://url-of-our-keycloak.fr/auth" InseeFrLab/onyxia-web
