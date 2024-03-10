@@ -58,10 +58,11 @@ You can now login to the **administration console** of **https://auth.lab.my-dom
    5. On the tab **Localization**
       1. _Internationalization_: **Enabled**
       2. _Supported locales_: \<Select the languages you wish to support>
-   6. On the tab **Session**
-      1. SSO Session Idle: 14 days - This setting and the following two are so that when the user click "remember me" when he logs in, he dosen't have to loggin again for the next two weeks.
-      2. SSO Session Idle Remember Me: 14 days
-      3. SSO Session Max Remember Me: 14 days
+   6. On the tab **Session**.
+      1. SSO Session Idle: [14 days](#user-content-fn-2)[^2]
+      2. SSO Session Max: [14 days](#user-content-fn-3)[^3]
+      3. SSO Session Idle Remember Me: [14 days](#user-content-fn-4)[^4]
+      4. SSO Session Max Remember Me: 14 days
 2. Create a client with client ID "onyxia"
    1. _Root URL_: **https://datalab.my-domain.net/**
    2. _Valid redirect URIs_: **https://datalab.my-domain.net/\***
@@ -139,3 +140,15 @@ Next step in the installation proccess it to enable all the S3 related features 
 {% endcontent-ref %}
 
 [^1]: Search/replace CHANGEME
+
+[^2]: Here, the approach depends on the security policy you wish to implement. If you prefer requiring users to log in again each time they navigate to your Onyxia instance, consider setting a shorter duration, such as 30 minutes. Be aware that setting it to 30 minutes means users will be automatically logged out if they remain inactive within the app for this period.  \
+    [https://github.com/InseeFrLab/onyxia/assets/6702424/343f74e1-1f08-43e3-8a1d-ce92f8dedc2c\
+    ](https://github.com/InseeFrLab/onyxia/assets/6702424/343f74e1-1f08-43e3-8a1d-ce92f8dedc2c)
+
+[^3]: You probably want to keep this high.  \
+    This set the max duration for a constantely active user session.  \
+    If the user is logged in and actively using the app there's no reason to disconect him. &#x20;
+
+[^4]: Change this if you want to implement a diferent policy for when user log in with the "remember me" checked.  \
+    In remember me mode, your user will be able to completely close their browser and don't have to login again on their next visite as long as the session hasn't expired.  \
+    [https://github.com/InseeFrLab/onyxia/assets/6702424/93b139cf-b0e7-4e4b-9811-bf9a9deaf144](https://github.com/InseeFrLab/onyxia/assets/6702424/93b139cf-b0e7-4e4b-9811-bf9a9deaf144)
