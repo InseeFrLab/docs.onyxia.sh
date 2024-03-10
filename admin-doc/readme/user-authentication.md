@@ -52,7 +52,7 @@ You can now login to the **administration console** of **https://auth.lab.my-dom
       5. _Username_: **\*\*\*\*\*\*\*\*\*\*\*\*\*\***
       6. _Password_: **\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\***
       7. When clicking "save" you'll be asked for a test email, you have to provide one that correspond **to a pre-existing user** or you will get a silent error and the credentials won't be saved.
-   4. On the tab Themes
+   4. On the tab **Themes**
       1. _Login theme_: **onyxia-web** (you can also select the login theme on a per client basis)
       2. _Email theme_: **onyxia-web**
    5. On the tab **Localization**
