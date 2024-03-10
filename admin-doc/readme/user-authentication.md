@@ -145,10 +145,7 @@ Next step in the installation proccess it to enable all the S3 related features 
     [https://github.com/InseeFrLab/onyxia/assets/6702424/343f74e1-1f08-43e3-8a1d-ce92f8dedc2c\
     ](https://github.com/InseeFrLab/onyxia/assets/6702424/343f74e1-1f08-43e3-8a1d-ce92f8dedc2c)
 
-[^3]: You probably want to keep this high.  \
-    This set the max duration for a constantely active user session.  \
-    If the user is logged in and actively using the app there's no reason to disconect him. &#x20;
+[^3]: You'll likely want to set this value high. It determines the maximum duration for a continuously active user session. If a user is logged in and actively using the app, there's no need to disconnect them. &#x20;
 
-[^4]: Change this if you want to implement a diferent policy for when user log in with the "remember me" checked.  \
-    In remember me mode, your user will be able to completely close their browser and don't have to login again on their next visite as long as the session hasn't expired.  \
+[^4]: Modify this setting if you wish to apply a different policy for users logging in with the "remember me" option selected. In "remember me" mode, users can close their browser completely and will not need to log in again on their next visit, provided the session has not expired.  \
     [https://github.com/InseeFrLab/onyxia/assets/6702424/93b139cf-b0e7-4e4b-9811-bf9a9deaf144](https://github.com/InseeFrLab/onyxia/assets/6702424/93b139cf-b0e7-4e4b-9811-bf9a9deaf144)
