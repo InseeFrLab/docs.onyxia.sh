@@ -125,9 +125,9 @@ git commit -am "Enable keycloak"
 git push
 ```
 
-Here is the DIFF of the onyxia configuration: &#x20;
+Here is [the DIFF](https://github.com/InseeFrLab/onyxia-ops/commit/37faa6390c9bc8c1efddfd3488dc06b38427b424) of the onyxia configuration: &#x20;
 
-{% @github-files/github-code-block %}
+{% embed url="https://github.com/InseeFrLab/onyxia-ops/commit/37faa6390c9bc8c1efddfd3488dc06b38427b424" %}
 
 Now your users should be able to create account, log-in, and start services on their own Kubernetes namespace.
 
