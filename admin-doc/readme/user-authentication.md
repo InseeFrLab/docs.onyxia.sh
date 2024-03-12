@@ -125,7 +125,7 @@ git commit -am "Enable keycloak"
 git push
 ```
 
-Here is [the DIFF](https://github.com/InseeFrLab/onyxia-ops/commit/37faa6390c9bc8c1efddfd3488dc06b38427b424) of the onyxia configuration: &#x20;
+Here is the DIFF of the onyxia configuration: &#x20;
 
 {% embed url="https://github.com/InseeFrLab/onyxia-ops/commit/37faa6390c9bc8c1efddfd3488dc06b38427b424" %}
 
