@@ -31,4 +31,5 @@
 
 * [🕹️ Getting started with Onyxia](user-doc/user-guide.md)
 * [🎓 Datascience Trainings and Tutorials](user-doc/datascience-trainings-and-tutorials.md)
+* [💻 Setting up your dev environment in Onyxia](user-doc/setting-up-your-dev-environment-in-onyxia.md)
 * [🤝 Community resources](user-doc/community-resources.md)
