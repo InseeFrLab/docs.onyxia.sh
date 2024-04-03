@@ -5,7 +5,7 @@ In this video, we guide you through setting up your development environment in O
 {% hint style="info" %}
 I forgot to show in the video that you can setup your GitHub/GitLab username and token in My Account -> External services.
 
-This will enable Onyxia to close even private repos! &#x20;
+This will enable Onyxia to clone private repos! &#x20;
 
 ![](<../.gitbook/assets/Screenshot 2024-04-03 at 10.28.14 (2).png>)
 {% endhint %}
