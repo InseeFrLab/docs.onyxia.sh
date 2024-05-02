@@ -88,8 +88,8 @@ Now you can edit the file as suggested in the following DIFF snippet. Be mindful
           "max": 255
         },
 +       "pattern": {
-+         "error-message": "${alphanumericalCharsOnly}",
-+         "pattern": "^[a-zA-Z0-9]*$"
++         "error-message": "${lowerCaseAlphanumericalCharsOnly}",
++         "pattern": "^[a-z0-9]*$"
 +       },
         "username-prohibited-characters": {}
       }
