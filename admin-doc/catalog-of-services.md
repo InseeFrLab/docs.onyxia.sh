@@ -20,13 +20,17 @@ This collection of charts help users to start automation tools for their datasci
 
 You can always find the source of the catalog by clicking on the "contribute to the... " link.
 
-![https://datalab.sspcloud.fr/catalog](<../.gitbook/assets/image (12).png>)
+{% embed url="https://github.com/InseeFrLab/onyxia/assets/6702424/0e8ff947-644f-4de6-88ae-9e2b6c2a8cd2" %}
+https://datalab.sspcloud.fr/catalog
+{% endembed %}
+
+
 
 If you take [this other instance](https://onyxia-sill.lab.sspcloud.fr), it has only one catalog, [helm-charts-sill](https://github.com/etalab/helm-charts-sill).
 
 ![https://sill-demo.etalab.gouv.fr/catalog](<../.gitbook/assets/image (25).png>)
 
-The available catalogs in a given Onyxia instance are configured at install time, example with datalab.sspcloud.fr:
+The available catalogs in a given Onyxia instance are configured at install time, example with datalab.sspcloud.fr
 
 ```bash
 helm repo add inseefrlab https://inseefrlab.github.io/helm-charts
@@ -45,8 +49,14 @@ api:
     [
        {
           "id": "ide",
-          "name": "Services interactifs",
-          "description": "Services for datascientists.",
+          "name": { 
+              "fr": "Services interactifs", 
+              "en": "Interactive services" 
+          },
+          "description": { 
+              "fr": "Services pour les **datascientists**.",  
+              "en": "Services for **datascientists**."
+          },
           "maintainer": "innovation@insee.fr",
           "location": "https://inseefrlab.github.io/helm-charts-interactive-services",
           "status": "PROD",
@@ -87,6 +97,28 @@ api:
 EOF
 
 helm install onyxia inseefrlab/onyxia -f onyxia-values.yaml
+```
+
+Here is the type of the catalog:&#x20;
+
+```typescript
+type Catalog = {
+    id: string;
+    // Display under the search bar as selection tab:
+    // https://github.com/InseeFrLab/onyxia/assets/6702424/a7247c7d-b0be-48db-893b-20c9352fdb94
+    name: LocalizedString;
+    // If defined, displayed in the header of the catalog page:
+    // https://github.com/InseeFrLab/onyxia/assets/6702424/57e32f44-b889-41b2-b0c7-727c35b07650
+    // Is rendered as Markdown
+    description?: LocalizedString;
+    maintener?: string;
+    // Url of the repo, the more important.
+    location: string;
+    status: "PROD" | "TEST";
+    // Chart that should appear first
+    highlightedCharts?: string[];
+    type: "helm";
+};
 ```
 
 In order to contribute you have to be familiar with [Helm](https://helm.sh/) and to be familiar with Helm you need to be familiar with [Kubernetes objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/).
