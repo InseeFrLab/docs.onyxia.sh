@@ -118,6 +118,7 @@ type Catalog = {
     // Chart that should appear first
     highlightedCharts?: string[];
     type: "helm";
+    skipTlsVerify: false;
 };
 ```
 
