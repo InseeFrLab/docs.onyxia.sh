@@ -54,8 +54,8 @@ onyxia:
           fr: "Services aérospatiaux"
           # ... other languages your instance supports
         },
+        # Optional. Defines the chart that should appear first
         highlightedCharts: ["jupyter-python", "rstudio", "vscode-python"],
-        # Optional. If true the certificate verification for `${location}/index.yaml` will be skipped.
         # Optional, If defined, displayed in the header of the catalog page:
         # https://github.com/InseeFrLab/onyxia/assets/6702424/57e32f44-b889-41b2-b0c7-727c35b07650
         # Is rendered as Markdown
@@ -64,14 +64,13 @@ onyxia:
           fr: "Un catalogue de services pour les ingénieurs aérospatiaux"
           # ...
         },
-        maintainer: "email@",
         # Can be "PROD" or "TEST". If test the catalogs will be accessible if you type the url in the search bar
         # but you won't have a tab to select it.
         status": "PROD",
-        # Optional. Defines the chart that should appear first
+        # Optional. If true the certificate verification for `${location}/index.yaml` will be skipped.
         skipTlsVerify: false,
         # Optional. certificate authority file to use for the TLS verification
-        caFile: null,
+        caFile: "https://myorg.github.io/helm-charts-aerospace/ca.crt",
         # Optional: Enables you to a specific group of users.
         # You can match any claim in the JWT token.  
         # If the claim's value is an array, it match if one of the value is the one you specified.
@@ -80,7 +79,7 @@ onyxia:
           {
             userAttribute: {
               key: "groups",
-              matches: "nasa-staff"
+              matches: "nasa-engineers"
             }
           }
         ]
