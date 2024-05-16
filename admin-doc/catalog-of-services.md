@@ -24,105 +24,72 @@ You can always find the source of the catalog by clicking on the "contribute to 
 https://datalab.sspcloud.fr/catalog
 {% endembed %}
 
-
-
 If you take [this other instance](https://onyxia-sill.lab.sspcloud.fr), it has only one catalog, [helm-charts-sill](https://github.com/etalab/helm-charts-sill).
 
 ![https://sill-demo.etalab.gouv.fr/catalog](<../.gitbook/assets/image (25).png>)
 
-The available catalogs in a given Onyxia instance are configured at install time, example with datalab.sspcloud.fr
+## Using your own catalogs (helm charts repositories)
 
-```bash
-helm repo add inseefrlab https://inseefrlab.github.io/helm-charts
+If you do not specify catalogs in your `onyxia/values.yaml` theses are the one that are used by default: [See file](https://github.com/InseeFrLab/onyxia-api/blob/main/onyxia-api/src/main/resources/catalogs.json).  
 
-DOMAIN=my-domain.net
+To configure your own catalogs:  
 
-cat << EOF > ./onyxia-values.yaml
-ingress:
-  enabled: true
-  annotations:
-    kubernetes.io/ingress.class: nginx
-  hosts:
-    - host: onyxia.$DOMAIN
-api:
-  catalogs: 
-    [
-       {
-          "id": "ide",
-          "name": { 
-              "fr": "Services interactifs", 
-              "en": "Interactive services" 
-          },
-          "description": { 
-              "fr": "Services pour les **datascientists**.",  
-              "en": "Services for **datascientists**."
-          },
-          "maintainer": "innovation@insee.fr",
-          "location": "https://inseefrlab.github.io/helm-charts-interactive-services",
-          "status": "PROD",
-          "highlightedCharts": ["jupyter-python", "rstudio", "vscode-python"],
-          "type": "helm",
-        },
-        {
-          "id": "databases",
-          "name": "Bases de données",
-          "description": "Services for datascientists.",
-          "maintainer": "innovation@insee.fr",
-          "location": "https://inseefrlab.github.io/helm-charts-databases",
-          "status": "PROD",
-          "highlightedCharts": ["postgresql", "elastic"],
-          "type": "helm",
-        },
-        {
-          "id": "automation",
-          "name": "Automatisation",
-          "description": "Services for datascientists.",
-          "maintainer": "innovation@insee.fr",
-          "location": "https://inseefrlab.github.io/helm-charts-automation",
-          "status": "PROD",
-          "highlightedCharts": ["argo-cd", "argo-workflows", "mlflow"],
-          "type": "helm",
-        }
-    ]
-  regions: 
-    [
+`onyxia/values.yaml`
+```yaml
+onyxia:
+  web:
+    # ...
+  api:
+    # ...
+    catalogs: [
       {
-        "services":{
-          "expose":{
-            "domain":"lab.$DOMAIN"
+        type: "helm",
+        id: "aerospace",
+        # The url of the Helm chart repository
+        location: "https://myorg.github.io/helm-charts-aerospace/",
+        # Display under the search bar as selection tab:
+        # https://github.com/InseeFrLab/onyxia/assets/6702424/a7247c7d-b0be-48db-893b-20c9352fdb94
+        name: { 
+          en: "Aerospace services",
+          fr: "Services aérospatiaux"
+          # ... other languages your instance supports
+        },
+        highlightedCharts: ["jupyter-python", "rstudio", "vscode-python"],
+        # Optional. If true the certificate verification for `${location}/index.yaml` will be skipped.
+        # Optional, If defined, displayed in the header of the catalog page:
+        # https://github.com/InseeFrLab/onyxia/assets/6702424/57e32f44-b889-41b2-b0c7-727c35b07650
+        # Is rendered as Markdown
+        description: { 
+          en: "A catalog of services for aerospace engineers",
+          fr: "Un catalogue de services pour les ingénieurs aérospatiaux"
+          # ...
+        },
+        maintainer: "email@",
+        # Can be "PROD" or "TEST". If test the catalogs will be accessible if you type the url in the search bar
+        # but you won't have a tab to select it.
+        status": "PROD",
+        # Optional. Defines the chart that should appear first
+        skipTlsVerify: false,
+        # Optional. certificate authority file to use for the TLS verification
+        caFile: null,
+        # Optional: Enables you to a specific group of users.
+        # You can match any claim in the JWT token.  
+        # If the claim's value is an array, it match if one of the value is the one you specified.
+        # The match property can also be a regex.
+        restrictions: [
+          {
+            userAttribute: {
+              key: "groups",
+              matches: "nasa-staff"
+            }
           }
-        }
-      }
+        ]
+      },
+       # { ... } another catalog
     ]
-EOF
-
-helm install onyxia inseefrlab/onyxia -f onyxia-values.yaml
 ```
 
-Here is the type of the catalog:&#x20;
-
-```typescript
-type Catalog = {
-    id: string;
-    // Display under the search bar as selection tab:
-    // https://github.com/InseeFrLab/onyxia/assets/6702424/a7247c7d-b0be-48db-893b-20c9352fdb94
-    name: LocalizedString;
-    // If defined, displayed in the header of the catalog page:
-    // https://github.com/InseeFrLab/onyxia/assets/6702424/57e32f44-b889-41b2-b0c7-727c35b07650
-    // Is rendered as Markdown
-    description?: LocalizedString;
-    maintener?: string;
-    // Url of the repo, the more important.
-    location: string;
-    status: "PROD" | "TEST";
-    // Chart that should appear first
-    highlightedCharts?: string[];
-    type: "helm";
-    skipTlsVerify: false;
-};
-```
-
-In order to contribute you have to be familiar with [Helm](https://helm.sh/) and to be familiar with Helm you need to be familiar with [Kubernetes objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/).
+### Customizing your helm charts for Onyxia
 
 In Onyxia we use the `values.schema.json` file to know what options should be displayed to the user at [the service configuration step](https://user-images.githubusercontent.com/6702424/177571819-f2e1b4ef-ecd1-479b-a5a1-658d87d7c7c0.png) and what default value Onyxia should inject.
 
