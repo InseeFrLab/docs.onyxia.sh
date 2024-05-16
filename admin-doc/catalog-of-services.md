@@ -70,7 +70,7 @@ onyxia:
         # Optional. If true the certificate verification for `${location}/index.yaml` will be skipped.
         skipTlsVerify: false,
         # Optional. certificate authority file to use for the TLS verification
-        caFile: "https://myorg.github.io/helm-charts-aerospace/ca.crt",
+        caFile: "/path/to/ca.crt",
         # Optional: Enables you to a specific group of users.
         # You can match any claim in the JWT token.  
         # If the claim's value is an array, it match if one of the value is the one you specified.
@@ -194,10 +194,18 @@ export type XOnyxiaParams = {
      * are dynamically injected by the Onyxia launcher.
      *
      * Examples:
-     * "overwriteDefaultWith": "user.email"
+     * "overwriteDefaultWith": "user.email" ( You can also write "{{user.email}}" it's equivalent )
      * "overwriteDefaultWith": "{{project.id}}-{{k8s.randomSubdomain}}.{{k8s.domain}}"
+     * "overwriteDefaultWith": [ "a hardcoded value", "some other hardcoded value", "{{region.oauth2.clientId}}" ]
+     * "overwriteDefaultWith": { "foo": "bar", "bar": "{{region.oauth2.clientId}}" }
+     *
      */
-    overwriteDefaultWith?: string;
+    overwriteDefaultWith?:
+        | string
+        | number
+        | boolean
+        | unknown[]
+        | Record<string, unknown>;
     hidden?: boolean;
     readonly?: boolean;
     useRegionSliderConfig?: string;
@@ -211,6 +219,39 @@ export type XOnyxiaContext = {
         password: string;
         ip: string;
         darkMode: boolean;
+        lang: "en" | "fr" | "zh-CN" | "no" | "fi" | "nl" | "it" | "de";
+        /**
+         * Decoded JWT OIDC ID token of the user launching the service.
+         * 
+         * Sample value: 
+         * {
+         *   "sub": "9000ffa3-5fb8-45b5-88e4-e2e869ba3cfa",
+         *   "name": "Joseph Garrone",
+         *   "aud": ["onyxia", "minio-datanode"],
+         *   "groups": [
+         *       "USER_ONYXIA",
+         *       "codegouv",
+         *       "onyxia",
+         *       "sspcloud-admin",
+         *   ],
+         *   "preferred_username": "jgarrone",
+         *   "given_name": "Joseph",
+         *   "locale": "en",
+         *   "family_name": "Garrone",
+         *   "email": "joseph.garrone@insee.fr",
+         *   "policy": "stsonly",
+         *   "typ": "ID",
+         *   "azp": "onyxia",
+         *   "email_verified": true,
+         *   "realm_access": {
+         *       "roles": ["offline_access", "uma_authorization", "default-roles-sspcloud"]
+         *   }
+         * }
+         */
+        decodedIdToken: Record<string, unknown>;
+    };
+    service: {
+        oneTimePassword: string;
     };
     project: {
         id: string;
@@ -229,7 +270,6 @@ export type XOnyxiaContext = {
         VAULT_MOUNT: string;
         VAULT_TOP_DIR: string;
     };
-    kaggleApiToken: string | undefined;
     s3: {
         AWS_ACCESS_KEY_ID: string;
         AWS_SECRET_ACCESS_KEY: string;
@@ -238,11 +278,23 @@ export type XOnyxiaContext = {
         AWS_S3_ENDPOINT: string;
         AWS_BUCKET_NAME: string;
         port: number;
+        pathStyleAccess: boolean;
+        /**
+         * The user is assumed to have read/write access on every
+         * object starting with this prefix on the bucket
+         **/
+        objectNamePrefix: string;
+        /**
+         * Only for making it easier for charts editors.
+         * <AWS_BUCKET_NAME>/<objectNamePrefix>
+         * */
+        workingDirectoryPath: string;
     };
     region: {
         defaultIpProtection: boolean | undefined;
         defaultNetworkPolicy: boolean | undefined;
         allowedURIPattern: string;
+        customValues: Record<string, unknown> | undefined;
         kafka:
             | {
                   url: string;
@@ -286,6 +338,8 @@ export type XOnyxiaContext = {
             | undefined;
         randomSubdomain: string;
         initScriptUrl: string;
+        useCertManager: boolean;
+        certManagerClusterIssuer: string | undefined;
     };
     proxyInjection:
         | {
