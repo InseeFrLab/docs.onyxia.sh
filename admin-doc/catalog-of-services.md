@@ -18,11 +18,10 @@ This collection of charts help users to launch many databases system. Most of th
 
 This collection of charts help users to start automation tools for their datascience activity.
 
-You can always find the source of the catalog by clicking on the "contribute to the... " link.
+You can always find the source of the catalog by clicking on the "contribute to the... " link.\
 
-{% embed url="https://github.com/InseeFrLab/onyxia/assets/6702424/0e8ff947-644f-4de6-88ae-9e2b6c2a8cd2" %}
-https://datalab.sspcloud.fr/catalog
-{% endembed %}
+
+<figure><img src="../.gitbook/assets/330910409-0e8ff947-644f-4de6-88ae-9e2b6c2a8cd2.png" alt=""><figcaption><p><a href="https://datalab.sspcloud.fr/catalog">https://datalab.sspcloud.fr/catalog</a></p></figcaption></figure>
 
 If you take [this other instance](https://onyxia-sill.lab.sspcloud.fr), it has only one catalog, [helm-charts-sill](https://github.com/etalab/helm-charts-sill).
 
@@ -30,11 +29,12 @@ If you take [this other instance](https://onyxia-sill.lab.sspcloud.fr), it has o
 
 ## Using your own catalogs (helm charts repositories)
 
-If you do not specify catalogs in your `onyxia/values.yaml` theses are the one that are used by default: [See file](https://github.com/InseeFrLab/onyxia-api/blob/main/onyxia-api/src/main/resources/catalogs.json).  
+If you do not specify catalogs in your `onyxia/values.yaml` theses are the one that are used by default: [See file](https://github.com/InseeFrLab/onyxia-api/blob/main/onyxia-api/src/main/resources/catalogs.json).
 
-To configure your own catalogs:  
+To configure your own catalogs:
 
 `onyxia/values.yaml`
+
 ```yaml
 onyxia:
   web:
