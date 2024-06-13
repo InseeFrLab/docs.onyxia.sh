@@ -213,7 +213,7 @@ The framework used to implement strict separation of concern betwen the UI and t
 
 There is [a snake game (the classic nokia game) example](https://github.com/garronej/snake-clean-architecture) for helping you understand the clean architecture framework. &#x20;
 
-<figure><img src="../../.gitbook/assets/image.png" alt="" width="375"><figcaption><p>Snake game for understanding the clean-architecture framwork</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (1).png" alt="" width="375"><figcaption><p>Snake game for understanding the clean-architecture framwork</p></figcaption></figure>
 
 ###
 

@@ -53,7 +53,7 @@ You can now login to **https://argocd.lab.my-domain.net** using:
 * username: **admin**
 * password: **\<the output of the previous command (without the `%` at the end)>**
 
-<figure><img src="../../.gitbook/assets/image (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Now that we have an ArgoCD we want to connect it to a Git repository that will describe what services we want to be running on our cluster.
 
@@ -68,7 +68,7 @@ Note that in this guide, we use GitHub, but feel free to fork the [InseeFrLab/on
 At this point you should have a very bare bone Onyxia instance that you can use to launch services.
 
 What's great, is that now, if you want to update the configuration of your Onyxia instance you only have to commit the change to your GitOps repo, ArgoCD will takes charge of restarting the service for you with the new configuration.\
-To put that to the test try to modify your Onyxia configuration by setting up a global alert that will be shown as a banner in Onyxia. &#x20;
+To put that to the test try to modify your Onyxia configuration by setting up a global alert that will be shown as a banner in Onyxia.
 
 {% code title="apps/onyxia/values.yaml" %}
 ```diff
@@ -95,7 +95,7 @@ To put that to the test try to modify your Onyxia configuration by setting up a 
 After a few seconds, if you reload **https://datalab.my-domain.net** you should see the message!\
 
 
-<figure><img src="../../.gitbook/assets/image (1).png" alt="" width="354"><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (1) (1).png" alt="" width="354"><figcaption></figcaption></figure>
 
 Next step is to see how to enable your user to authenticate themselvs to your datalab!
 

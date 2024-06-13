@@ -94,6 +94,8 @@ In Onyxia we use the `values.schema.json` file to know what options should be di
 
 ![https://helm.sh/docs/topics/charts/#the-chart-file-structure](<../.gitbook/assets/image (19).png>)
 
+### \[x-onyxia] overwriteDefaultWith
+
 Let's consider a sample of the `values.schema.json` of the InseeFrLab/helm-charts-datascience's Jupyter chart:
 
 <pre class="language-javascript" data-title="values.schema.json"><code class="lang-javascript">"git": {
@@ -206,6 +208,7 @@ export type XOnyxiaParams = {
         | boolean
         | unknown[]
         | Record<string, unknown>;
+    overwriteListEnumWith?: unknown[] | string;
     hidden?: boolean;
     readonly?: boolean;
     useRegionSliderConfig?: string;
@@ -219,11 +222,11 @@ export type XOnyxiaContext = {
         password: string;
         ip: string;
         darkMode: boolean;
-        lang: "en" | "fr" | "zh-CN" | "no" | "fi" | "nl" | "it" | "de";
+        lang: "en" | "fr" | "zh-CN" | "no" | "fi" | "nl" | "it" | "es" | "de";
         /**
          * Decoded JWT OIDC ID token of the user launching the service.
-         * 
-         * Sample value: 
+         *
+         * Sample value:
          * {
          *   "sub": "9000ffa3-5fb8-45b5-88e4-e2e869ba3cfa",
          *   "name": "Joseph Garrone",
@@ -289,6 +292,12 @@ export type XOnyxiaContext = {
          * <AWS_BUCKET_NAME>/<objectNamePrefix>
          * */
         workingDirectoryPath: string;
+        /**
+         * If true the bucket's (directory) should be accessible without any credentials.
+         * In this case s3.AWS_ACCESS_KEY_ID, s3.AWS_SECRET_ACCESS_KEY and s3.AWS_SESSION_TOKEN
+         * will be empty strings.
+         */
+        isAnonymous: boolean;
     };
     region: {
         defaultIpProtection: boolean | undefined;
@@ -365,9 +374,10 @@ export type XOnyxiaContext = {
 };
 ```
 
-You can also concatenate string values using [mustache](https://mustache.github.io/) syntax.
+You can also concatenate string values using by wrapping the XOnyxia targeted values in `{{}}`.
 
-```javascript
+{% code title="values.shema.json" %}
+```json
 "hostname": {
   "type": "string",
   "form": true,
@@ -377,6 +387,43 @@ You can also concatenate string values using [mustache](https://mustache.github.
   }
 }
 ```
+{% endcode %}
+
+### \[x-onyxia] overwriteListEnumWith
+
+This is an option for customizing the options of the forms fields rendered as select.
+
+<figure><img src="../.gitbook/assets/image.png" alt="" width="375"><figcaption><p>Example of select form field in the onyxia launcher</p></figcaption></figure>
+
+In your values shema such a field would be defined like:
+
+{% code title="values.shema.json" %}
+```json
+"pullPolicy": {
+    "type": "string",
+    "default": "IfNotPresent",
+    "listEnum": [
+        "IfNotPresent",
+        "Always",
+        "Never"
+    ]
+}
+```
+{% endcode %}
+
+But what if you want to dynamicaly generate the option? For this you can use the overwriteListEnumWith x-onyxia option.  \
+For example if you need to let the user select one of the groups he belongs to you can write: &#x20;
+
+<pre class="language-json" data-title="values.schema.json"><code class="lang-json">"group": {
+  "type": "string",
+<strong>  "default": "",
+</strong><strong>  "listEnum": [""],
+</strong>  "x-onyxia": {
+<strong>    "overwriteDefaultWith": "user.decodedIdToken.groups[0]",
+</strong><strong>    "overwriteListEnumWith": "user.decodedIdToken.groups"
+</strong>  }
+}
+</code></pre>
 
 #### Defining region scoped resources limit
 

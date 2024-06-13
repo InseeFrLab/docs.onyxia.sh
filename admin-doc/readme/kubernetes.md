@@ -127,7 +127,7 @@ This command will open your configured text editor, go to containers -> args and
       - --watch-ingress-without-class
 ```
 
-<figure><img src="../../.gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Save and quit. Done :tada:\
 We installed the ingress-nginx in our cluster, (but note that any other ingress controller could have been used as well). The configuration was adjusted to handle all ingress objects, even those lacking a specified class, and to employ our SSL certificate for our wildcard certificate. This strategy facilitated an effortless SSL termination, managed by the reverse proxy for both **\*.lab.my-domain.net** and **datalab.my-domain.net**, thus removing any additional SSL configuration concerns.
