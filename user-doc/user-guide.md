@@ -2,7 +2,7 @@
 description: Using Onyxia (as a data scientist)
 ---
 
-# 🕹 Getting started with Onyxia
+# 🕹️ Getting started with Onyxia
 
 {% hint style="success" %}
 See also [https://docs.sspcloud.fr](https://docs.sspcloud.fr/)
@@ -48,6 +48,12 @@ After launching a service, notes are shown to the user. He can retrieve those no
 
 <figure><img src="../.gitbook/assets/image (21).png" alt=""><figcaption></figcaption></figure>
 
+Now you want to learn how to setup your devloppement environement for day to day usage: &#x20;
+
+{% content-ref url="setting-up-your-dev-environment-in-onyxia.md" %}
+[setting-up-your-dev-environment-in-onyxia.md](setting-up-your-dev-environment-in-onyxia.md)
+{% endcontent-ref %}
+
 ## File browser
 
 Users can manage their files on S3. There is no support for rename in S3 so don't be surprise. Onyxia is educational. Any action on the S3 browser in the UI is written in a console with a cli.
@@ -78,4 +84,7 @@ Onyxia use only a key value v2 secret engine in Vault. Users can store some secr
 
 <figure><img src="../.gitbook/assets/image (20).png" alt=""><figcaption></figcaption></figure>
 
+
+
 Of course, in our default catalags there are all the necessary tools to connect to Vault.
+
