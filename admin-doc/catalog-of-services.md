@@ -56,6 +56,8 @@ onyxia:
         },
         # Optional. Defines the chart that should appear first
         highlightedCharts: ["jupyter-artemis", "rstudio-dragonfly"],
+        # Optional. Defines the chart that should be excluded
+        excludedCharts: ["a-vendor-locking-chart"],
         # Optional, If defined, displayed in the header of the catalog page:
         # https://github.com/InseeFrLab/onyxia/assets/6702424/57e32f44-b889-41b2-b0c7-727c35b07650
         # Is rendered as Markdown
