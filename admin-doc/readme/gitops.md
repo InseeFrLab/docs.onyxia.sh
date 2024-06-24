@@ -68,7 +68,7 @@ Note that in this guide, we use GitHub, but feel free to fork the [InseeFrLab/on
 At this point you should have a very bare bone Onyxia instance that you can use to launch services.
 
 What's great, is that now, if you want to update the configuration of your Onyxia instance you only have to commit the change to your GitOps repo, ArgoCD will takes charge of restarting the service for you with the new configuration.\
-To put that to the test try to modify your Onyxia configuration by setting up a global alert that will be shown as a banner to all users.
+To put that to the test try to modify your Onyxia configuration by setting up a global alert that will be shown as a banner to all users!
 
 {% code title="apps/onyxia/values.yaml" %}
 ```diff
