@@ -31,10 +31,10 @@ If you take [this other instance](https://onyxia-sill.lab.sspcloud.fr), it has o
 
 If you do not specify catalogs in your `onyxia/values.yaml` theses are the one that are used by default: [See file](https://github.com/InseeFrLab/onyxia-api/blob/main/onyxia-api/src/main/resources/catalogs.json).
 
-To configure your own catalogs:
+To configure your onyxia instance to use your own custom helm repository as onyxia catalogs you need to use the onyxia configuration `onyxia.api.catalogs`.  \
+Let's say we're NASA and we want to have an "_Areospace services"_ catalog on our onyxia instance. Our onyxia configuctation would look a bit like this: &#x20;
 
-`onyxia/values.yaml`
-
+{% code title="onyxia/values.yaml" %}
 ```yaml
 onyxia:
   web:
@@ -89,6 +89,7 @@ onyxia:
        # { ... } another catalog
     ]
 ```
+{% endcode %}
 
 ## Customizing your helm charts for Onyxia
 
