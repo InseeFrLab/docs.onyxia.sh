@@ -131,7 +131,7 @@ Here is the DIFF of the onyxia configuration: &#x20;
 
 Now your users should be able to create account, log-in, and start services on their own Kubernetes namespace.
 
-<figure><img src="../../.gitbook/assets/image (36).png" alt=""><figcaption><p>The screen you shoud see when clicking on "login" in your Onyxia deployment</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (49).png" alt=""><figcaption><p>The screen you shoud see when clicking on "login" in your Onyxia deployment</p></figcaption></figure>
 
 Next step in the installation proccess it to enable all the S3 related features of Onyxia: &#x20;
 

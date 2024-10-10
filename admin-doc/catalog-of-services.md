@@ -18,21 +18,20 @@ This collection of charts help users to launch many databases system. Most of th
 
 This collection of charts help users to start automation tools for their datascience activity.
 
-You can always find the source of the catalog by clicking on the "contribute to the... " link.\
-
+You can always find the source of the catalog by clicking on the "contribute to the... " link.\\
 
 <figure><img src="../.gitbook/assets/330910409-0e8ff947-644f-4de6-88ae-9e2b6c2a8cd2.png" alt=""><figcaption><p><a href="https://datalab.sspcloud.fr/catalog">https://datalab.sspcloud.fr/catalog</a></p></figcaption></figure>
 
 If you take [this other instance](https://onyxia-sill.lab.sspcloud.fr), it has only one catalog, [helm-charts-sill](https://github.com/etalab/helm-charts-sill).
 
-![https://sill-demo.etalab.gouv.fr/catalog](<../.gitbook/assets/image (25).png>)
+![https://sill-demo.etalab.gouv.fr/catalog](<../.gitbook/assets/image (38).png>)
 
 ## Using your own catalogs (helm charts repositories)
 
 If you do not specify catalogs in your `onyxia/values.yaml` theses are the one that are used by default: [See file](https://github.com/InseeFrLab/onyxia-api/blob/main/onyxia-api/src/main/resources/catalogs.json).
 
-To configure your onyxia instance to use your own custom helm repository as onyxia catalogs you need to use the onyxia configuration `onyxia.api.catalogs`.  \
-Let's say we're NASA and we want to have an "_Areospace services"_ catalog on our onyxia instance. Our onyxia configuctation would look a bit like this: &#x20;
+To configure your onyxia instance to use your own custom helm repository as onyxia catalogs you need to use the onyxia configuration `onyxia.api.catalogs`.\
+Let's say we're NASA and we want to have an "_Areospace services"_ catalog on our onyxia instance. Our onyxia configuctation would look a bit like this:
 
 {% code title="onyxia/values.yaml" %}
 ```yaml
@@ -95,7 +94,7 @@ onyxia:
 
 In Onyxia we use the `values.schema.json` file to know what options should be displayed to the user at [the service configuration step](https://user-images.githubusercontent.com/6702424/177571819-f2e1b4ef-ecd1-479b-a5a1-658d87d7c7c0.png) and what default value Onyxia should inject.
 
-![https://helm.sh/docs/topics/charts/#the-chart-file-structure](<../.gitbook/assets/image (19).png>)
+![https://helm.sh/docs/topics/charts/#the-chart-file-structure](<../.gitbook/assets/image (32).png>)
 
 ### \[x-onyxia] overwriteDefaultWith
 
@@ -188,7 +187,7 @@ Note the `"git.name"`, `"git.email"` and `"git.token"`, this enables [onyxia-web
 
 If the user took the time to fill its profile information, [onyxia-web](https://github.com/InseeFrLab/onyxia-web) know what is the Git **username**, **email** and **personal access token** of the user.
 
-![The onyxia user profile](<../.gitbook/assets/image (8).png>)
+![The onyxia user profile](<../.gitbook/assets/image (21).png>)
 
 [Here](https://github.com/InseeFrLab/onyxia/blob/main/web/src/core/ports/OnyxiaApi/XOnyxia.ts) is defined the structure of the context that you can use in the `overwriteDefaultWith` field:
 
@@ -414,8 +413,8 @@ In your values shema such a field would be defined like:
 ```
 {% endcode %}
 
-But what if you want to dynamicaly generate the option? For this you can use the overwriteListEnumWith x-onyxia option.  \
-For example if you need to let the user select one of the groups he belongs to you can write: &#x20;
+But what if you want to dynamicaly generate the option? For this you can use the overwriteListEnumWith x-onyxia option.\
+For example if you need to let the user select one of the groups he belongs to you can write:
 
 <pre class="language-json" data-title="values.schema.json"><code class="lang-json">"group": {
   "type": "string",

@@ -1,4 +1,4 @@
-# ⬆ Migrating to the new helm repo
+# ⬆️ Migrating to the new helm repo
 
 Previously, the Helm chart of Onyxia was hosted on the inseefrlab/helm-charts repo and has now been moved to inseefrlab/onyxia.  \
 \
@@ -84,4 +84,4 @@ helm install keycloak codecentric/keycloak -f keycloak-values.yaml
 Also note that, the theme will now appear as "onyxia" in the dropdown. Previously it was "onyxia-web"\
 
 
-<figure><img src="../../.gitbook/assets/image (31).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (44).png" alt=""><figcaption></figcaption></figure>

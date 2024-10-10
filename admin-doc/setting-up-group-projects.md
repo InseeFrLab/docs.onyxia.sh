@@ -10,7 +10,7 @@ The user interface of onyxia enable to create project for groups of Onyxia user.
 
 Users will be able to dynamically switch from one project to another using a select input in the header.
 
-<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
 
 This select doesen't appear when the user isn't in any group project. &#x20;
 
