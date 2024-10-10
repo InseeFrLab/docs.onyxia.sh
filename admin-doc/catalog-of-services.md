@@ -1,22 +1,26 @@
 ---
-description: Unserstand how Onyxia catalogs works and potentially create your own!
+description: Unserstand how Onyxia catalogs work and potentially create your own!
 ---
 
 # 🔬 Catalog of services
 
-Every Onyxia instance may or may not have it's own catalog. There is three default catalogs :
+Every Onyxia instance may or may not have it's own catalog. There are four default catalogs :
 
 {% embed url="https://github.com/inseefrlab/helm-charts-interactive-services" %}
 
-This collection of charts help users to launch many IDE with various binary stacks (python , R) with or without GPU support. Docker images are built [here](https://github.com/inseefrlab/images-datascience) and help us to give a homogeneous stack.
+This collection of charts helps users to launch many IDE with various binary stacks (python , R) with or without GPU support. Docker images are built [here](https://github.com/inseefrlab/images-datascience) and help us to give a homogeneous stack.
 
 {% embed url="https://github.com/inseefrlab/helm-charts-databases" %}
 
-This collection of charts help users to launch many databases system. Most of them are based on [bitnami/charts](https://github.com/bitnami/charts).
+This collection of charts helps users to launch many databases system. Most of them are based on [bitnami/charts](https://github.com/bitnami/charts).
 
 {% embed url="https://github.com/InseeFrLab/helm-charts-automation/" %}
 
-This collection of charts help users to start automation tools for their datascience activity.
+This collection of charts helps users to start automation tools for their datascience activity.
+
+{% embed url="https://github.com/InseeFrLab/helm-charts-datavisualization" %}
+
+This collection of charts helps users to launch tools to visualize and share data insights.
 
 You can always find the source of the catalog by clicking on the "contribute to the... " link.\
 
@@ -25,14 +29,14 @@ You can always find the source of the catalog by clicking on the "contribute to 
 
 If you take [this other instance](https://onyxia-sill.lab.sspcloud.fr), it has only one catalog, [helm-charts-sill](https://github.com/etalab/helm-charts-sill).
 
-![https://sill-demo.etalab.gouv.fr/catalog](<../.gitbook/assets/image (25).png>)
+![https://sill-demo.etalab.gouv.fr/catalog](<../.gitbook/assets/image (38).png>)
 
 ## Using your own catalogs (helm charts repositories)
 
-If you do not specify catalogs in your `onyxia/values.yaml` theses are the one that are used by default: [See file](https://github.com/InseeFrLab/onyxia-api/blob/main/onyxia-api/src/main/resources/catalogs.json).
+If you do not specify catalogs in your `onyxia/values.yaml,` these are the ones that are used by default: [See file](https://github.com/InseeFrLab/onyxia-api/blob/main/onyxia-api/src/main/resources/catalogs.json).
 
-To configure your onyxia instance to use your own custom helm repository as onyxia catalogs you need to use the onyxia configuration `onyxia.api.catalogs`.  \
-Let's say we're NASA and we want to have an "_Areospace services"_ catalog on our onyxia instance. Our onyxia configuctation would look a bit like this: &#x20;
+To configure your onyxia instance to use your own custom helm repositories as onyxia catalogs you need to use the onyxia configuration `onyxia.api.catalogs`.  \
+Let's say we're NASA and we want to have an "_Areospace services"_ catalog on our onyxia instance. Our onyxia configuration would look a bit like this: &#x20;
 
 {% code title="onyxia/values.yaml" %}
 ```yaml
@@ -95,11 +99,11 @@ onyxia:
 
 In Onyxia we use the `values.schema.json` file to know what options should be displayed to the user at [the service configuration step](https://user-images.githubusercontent.com/6702424/177571819-f2e1b4ef-ecd1-479b-a5a1-658d87d7c7c0.png) and what default value Onyxia should inject.
 
-![https://helm.sh/docs/topics/charts/#the-chart-file-structure](<../.gitbook/assets/image (19).png>)
+![https://helm.sh/docs/topics/charts/#the-chart-file-structure](<../.gitbook/assets/image (32).png>)
 
 ### \[x-onyxia] overwriteDefaultWith
 
-Let's consider a sample of the `values.schema.json` of the InseeFrLab/helm-charts-datascience's Jupyter chart:
+Let's consider a sample of the `values.schema.json` of the InseeFrLab/helm-charts-interactive-services' Jupyter chart:
 
 <pre class="language-javascript" data-title="values.schema.json"><code class="lang-javascript">"git": {
     "description": "Git user configuration",
@@ -186,9 +190,9 @@ And it translates into this:
 
 Note the `"git.name"`, `"git.email"` and `"git.token"`, this enables [onyxia-web](https://github.com/InseeFrLab/onyxia-web) to pre fill the fields.
 
-If the user took the time to fill its profile information, [onyxia-web](https://github.com/InseeFrLab/onyxia-web) know what is the Git **username**, **email** and **personal access token** of the user.
+If the user took the time to fill its profile information, [onyxia-web](https://github.com/InseeFrLab/onyxia-web) knows what is the Git **username**, **email** and **personal access token** of the user.
 
-![The onyxia user profile](<../.gitbook/assets/image (8).png>)
+![The onyxia user profile](<../.gitbook/assets/image (21).png>)
 
 [Here](https://github.com/InseeFrLab/onyxia/blob/main/web/src/core/ports/OnyxiaApi/XOnyxia.ts) is defined the structure of the context that you can use in the `overwriteDefaultWith` field:
 
@@ -255,6 +259,8 @@ export type XOnyxiaContext = {
          * }
          */
         decodedIdToken: Record<string, unknown>;
+        accessToken: string;
+        refreshToken: string;
     };
     service: {
         oneTimePassword: string;
@@ -414,7 +420,7 @@ In your values shema such a field would be defined like:
 ```
 {% endcode %}
 
-But what if you want to dynamicaly generate the option? For this you can use the overwriteListEnumWith x-onyxia option.  \
+But what if you want to dynamically generate the option? For this you can use the overwriteListEnumWith x-onyxia option.  \
 For example if you need to let the user select one of the groups he belongs to you can write: &#x20;
 
 <pre class="language-json" data-title="values.schema.json"><code class="lang-json">"group": {
@@ -428,140 +434,431 @@ For example if you need to let the user select one of the groups he belongs to y
 }
 </code></pre>
 
-#### Defining region scoped resources limit
+### \[x-onyxia] overwriteSchemaWith
 
-You probably want to be able to define a limit to the amount of resources a user can request when launching a service.
+Certain elements of a Helm chart should be customized for each instance of Onyxia, such as resource requests and limits, node selectors and tolerations. For this purpose, chart developers can use `x-onyxia.overwriteSchemaWith` to allow administrators to override specific parts of the schema. Our default charts use this specification.
 
-It's possible to do it at the catalog level but it's best to enable the person who is deploying Onyxia to define boundaries for his deployment regions.
+{% code title="values.shema.json" %}
+```json
+"nodeSelector": {
+    "type": "object",
+    "description": "NodeSelector",
+    "default": {},
+    "x-onyxia": {
+        "overwriteSchemaWith": "nodeSelector.json"
+    }
+}
+```
+{% endcode %}
 
-This is the purpose of the `x-onyxia` param `useRegionSliderConfig`
+You can see [here](https://github.com/InseeFrLab/onyxia-api/tree/main/onyxia-api/src/main/resources/schemas) the list of default schemas included in the Onyxia API. We also provide examples demonstrating how you [can customize your services using our interactive services charts with the provided schemas](https://github.com/InseeFrLab/helm-charts-interactive-services/).
 
-<pre class="language-yaml" data-title="onyxia/values.yaml"><code class="lang-yaml">onyxia:
+The following node selector schema provided by Onyxia API is a generic definition, which may not provide the best experience for a specific Kubernetes cluster in Onyxia.
 
-  web:
-    ...
-    
-  api:
-    ...
-    regions:
-      [
-        {
-          "id": "paris",
-          "name": "Kubernetes DG Insee",
-          "services": {
-            "defaultConfiguration": {
-<strong>              "sliders": {
-</strong>                "cpu": {
-                  "sliderMin": 100,
-                  "sliderMax": 80000,
-                  "sliderStep": 100,
-                  "sliderUnit": "m"
-                },
-                "memory": {
-                  "sliderMin": 1,
-                  "sliderMax": 400,
-                  "sliderStep": 1,
-                  "sliderUnit": "Gi"
-                },
-<strong>                "gpu": {
-</strong><strong>                  "sliderMin": 1,
-</strong><strong>                  "sliderMax": 4,
-</strong><strong>                  "sliderStep": 1,
-</strong><strong>                  "sliderUnit": ""
-</strong><strong>                },
-</strong>                "disk": {
-                  "sliderMin": 1,
-                  "sliderMax": 100,
-                  "sliderStep": 1,
-                  "sliderUnit": "Gi"
-                }
-              },
-              "resources": {
-                "cpuRequest": "100m",
-                "cpuLimit": "40000m",
-                "memoryRequest": "1Gi",
-                "memoryLimit": "200Gi",
-                "disk": "10Gi",
-<strong>                "gpu": "1"
-</strong>              }
-            }
-          }
-        }
-      ]
-</code></pre>
+{% code title="nodeSelector.json" %}
+```json
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Node Selector",
+    "type": "object",
+    "description": "Node selector constraints for the pod",
+    "additionalProperties": {
+      "type": "string",
+      "description": "Key-value pairs to select nodes"
+    }
+}
+```
+{% endcode %}
 
-<pre class="language-json" data-title="values.schema.json"><code class="lang-json">{
-  "$schema": "http://json-schema.org/schema#",
+As an administrator of Onyxia, you can provide your own schemas to refine and restrict the initial schemas provided in the Helm chart.
+
+#### node selectors
+
+You can provide this schema to allow your users to choose between SSD or HDD disk types, and A2 or H100 NVIDIA GPUs. Any other values or labels are disallowed, and Onyxia will reject starting a service that does not comply with the provided schema.
+
+{% code title="nodeSelector.json" %}
+```json
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Node Selector",
   "type": "object",
   "properties": {
-    "resources": {
-      "description": "Your service will have at least the requested resources and never more than its limits. No limit for a resource and you can consume everything left on the host machine.",
-      "type": "object",
-      "properties": {
-        "limits": {
-          "description": "max resources",
-          "type": "object",
-          "properties": {
-            "nvidia.com/gpu": {
-              "description": "GPU to allocate to this instance. This is also requested",
-              "type": "string",
-<strong>              "default": "0", // Will be overwritten by "1"
-</strong>              "render": "slider",
-<strong>              "sliderMin": 0, // Will be overwritten by 1
-</strong><strong>              "sliderMax": 3, // Will be overwritten by 4
-</strong><strong>              "sliderStep": 1, // Will be overwritten by 1
-</strong><strong>              "sliderUnit": "", // Will be overwritten by ""
-</strong><strong>              "x-onyxia": {
-</strong><strong>                "overwriteDefaultWith": "region.resources.gpu",
-</strong><strong>                "useRegionSliderConfig": "gpu" // 👀
-</strong><strong>              }
-</strong>            },
-            "cpu": {
-              "description": "The maximum amount of cpu",
-              "title": "CPU",
-              "type": "string",
-              "default": "30000m",
-              "render": "slider",
-              "sliderMin": 50,
-              "sliderMax": 40000,
-              "sliderStep": 50,
-              "sliderUnit": "m",
-              "sliderExtremity": "up",
-              "sliderExtremitySemantic": "Maximum",
-              "sliderRangeId": "cpu",
-              "x-onyxia": {
-                "overwriteDefaultWith": "region.resources.cpuLimit",
-                "useRegionSliderConfig": "cpu"
-              }
-            },
-            "memory": {
-              "description": "The maximum amount of memory",
-              "title": "Memory",
-              "type": "string",
-              "default": "50Gi",
-              "render": "slider",
-              "sliderMin": 1,
-              "sliderMax": 200,
-              "sliderStep": 1,
-              "sliderUnit": "Gi",
-              "sliderExtremity": "up",
-              "sliderExtremitySemantic": "Maximum",
-              "sliderRangeId": "memory",
-              "x-onyxia": {
-                "overwriteDefaultWith": "region.resources.memoryLimit",
-                "useRegionSliderConfig": "memory"
-              }
-            }
-          }
+    "disktype": {
+      "description": "The type of disk",
+      "type": "string",
+      "enum": ["ssd", "hdd"]
+    },
+    "gpu": {
+      "description": "The type of GPU",
+      "type": "string",
+      "enum": ["A2", "H100"]
+    }
+  },
+  "additionalProperties": false //any other label is disallowed
+}
+```
+{% endcode %}
+
+#### rolebindings for IDE pods
+
+This is the default role for IDE pods in our charts. It is very permissive, and you may want to restrict it to view-only access.
+
+{% code title="ide/role.json" %}
+```json
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Role",
+    "type": "object",
+    "properties": {
+        "enabled": {
+            "type": "boolean",
+            "description": "allow your service to access your namespace ressources",
+            "default": true
+        },
+        "role": {
+            "type": "string",
+            "description": "bind your service account to this kubernetes default role",
+            "default": "view",
+            "enum": [
+                "view",
+                "edit",
+                "admin"
+            ]
         }
-      }
+    }
+}
+
+```
+{% endcode %}
+
+Here is the refined version
+
+{% code title="ide/role.json" %}
+```json
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Role",
+  "type": "object",
+  "properties": {
+    "enabled": {
+      "type": "boolean",
+      "const": true,
+      "description": "This value must always be true, allowing your service to access your namespace resources."
+    },
+    "role": {
+      "type": "string",
+      "const": "view",
+      "description": "This value must always be 'view', binding your service account to this Kubernetes default role.",
     }
   }
 }
+
+```
+{% endcode %}
+
+#### resources for IDE
+
+You may want to modify the slide bar for resources
+
+{% code title="ide/resources.json" %}
+```json
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Resources",
+    "description": "Your service will have at least the requested resources and never more than its limits. No limit for a resource and you can consume everything left on the host machine.",
+    "type": "object",
+    "properties": {
+        "requests": {
+            "description": "Guaranteed resources",
+            "type": "object",
+            "properties": {
+                "cpu": {
+                    "description": "The amount of cpu guaranteed",
+                    "title": "CPU",
+                    "type": "string",
+                    "default": "100m",
+                    "render": "slider",
+                    "sliderMin": 50,
+                    "sliderMax": 40000,
+                    "sliderStep": 50,
+                    "sliderUnit": "m",
+                    "sliderExtremity": "down",
+                    "sliderExtremitySemantic": "guaranteed",
+                    "sliderRangeId": "cpu"
+                },
+                "memory": {
+                    "description": "The amount of memory guaranteed",
+                    "title": "memory",
+                    "type": "string",
+                    "default": "2Gi",
+                    "render": "slider",
+                    "sliderMin": 1,
+                    "sliderMax": 200,
+                    "sliderStep": 1,
+                    "sliderUnit": "Gi",
+                    "sliderExtremity": "down",
+                    "sliderExtremitySemantic": "guaranteed",
+                    "sliderRangeId": "memory"
+                }
+            }
+        },
+        "limits": {
+            "description": "max resources",
+            "type": "object",
+            "properties": {
+                "cpu": {
+                    "description": "The maximum amount of cpu",
+                    "title": "CPU",
+                    "type": "string",
+                    "default": "30000m",
+                    "render": "slider",
+                    "sliderMin": 50,
+                    "sliderMax": 40000,
+                    "sliderStep": 50,
+                    "sliderUnit": "m",
+                    "sliderExtremity": "up",
+                    "sliderExtremitySemantic": "Maximum",
+                    "sliderRangeId": "cpu"
+                },
+                "memory": {
+                    "description": "The maximum amount of memory",
+                    "title": "Memory",
+                    "type": "string",
+                    "default": "50Gi",
+                    "render": "slider",
+                    "sliderMin": 1,
+                    "sliderMax": 200,
+                    "sliderStep": 1,
+                    "sliderUnit": "Gi",
+                    "sliderExtremity": "up",
+                    "sliderExtremitySemantic": "Maximum",
+                    "sliderRangeId": "memory"
+                }
+            }
+        }
+    }
+}
+
+```
+{% endcode %}
+
+
+
+<pre class="language-json" data-title="ide/resources.json"><code class="lang-json"><strong>{
+</strong>    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Resources",
+    "description": "Your service will have at least the requested resources and never more than its limits. No limit for a resource and you can consume everything left on the host machine.",
+    "type": "object",
+    "properties": {
+        "requests": {
+            "description": "Guaranteed resources",
+            "type": "object",
+            "properties": {
+                "cpu": {
+                    "description": "The amount of cpu guaranteed",
+                    "title": "CPU",
+                    "type": "string",
+                    "default": "100m",
+                    "render": "slider",
+                    "sliderMin": 50,
+                    "sliderMax": 10000,
+                    "sliderStep": 50,
+                    "sliderUnit": "m",
+                    "sliderExtremity": "down",
+                    "sliderExtremitySemantic": "guaranteed",
+                    "sliderRangeId": "cpu"
+                },
+                "memory": {
+                    "description": "The amount of memory guaranteed",
+                    "title": "memory",
+                    "type": "string",
+                    "default": "2Gi",
+                    "render": "slider",
+                    "sliderMin": 1,
+                    "sliderMax": 200,
+                    "sliderStep": 1,
+                    "sliderUnit": "Gi",
+                    "sliderExtremity": "down",
+                    "sliderExtremitySemantic": "guaranteed",
+                    "sliderRangeId": "memory"
+                }
+            }
+        },
+        "limits": {
+            "description": "max resources",
+            "type": "object",
+            "properties": {
+                "cpu": {
+                    "description": "The maximum amount of cpu",
+                    "title": "CPU",
+                    "type": "string",
+                    "default": "5000m",
+                    "render": "slider",
+                    "sliderMin": 50,
+                    "sliderMax": 10000,
+                    "sliderStep": 50,
+                    "sliderUnit": "m",
+                    "sliderExtremity": "up",
+                    "sliderExtremitySemantic": "Maximum",
+                    "sliderRangeId": "cpu"
+                },
+                "memory": {
+                    "description": "The maximum amount of memory",
+                    "title": "Memory",
+                    "type": "string",
+                    "default": "50Gi",
+                    "render": "slider",
+                    "sliderMin": 1,
+                    "sliderMax": 200,
+                    "sliderStep": 1,
+                    "sliderUnit": "Gi",
+                    "sliderExtremity": "up",
+                    "sliderExtremitySemantic": "Maximum",
+                    "sliderRangeId": "memory"
+                }
+            }
+        }
+    }
+}
 </code></pre>
 
-You now have all the relevent information to submit PR on the existing catalogs or even to create your own.
+#### How to overwrite a schema or create a new one ?
 
-Remember that a helm chart repository is nothing more than a GitHub repo with a special [github Action setup](https://github.com/marketplace/actions/helm-deploy) to publish the charts on GitHub Pages.
+You can directly create file in the values of onyxia helm charts
 
-If you are looking for a repo to start from have a look at [this one](https://github.com/codegouvfr/helm-charts), it has a directory where you can put the icons of your services.
+{% code title="onyxia-values.yaml" %}
+```yaml
+onyxia:
+  web:
+    # ...
+  api:
+    # ...
+    schemas:
+      enabled: true
+      files:
+        - relativePath: ide/resources.json
+          content: |
+            {
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "title": "Resources",
+                "description": "Your service will have at least the requested resources and never more than its limits. No limit for a resource and you can consume everything left on the host machine.",
+                "type": "object",
+                "properties": {
+                    "requests": {
+                        "description": "Guaranteed resources",
+                        "type": "object",
+                        "properties": {
+                            "cpu": {
+                                "description": "The amount of cpu guaranteed",
+                                "title": "CPU",
+                                "type": "string",
+                                "default": "100m",
+                                "render": "slider",
+                                "sliderMin": 50,
+                                "sliderMax": 10000,
+                                "sliderStep": 50,
+                                "sliderUnit": "m",
+                                "sliderExtremity": "down",
+                                "sliderExtremitySemantic": "guaranteed",
+                                "sliderRangeId": "cpu"
+                            },
+                            "memory": {
+                                "description": "The amount of memory guaranteed",
+                                "title": "memory",
+                                "type": "string",
+                                "default": "2Gi",
+                                "render": "slider",
+                                "sliderMin": 1,
+                                "sliderMax": 200,
+                                "sliderStep": 1,
+                                "sliderUnit": "Gi",
+                                "sliderExtremity": "down",
+                                "sliderExtremitySemantic": "guaranteed",
+                                "sliderRangeId": "memory"
+                            }
+                        }
+                    },
+                    "limits": {
+                        "description": "max resources",
+                        "type": "object",
+                        "properties": {
+                            "cpu": {
+                                "description": "The maximum amount of cpu",
+                                "title": "CPU",
+                                "type": "string",
+                                "default": "5000m",
+                                "render": "slider",
+                                "sliderMin": 50,
+                                "sliderMax": 10000,
+                                "sliderStep": 50,
+                                "sliderUnit": "m",
+                                "sliderExtremity": "up",
+                                "sliderExtremitySemantic": "Maximum",
+                                "sliderRangeId": "cpu"
+                            },
+                            "memory": {
+                                "description": "The maximum amount of memory",
+                                "title": "Memory",
+                                "type": "string",
+                                "default": "50Gi",
+                                "render": "slider",
+                                "sliderMin": 1,
+                                "sliderMax": 200,
+                                "sliderStep": 1,
+                                "sliderUnit": "Gi",
+                                "sliderExtremity": "up",
+                                "sliderExtremitySemantic": "Maximum",
+                                "sliderRangeId": "memory"
+                            }
+                        }
+                    }
+                }
+            }
+        - relativePath: nodeSelector.json
+          content: |
+            {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "title": "Node Selector",
+              "type": "object",
+              "properties": {
+                "disktype": {
+                  "description": "The type of disk",
+                  "type": "string",
+                  "enum": ["ssd", "hdd"]
+                },
+                "gpu": {
+                  "description": "The type of GPU",
+                  "type": "string",
+                  "enum": ["A2", "H100"]
+                }
+              },
+              "additionalProperties": false
+            }
+        - relativePath: ide/role.json
+          content: |
+            {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "title": "Role",
+              "type": "object",
+              "properties": {
+                  "enabled": {
+                      "type": "boolean",
+                      "description": "allow your service to access your namespace ressources",
+                      "default": true
+                  },
+                  "role": {
+                      "type": "string",
+                      "description": "bind your service account to this kubernetes default role",
+                      "default": "view",
+                      "hidden": {
+                          "value": false,
+                          "path": "kubernetes/enabled"
+                      },
+                      "enum": [
+                          "view"
+                      ]
+                  }
+              }
+            }
+```
+{% endcode %}

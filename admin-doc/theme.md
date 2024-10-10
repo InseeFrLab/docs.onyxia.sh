@@ -8,11 +8,11 @@ description: >-
 
 {% embed url="https://youtu.be/NrVuVXsbloA" %}
 
-The full documentation of the avalable parameter can be found here:
+The full documentation of the available parameter can be found here:
 
 {% embed url="https://github.com/InseeFrLab/onyxia/blob/main/web/.env" %}
 
-Note that your custom assets are imported into your Onyxia instance via the use of the `CUSTOM_RESOURCES` parameter, url of a ZIP archive that should contain you assets. An example is given at the top of the [`.env`](https://github.com/InseeFrLab/onyxia/blob/main/web/.env) file.
+Note that your custom assets are imported into your Onyxia instance via the use of the `CUSTOM_RESOURCES` parameter, url of a ZIP archive that should contain your assets. An example is given at the top of the [`.env`](https://github.com/InseeFrLab/onyxia/blob/main/web/.env) file.
 
 {% hint style="info" %}
 Onyxia is configured to make the the browser cache assets so they are not re-downloaded each time the user access the app.

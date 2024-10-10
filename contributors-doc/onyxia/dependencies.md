@@ -16,12 +16,6 @@ Modules marked by 🐔 are our own.
 
 We also heavily rely on [tsafe](https://github.com/garronej/tsafe). It's a collection of utilities that help write cleaner TypeScript code. It is crutial to understand at least [`assert`](https://docs.tsafe.dev/assert), [id](https://docs.tsafe.dev/id), [Equals](https://docs.tsafe.dev/equals) and [symToStr](https://docs.tsafe.dev/symtostr) to be able to contribute on the codebase.
 
-### TS-CI 🐔
-
-{% embed url="https://github.com/garronej/ts-ci" %}
-
-We try, whenever we see an opportunity for it, to publish as standalone NPM module chunks of the code we write for Onyxia-web. It help keep the complexity in check. We use TS-CI as a starter for everything we publish on NPM.
-
 ## For working on what the end user 👁
 
 Anything contained in the [src/ui](https://github.com/InseeFrLab/onyxia-web/tree/main/src/ui) directory.
@@ -90,7 +84,7 @@ It also asks to rotate the screen when the app is rendered in protrait mode. &#x
 
 ### Storybook
 
-{% embed url="https://storybook.js.org" %}
+{% embed url="https://storybook.js.org/" %}
 
 It enables us to test the graphical components in isolation. [See sources](https://github.com/InseeFrLab/onyxia/tree/main/web/src/stories).
 
@@ -189,17 +183,9 @@ The library we use for routing. It's like [react-router](https://reactrouter.com
 
 For internalization and translation.
 
-### create-react-app
+### Vite
 
-{% embed url="https://create-react-app.dev" %}
-
-{% hint style="warning" %}
-We plane to move to Vite when [Keycloakify](https://keycloakify.dev) will support it.
-{% endhint %}
-
-The project is a non-ejected [create-react-app](https://reactjs.org/docs/create-a-new-react-app.html) using [typescript template](https://create-react-app.dev/docs/getting-started#creating-a-typescript-app) (you can find [here](https://github.com/garronej/keycloakify-demo-app) the template repo that was used as a base for this project).
-
-We use [react-app-rewired](https://github.com/timarney/react-app-rewired) instead of the default `react-scripts` to be able to use custom Webpack plugins without having to eject the App. The custom webpack plugins that we use are defined here [/config-overrides.json](dependencies.md#setting-up-the-development-environnement). Currently we only one we use is [circular-dependency-plugins](https://www.npmjs.com/package/circular-dependency-plugin).
+{% embed url="https://vitejs.dev/" %}
 
 ## For working on 🧠 of the App
 

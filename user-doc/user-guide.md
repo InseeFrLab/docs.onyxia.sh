@@ -32,6 +32,10 @@ This collection of charts help users to launch many databases system. Most of th
 
 This collection of charts help users to start automation tools for their datascience activity.&#x20;
 
+{% embed url="https://github.com/InseeFrLab/helm-charts-datavisualization" %}
+
+This collection of charts helps users to launch tools to visualize and share data insights.
+
 {% hint style="info" %}
 The Onyxia user experience may be very different from one catalog of service to another. &#x20;
 
@@ -42,11 +46,11 @@ Users can edit various parameters. Onyxia do some assertion based on the charts 
 
 
 
-<figure><img src="../.gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (17).png" alt=""><figcaption></figcaption></figure>
 
 After launching a service, notes are shown to the user. He can retrieve those notes on the README button. Charts administrator should explain how to connect to the services (url , account) and what happens on deletion.
 
-<figure><img src="../.gitbook/assets/image (21).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (34).png" alt=""><figcaption></figcaption></figure>
 
 Now you want to learn how to setup your devloppement environement for day to day usage: &#x20;
 
@@ -58,7 +62,7 @@ Now you want to learn how to setup your devloppement environement for day to day
 
 Users can manage their files on S3. There is no support for rename in S3 so don't be surprise. Onyxia is educational. Any action on the S3 browser in the UI is written in a console with a cli.
 
-<figure><img src="../.gitbook/assets/image (7).png" alt=""><figcaption><p>s3 browser</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (20).png" alt=""><figcaption><p>s3 browser</p></figcaption></figure>
 
 User can do the following S3 actions :&#x20;
 
@@ -78,11 +82,11 @@ Connecting to an external S3
 
 Users can mange their secrets on Vault. There is also a cli console.
 
-<figure><img src="../.gitbook/assets/image (27).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (40).png" alt=""><figcaption></figcaption></figure>
 
 Onyxia use only a key value v2 secret engine in Vault. Users can store some secrets there and inject them in their services if configured by the helm chart.
 
-<figure><img src="../.gitbook/assets/image (20).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (33).png" alt=""><figcaption></figcaption></figure>
 
 
 

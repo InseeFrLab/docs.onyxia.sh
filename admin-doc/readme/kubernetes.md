@@ -127,7 +127,7 @@ This command will open your configured text editor, go to containers -> args and
       - --watch-ingress-without-class
 ```
 
-<figure><img src="../../.gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
 
 Save and quit. Done :tada:\
 We installed the ingress-nginx in our cluster, (but note that any other ingress controller could have been used as well). The configuration was adjusted to handle all ingress objects, even those lacking a specified class, and to employ our SSL certificate for our wildcard certificate. This strategy facilitated an effortless SSL termination, managed by the reverse proxy for both **\*.lab.my-domain.net** and **datalab.my-domain.net**, thus removing any additional SSL configuration concerns.
@@ -136,7 +136,7 @@ We installed the ingress-nginx in our cluster, (but note that any other ingress 
 {% tab title="Test on your machine" %}
 If you are on a Mac or Window computer you can install [Docker desktop](https://www.docker.com/products/docker-desktop/) then enable Kubernetes.
 
-<figure><img src="../../.gitbook/assets/image (34).png" alt=""><figcaption><p>Enabling Kubernetes in the Docker desktop App</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (47).png" alt=""><figcaption><p>Enabling Kubernetes in the Docker desktop App</p></figcaption></figure>
 
 {% hint style="warning" %}
 WARNING: If you are folowing this installating guide on an Apple Sillicon Mac, be aware that many of the services that comes by default with Onyxia like Jupyter RStudio and VSCode won't run because we do not yet compile our datacience stack for the ARM64 architecture.  \

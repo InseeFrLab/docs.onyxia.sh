@@ -1,6 +1,6 @@
-# ⬆ v7->v8
+# ⬆️ v7 -> v8
 
-{% hint style="success" %}
+{% hint style="info" %}
 You can now have comments, trailing comas and single quotes in your region and catalog parameters! See [the PR](https://github.com/InseeFrLab/onyxia-api/pull/344).
 {% endhint %}
 

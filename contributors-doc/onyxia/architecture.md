@@ -14,7 +14,11 @@
 
 * Whenever we need to interact with the infrastructure we define a port in [`src/core/port`](https://github.com/InseeFrLab/onyxia/tree/main/web/src/core/ports). A port is only a type definition. In our case the infrastructure is: the Keycloak server, the Vault server, the Minio server and a Kubernetes API (Onyxia-API).
 * In [`src/core/adapters`](https://github.com/InseeFrLab/onyxia/tree/main/web/src/core/adapters) are the implementations of the ports. For each port we should have at least two implementations, a dummy and a real one. It enabled the app to still run, be it in degraded mode, if one piece of the infrastructure is missing. Say we don’t have a Vault server we should still be able to launch containers.
-* In [`src/lib/usecases`](https://github.com/InseeFrLab/onyxia/tree/main/web/src/core/usecases) we expose APIs for the UI to consume.
+* In [`src/lib/usecases`](https://github.com/InseeFrLab/onyxia/tree/main/web/src/core/usecases) we expose APIs for the UI to consume. &#x20;
+
+The following framework is the backbone of onyxia-web, if you can familiarize yourself with it it will make working with onyxia-web much easyer.
+
+{% embed url="https://github.com/garronej/clean-architecture" %}
 
 ## In practice
 
