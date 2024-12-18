@@ -17,14 +17,6 @@
   * [🎭 Override schema for a specific instance](admin-doc/catalog-of-services/override-schema-for-a-specific-instance.md)
 * [👥 Setting up group projects](admin-doc/setting-up-group-projects.md)
 * [🔓 Security consideration](admin-doc/security-consideration.md)
-* [⬆️ Migration guides](admin-doc/migration-guides/README.md)
-  * [⬆️ v9 -> v10](admin-doc/migration-guides/v9-greater-than-v10.md)
-  * [⬆️ v8 -> v9](admin-doc/migration-guides/v8-greater-than-v9.md)
-  * [⬆️ v7 -> v8](admin-doc/migration-guides/v7-greater-than-v8.md)
-  * [⬆️ v6 -> v7](admin-doc/migration-guides/v6-greater-than-v7.md)
-  * [⬆️ v5 -> v6](admin-doc/migration-guides/v5-greater-than-v6.md)
-  * [⬆️ v4 -> v5](admin-doc/migration-guides/v4-greater-than-v5.md)
-  * [⬆️ Migrating to the new helm repo](admin-doc/migration-guides/migrating-to-the-new-helm-repo.md)
 
 ## Contributors doc
 
