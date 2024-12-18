@@ -1,4 +1,8 @@
-# 💻 Setting up your dev environment in Onyxia
+---
+icon: laptop-code
+---
+
+# Setting up your dev environment in Onyxia
 
 In this video, we guide you through setting up your development environment in Onyxia. We demonstrate how to automatically clone your Git repository, install any missing dependencies, and open a port for your development server.
 

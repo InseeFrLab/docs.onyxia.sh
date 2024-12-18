@@ -1,8 +1,9 @@
 ---
 description: Let's install ArgoCD to manage and monitor our Onyxia Datalab deployment!
+icon: octopus
 ---
 
-# 🐙 GitOps
+# GitOps
 
 {% hint style="info" %}
 At this stage of this installation process we assumes that:

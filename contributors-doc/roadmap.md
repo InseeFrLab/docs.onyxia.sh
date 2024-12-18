@@ -1,8 +1,9 @@
 ---
 description: Onyxia Project Core Team Future Developments Roadmap
+icon: road
 ---
 
-# 🎯 Roadmap
+# Roadmap
 
 Want to know what we are up to? &#x20;
 

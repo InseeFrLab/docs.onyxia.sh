@@ -1,4 +1,8 @@
-# 🤝 Community resources
+---
+icon: up-right-from-square
+---
+
+# Community resources
 
 You can find extra information on how to use Onyxia as a datascientist by checking out the community website of the french statistician workforce. It's in french though. &#x20;
 

@@ -1,5 +1,6 @@
 ---
 description: Enable S3 storage via MinIO S3
+icon: folder
 layout:
   title:
     visible: true
@@ -13,7 +14,7 @@ layout:
     visible: false
 ---
 
-# 🗃️ Data (S3)
+# Data (S3)
 
 Onyxia uses [AWS Security Token Service API](https://docs.aws.amazon.com/STS/latest/APIReference/welcome.html) to obtain S3 tokens on behalf of your users. We support any S3 storage compatible with this API. In this context, we are using [MinIO](https://min.io/), which is compatible with the Amazon S3 storage service and we demonstrate how to integrate it with Keycloak.
 

@@ -2,9 +2,10 @@
 description: >-
   Enabling a group of users to share the same Kubernetes namespace to work on
   something together.
+icon: people-group
 ---
 
-# 👥 Setting up group projects
+# Setting up group projects
 
 The user interface of onyxia enables to create projects for groups of Onyxia users. &#x20;
 

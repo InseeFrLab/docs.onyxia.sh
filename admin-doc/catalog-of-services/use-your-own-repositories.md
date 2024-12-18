@@ -1,8 +1,9 @@
 ---
 description: Declare your own repository of charts
+icon: house-flag
 ---
 
-# 🏠 Use your own repositories
+# Use your own repositories
 
 If you do not specify catalogs in your `onyxia/values.yaml,` these are the ones that are used by default: [See file](https://github.com/InseeFrLab/onyxia-api/blob/main/onyxia-api/src/main/resources/catalogs.json).
 

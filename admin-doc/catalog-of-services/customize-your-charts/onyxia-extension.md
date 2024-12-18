@@ -1,8 +1,9 @@
 ---
 description: Onyxia has his own extension of json schema
+icon: plus
 ---
 
-# 🟨 Onyxia extension
+# Onyxia extension
 
 ### \[x-onyxia] overwriteDefaultWith
 
@@ -322,8 +323,8 @@ In your values shema such a field would be defined like:
 ```
 {% endcode %}
 
-But what if you want to dynamically generate the option? For this you can use the overwriteListEnumWith x-onyxia option.  \
-For example if you need to let the user select one of the groups he belongs to you can write: &#x20;
+But what if you want to dynamically generate the option? For this you can use the overwriteListEnumWith x-onyxia option.\
+For example if you need to let the user select one of the groups he belongs to you can write:
 
 <pre class="language-json" data-title="values.schema.json"><code class="lang-json">"group": {
   "type": "string",
@@ -545,8 +546,6 @@ You may want to modify the slide bar for resources
 
 ```
 {% endcode %}
-
-
 
 <pre class="language-json" data-title="ide/resources.json"><code class="lang-json"><strong>{
 </strong>    "$schema": "http://json-schema.org/draft-07/schema#",

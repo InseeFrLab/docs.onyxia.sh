@@ -1,8 +1,9 @@
 ---
 description: The TypeScript App that runs in the browser.
+icon: sidebar
 ---
 
-# 🖥️ The Web Application
+# The Web Application
 
 This is the documentation for [InseeFrLab/onyxia -> web/](https://github.com/InseeFrLab/onyxia/tree/main/web). &#x20;
 

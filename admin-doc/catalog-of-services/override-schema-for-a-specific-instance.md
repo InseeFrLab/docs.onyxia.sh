@@ -1,10 +1,14 @@
-# 🎭 Override schema for a specific instance
+---
+icon: sliders-up
+---
+
+# Override schema for a specific instance
 
 When charts allow overwriteSchemaWith you can modify this schema at the instance level or for a specific role.
 
 ### For the whole instance
 
-You can override schemas directly in the values of Onyxia Helm Charts. In the following example, the *ide/resources.json* schema is overridden.
+You can override schemas directly in the values of Onyxia Helm Charts. In the following example, the _ide/resources.json_ schema is overridden.
 
 {% code title="onyxia-values.yaml" %}
 ```yaml
@@ -99,7 +103,7 @@ onyxia:
 
 ### For a specific role
 
-A schema can be redefined for a given role. Below, the schema for *nodeSelector.json* is overridden specifically for the `fullgpu` role. Similarly, the *ide/resources.json* schema is overridden at the whole instance.
+A schema can be redefined for a given role. Below, the schema for _nodeSelector.json_ is overridden specifically for the `fullgpu` role. Similarly, the _ide/resources.json_ schema is overridden at the whole instance.
 
 {% code title="onyxia-values.yaml" %}
 ```yaml

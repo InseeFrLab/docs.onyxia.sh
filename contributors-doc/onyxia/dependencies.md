@@ -1,8 +1,9 @@
 ---
 description: Technologies at play in Onyxia-web
+icon: gear
 ---
 
-# ⚙️ Technical stack
+# Technical stack
 
 To find your way in Onyxia, the best approach is to start by getting a surface-level understanding of the libraries that are leveraged in the project.
 
@@ -132,7 +133,7 @@ Checkout [the helm chart](https://github.com/InseeFrLab/paris-sspcloud/blob/812b
 * Then, in the code the variable can be accessed [like this](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/src/app/libApi/LibProvider.tsx#L32).
 
 {% hint style="warning" %}
-Please try not to access the environment variable to liberally through out the code. In principle they should only be accessed [here](https://github.com/InseeFrLab/onyxia-web/blob/main/src/app/libApi/LibProvider.tsx). We try to keep things [pure](https://en.wikipedia.org/wiki/Pure\_function) as much as possible.
+Please try not to access the environment variable to liberally through out the code. In principle they should only be accessed [here](https://github.com/InseeFrLab/onyxia-web/blob/main/src/app/libApi/LibProvider.tsx). We try to keep things [pure](https://en.wikipedia.org/wiki/Pure_function) as much as possible.
 {% endhint %}
 
 {% embed url="https://youtu.be/JaX14cborxE" %}

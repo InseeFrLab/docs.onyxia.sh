@@ -1,4 +1,8 @@
-# 🔓 Vault
+---
+icon: vault
+---
+
+# Vault
 
 {% hint style="info" %}
 Vault is also used by Onyxia as the persistance layer for all saved configuration. If Vault is not configured, all user settings will be stored in the browser's local storage.
@@ -6,7 +10,7 @@ Vault is also used by Onyxia as the persistance layer for all saved configuratio
 
 Onyxia-web use vault as a storage for two kinds of secrets:\
 1\. secrets or information generate by Onyxia to store differents values (S3 sources configuration)\
-2\. user secrets\
+2\. user secrets\\
 
 **Onyxia use the KV version 2 secret engine.**\
 **Vault must be configured with JWT or OIDC authentification methods.**

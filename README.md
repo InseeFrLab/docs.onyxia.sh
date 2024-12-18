@@ -1,5 +1,6 @@
 ---
 description: Convinced by Onyxia? Let's see how you can get your own instance today!
+icon: sign-posts-wrench
 layout:
   title:
     visible: true
@@ -13,7 +14,7 @@ layout:
     visible: false
 ---
 
-# 🏁 Install
+# Install
 
 {% hint style="info" %}
 ## Oneliner

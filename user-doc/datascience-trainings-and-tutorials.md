@@ -1,4 +1,8 @@
-# 🎓 Datascience Trainings and Tutorials
+---
+icon: chalkboard-user
+---
+
+# Datascience Trainings and Tutorials
 
 The Onyxia team maintain a catalog of training and tutorials with several practical exercices that can be performed on an Onyxia instance! &#x20;
 

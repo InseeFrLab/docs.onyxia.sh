@@ -1,4 +1,8 @@
-# 📐 Architecture
+---
+icon: angle
+---
+
+# Architecture
 
 ## Main rules
 

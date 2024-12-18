@@ -1,8 +1,9 @@
 ---
 description: Unserstand how Onyxia catalogs work and potentially create your own!
+icon: microscope
 ---
 
-# 🔬 Catalog of services
+# Catalog of services
 
 Every Onyxia instance may or may not have it's own catalog. There are four default catalogs :
 

@@ -1,14 +1,15 @@
 ---
 description: This section describes JSON Schema support in the launcher.
+icon: bagel
 ---
 
-# 🟩 Json schema support
+# JSON Schema Support
 
 Onyxia uses JSON Schema to dynamically create its service launch interface, often referred to as the "launcher." By defining parameters and configurations in JSON Schema, Onyxia can automatically generate forms and interfaces that guide users through setting up and deploying services.
 
 The JSON Schema draft Onyxia follows is largely based on [Draft 7](https://json-schema.org/specification-links.html#draft-7), but it only implements a subset of the specification. This means that while Onyxia’s schema supports many core features of Draft 7—like data types, required fields, and basic validations—it may not include every feature or validation option found in the full Draft 7 specification. This subset approach keeps the schema manageable and efficient for the specific needs of Onyxia's interface generation and deployment configurations. In the following section, you’ll also see that Onyxia adds additional semantic layers.
 
-## **Summary**&#x20;
+## **Summary**
 
 * **String**: Supports plain text input
 * **Number / Integer**: Allows numerical input.
@@ -26,10 +27,9 @@ In Onyxia’s JSON Schema implementation, string elements include various `rende
 
 1.  **Dropdown Selection (`render: "list"`)**: Displays a dropdown menu for selecting from a set of predefined values, which is useful for fields like software versions or configurations.
 
-
     Example with schema validation :
 
-    ```json 
+    ```json
     {
       "type": "string",
       "enum": ["version1", "version2", "version3"],
@@ -49,7 +49,6 @@ In Onyxia’s JSON Schema implementation, string elements include various `rende
       "description": "Choose a software version"
     }
     ```
-
 2.  **Password Field (`render: "password"`)**: Provides a masked input field to secure sensitive data, such as passwords or API keys.
 
     ```json
@@ -81,4 +80,3 @@ In Onyxia’s JSON Schema implementation, string elements include various `rende
       "description": "Set the CPU limit"
     }
     ```
-

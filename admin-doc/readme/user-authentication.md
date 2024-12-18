@@ -1,5 +1,6 @@
 ---
 description: Using Keycloak to enable user authentication
+icon: key
 layout:
   title:
     visible: true
@@ -13,7 +14,7 @@ layout:
     visible: false
 ---
 
-# 🔑 User authentication
+# User authentication
 
 Let's setup Keycloak to enable users to create account and login to our Onyxia.
 

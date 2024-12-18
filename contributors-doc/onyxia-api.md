@@ -1,8 +1,9 @@
 ---
 description: The backend REST API in Java
+icon: webhook
 ---
 
-# 🔌 The REST API
+# The REST API
 
 This is the documentation for [InseeFrLab/onyxia -> api/](https://github.com/InseeFrLab/onyxia-api). &#x20;
 

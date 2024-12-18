@@ -1,8 +1,9 @@
 ---
 description: Using Onyxia (as a data scientist)
+icon: joystick
 ---
 
-# 🕹️ Getting started with Onyxia
+# Getting started with Onyxia
 
 {% hint style="success" %}
 See also [https://docs.sspcloud.fr](https://docs.sspcloud.fr/)
