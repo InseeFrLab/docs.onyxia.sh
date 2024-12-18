@@ -13,7 +13,7 @@ layout:
     visible: false
 ---
 
-# 🛳️ Kubernetes
+# 🚢 Kubernetes
 
 First you'll need a Kubernetes cluster. If you have one already you can skip and directly go to [the Onyxia instalation section](gitops.md).
 

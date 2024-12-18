@@ -3,7 +3,7 @@
 ## Admin doc
 
 * [🏁 Install](README.md)
-  * [🛳️ Kubernetes](admin-doc/readme/kubernetes.md)
+  * [🚢 Kubernetes](admin-doc/readme/kubernetes.md)
   * [🐙 GitOps](admin-doc/readme/gitops.md)
   * [🔑 User authentication](admin-doc/readme/user-authentication.md)
   * [🗃️ Data (S3)](admin-doc/readme/data-s3.md)
@@ -32,7 +32,7 @@
   * [⚙️ Technical stack](contributors-doc/onyxia/dependencies.md)
   * [📐 Architecture](contributors-doc/onyxia/architecture.md)
 * [🔌 The REST API](contributors-doc/onyxia-api.md)
-* [🛣️ Roadmap](contributors-doc/roadmap.md)
+* [🎯 Roadmap](contributors-doc/roadmap.md)
 
 ## user doc
 
