@@ -116,7 +116,7 @@ onyxia:
       enabled: true
       roles:
         - roleName: fullgpu
-          files
+          files:
             - relativePath: nodeSelector.json
               content: |
                 {
