@@ -17,7 +17,7 @@ We can proceed with manually installing various services via Helm to set up the 
 
 To clarify, using ArgoCD is merely an approach that we recommend, but it is by no means a requirement. Feel free to manually helm install the different services using the `values.yaml` from [InseeFrLab/onyxia-ops](https://github.com/InseeFrLab/onyxia-ops)!
 
-Let's install ArgoCD on the our cluster.
+Let's install ArgoCD on the cluster.
 
 ```bash
 DOMAIN=my-domain.net
