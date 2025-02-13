@@ -1,6 +1,6 @@
 ---
-description: Using Keycloak to enable user authentication
 icon: key
+description: Using Keycloak to enable user authentication
 layout:
   title:
     visible: true
@@ -66,9 +66,8 @@ You can now login to the **administration console** of **https://auth.lab.my-dom
       4. SSO Session Max Remember Me: 14 days
 2. Create a client with client ID "onyxia"
    1. _Root URL_: **https://datalab.my-domain.net/**
-   2. _Valid redirect URIs_: **https://datalab.my-domain.net/\***
-   3. _Web origins_: **\***
-   4. Login theme: **onyxia-web**
+   2. _Valid redirect URIs_: **https://datalab.my-domain.net/**
+   3. Login theme: **onyxia-web**
 3. In **Authentication** (on the left panel) -> Tab **Required Actions** enable and set as default action **Therms and Conditions.**
 
 Now you want to ensure that the username chosen by your users complies with Onyxia requirement (only alphanumerical characters) and define a list of email domain allowed to register to your service.
