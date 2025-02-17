@@ -60,10 +60,12 @@ You can now login to the **administration console** of **https://auth.lab.my-dom
       1. _Internationalization_: **Enabled**
       2. _Supported locales_: \<Select the languages you wish to support>
    6. On the tab **Session**.
-      1. SSO Session Idle: [14 days](#user-content-fn-2)[^2]
-      2. SSO Session Max: [14 days](#user-content-fn-3)[^3]
-      3. SSO Session Idle Remember Me: [14 days](#user-content-fn-4)[^4]
-      4. SSO Session Max Remember Me: 14 days
+      * Users **without** "Remember Me" will need to log in **every 2 weeks**:
+        * Set **Session idle timeout**: `14 days`.
+        * Set **Session max idle timeout**: `14 days`.
+      * Users **who checked "Remember Me"** should stay logged in for **1 year**:
+        * Set **Session idle timeout (Remember Me)**: `365 days`.
+        * Set **Session max idle timeout (Remember Me)**: `365 days`.
 2. Create a client with client ID "onyxia"
    1. _Root URL_: **https://datalab.my-domain.net/**
    2. _Valid redirect URIs_: **https://datalab.my-domain.net/**
@@ -72,7 +74,7 @@ You can now login to the **administration console** of **https://auth.lab.my-dom
 
 Now you want to ensure that the username chosen by your users complies with Onyxia requirement (only alphanumerical characters) and define a list of email domain allowed to register to your service.
 
-Go to **Realm Settings** (on the left panel) -> Tab **User Profile** (this tab shows up only if User Profile is enabled in the General tab and you can enable user profile only if you have started Keycloak with `-Dkeycloak.profile=preview)` -> **JSON Editor**.
+Go to **Realm Settings** (on the left panel) -> Tab **User Profile** -> **JSON Editor**.
 
 Now you can edit the file as suggested in the following DIFF snippet. Be mindful that in this example we only allow emails @gmail.com and @hotmail.com to register you want to edit that.
 
@@ -140,12 +142,3 @@ Next step in the installation proccess it to enable all the S3 related features 
 {% endcontent-ref %}
 
 [^1]: Search/replace CHANGEME
-
-[^2]: Here, the approach depends on the security policy you wish to implement. If you prefer requiring users to log in again each time they navigate to your Onyxia instance, consider setting a shorter duration, such as 30 minutes. Be aware that setting it to 30 minutes means users will be automatically logged out if they remain inactive within the app for this period.  \
-    [https://github.com/InseeFrLab/onyxia/assets/6702424/343f74e1-1f08-43e3-8a1d-ce92f8dedc2c\
-    ](https://github.com/InseeFrLab/onyxia/assets/6702424/343f74e1-1f08-43e3-8a1d-ce92f8dedc2c)
-
-[^3]: You'll likely want to set this value high. It determines the maximum duration for a continuously active user session. If a user is logged in and actively using the app, there's no need to disconnect them. &#x20;
-
-[^4]: Modify this setting if you wish to apply a different policy for users logging in with the "remember me" option selected. In "remember me" mode, users can close their browser completely and will not need to log in again on their next visit, provided the session has not expired.  \
-    [https://github.com/InseeFrLab/onyxia/assets/6702424/93b139cf-b0e7-4e4b-9811-bf9a9deaf144](https://github.com/InseeFrLab/onyxia/assets/6702424/93b139cf-b0e7-4e4b-9811-bf9a9deaf144)
