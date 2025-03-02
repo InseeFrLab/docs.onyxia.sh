@@ -68,7 +68,7 @@ onyxia:
       
       # Optional: This parameter is to be provided if you want your user to be
       # automatically logged out after a set period of inactivity.  
-      oidc.idleSessionLifetimeInSeconds: n
+      oidc.idleSessionLifetimeInSeconds: "..."
 
       # Optional: Onyxia API fetches `<issuer-uri>/.well-known/openid-configuration` 
       # to retrieve JWKs  for validating Access Tokens (used as Authorization Bearers).  
@@ -213,31 +213,19 @@ Replace the default content with the following JavaScript code:
 ```js
 function toRFC1123(input) {
   if (!input) return "";
-
-  // Convert to lowercase
   let output = input.toLowerCase();
-
-  // Replace non-alphanumeric and non-hyphen characters with hyphens
   output = output.replace(/[^a-z0-9-]/g, "-");
-
-  // Ensure it starts and ends with an alphanumeric character
   output = output.replace(/^-+|-+$/g, "");
-
-  // Trim to at most 63 characters
   if (output.length > 63) {
     output = output.substring(0, 63);
-    // Ensure the last character is alphanumeric (remove trailing hyphen)
     output = output.replace(/-+$/, "");
   }
-
   return output;
 }
 
 exports.onExecutePostLogin = async (event, api) => {
   const sub = event.user.user_id;
-
   if (sub) {
-    // Add the transformed claim to the access token
     api.accessToken.setCustomClaim("onyxia-username", toRFC1123(sub));
   }
 };
@@ -268,6 +256,8 @@ onyxia:
       oidc.clientID: "<Onyxia Application Client ID>"  
       oidc.username-claim: "onyxia-username"
       oidc.audience: "https://datalab.my-domain.net/api"
+      # If you have configured Auto Logout:
+      oidc.idleSessionLifetimeInSeconds: "300"
 ```
 {% endcode %}
 {% endtab %}
@@ -305,7 +295,7 @@ type OidcConfiguration = {
     extraQueryParams?: string;
     scope?: string;
     audience?: string;
-    idleSessionLifetimeInSeconds?: string;
+    idleSessionLifetimeInSeconds?: number;
 };
 ```
 
