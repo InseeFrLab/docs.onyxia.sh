@@ -1,3 +1,7 @@
+---
+icon: folder
+---
+
 # S3 Configuration
 
 Configuration parameters for integrating your Onyxia service with S3.
