@@ -4,37 +4,37 @@ icon: key-skeleton
 
 # OpenID Connect Configuration
 
-The instalation guides instruct you on how to instantiate a new Keycloak to enable authentication on your datalab.
+The installation guides explain how to set up a new Keycloak instance to enable authentication on your datalab.
 
-However chance are your organization already have an existing IAM system in place in your organization. This guide covers how to integrate Onyxia with various commonly used OIDC providers, namely [Keycloak](https://www.keycloak.org/), [Auth0](https://auth0.com/) and [Microsoft Entra ID](https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id). &#x20;
+However, chances are that your organization already has an existing IAM system in place. This guide covers how to integrate Onyxia with various commonly used OIDC providers, including [Keycloak](https://www.keycloak.org/), [Auth0](https://auth0.com/), and [Microsoft Entra ID](https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id). &#x20;
 
-## Overview of the avalible parameters
+## Overview of Available Parameters
 
-Before diving into specifc OIDC providers, review the available parameters. &#x20;
+Before diving into specific OIDC providers, review the available parameters. &#x20;
 
 {% code title="apps/onyxia/values.yaml" %}
 ```yaml
 onyxia:
   api:
     env:
-      # Mandatory and no other mode is currently supported.
+      # Mandatory and no other authentication mode is currently supported.
       authentication.mode: "openidconnect"
 
       # Mandatory: The issuer URI of the OIDC provider.  
       oidc.issuer-uri: "..."
 
-      # Mandatory: The client ID of the OIDC client that represents the Onyxia Web Application.
+      # Mandatory: The client ID of the OIDC client representing the Onyxia Web Application.
       oidc.clientID: "..."
 
       # Mandatory: Defines which claim in the Access Token's JWT serves as the unique 
       # user identifier.  
       # This identifier must contain only lowercase alphanumeric characters and `-`. 
-      # More specificaly it must complies with the RFC 1123: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#dns-label-names
+      # Specifically, it must comply with RFC 1123: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#dns-label-names
       #
-      # - If your usernames conform to this constraint, you can use 
+      # - If your usernames already conform to this constraint, you can use 
       #   `"preferred_username"` for a more human-readable identifier.
-      # - If your usernames may contain special characters, use another claim 
-      #   like `"sub"` (Make sure the `sub` values actually complies with RFC 1123).  
+      # - If usernames contain special characters, use another claim 
+      #   such as `"sub"` (Ensure that the `sub` values comply with RFC 1123).  
       #
       oidc.username-claim: "..."
 
@@ -48,16 +48,15 @@ onyxia:
       # Example: If using Keycloak with Google OAuth as an identity provider, you might want  
       # to preselect Google as the login option using `"kc_idp_hint=google"`.  
       # 
-      # ⚠️ This string is appended as-is. Ensure it's properly URI-encoded.  
+      # ⚠️ This string is appended as-is. Ensure it is properly URI-encoded.  
       # If adding multiple parameters, separate them with `&`.  
       #
       # Example: `"foo=foo%20value&bar=bar%20value"`
       oidc.extra-query-params: "..."
 
-      # Optional: Specifies the expected audience value in the Access Token.  
+      # Optional: Specifies the expected audience (`aud`) value in the Access Token.  
       # If provided, Onyxia will validate the `aud` claim in the token and reject 
-      # requests where it does not match (or include an entries that match if it's 
-      # an array).
+      # requests where it does not match (or does not include a matching entry if `aud` is an array).
       oidc.audience: "..."
 
       # Optional: Specifies the OIDC scopes requested by the Onyxia client.  
@@ -66,18 +65,15 @@ onyxia:
       # regardless of this setting.
       oidc.scope: "..."
       
-      # Optional: This parameter is to be provided if you want your user to be
-      # automatically logged out after a set period of inactivity.  
+      # Optional: Automatically logs out users after a set period of inactivity.  
       oidc.idleSessionLifetimeInSeconds: "..."
 
-      # Optional: Onyxia API fetches `<issuer-uri>/.well-known/openid-configuration` 
-      # to retrieve JWKs  for validating Access Tokens (used as Authorization Bearers).  
+      # Optional: The Onyxia API fetches `<issuer-uri>/.well-known/openid-configuration` 
+      # to retrieve JWKs for validating Access Tokens (used as Authorization Bearers).  
       #
       # ⚠️ In development, if you lack proper root certificates, you can disable TLS verification.  
-      # However, in production, it's recommended to mount the correct `cacerts` instead.
+      # However, in production, it is strongly recommended to mount the correct `cacerts` instead.
       oidc.skip-tls-verify: "true|false"
-      
-
 ```
 {% endcode %}
 
@@ -89,36 +85,40 @@ onyxia:
 {% tab title="Keycloak" %}
 ### Onyxia Login Theme
 
-We ship [a custom Login Keycloak theme](https://youtu.be/NrVuVXsbloA?si=fDCPpXUIpSlCHsYw\&t=405) with each version of Onyxia. You can dowload it [on the relase page](https://github.com/InseeFrLab/onyxia/releases). You will find specific instruction on how to load the theme in your onyxia instance [in this guide](https://docs.keycloakify.dev/deploying-your-theme). If you are using Helm for deploying Keycloak as instructed in the instalation guide[ here are the relevent lines](https://github.com/InseeFrLab/onyxia-ops/blob/35f86c848a3ddeef6bfe4a9a4f41e5d516eb66db/apps/keycloak/values.yaml#L60-L79) in the Onyxia-ops repo.
+Each version of Onyxia ships with [a custom Keycloak login theme](https://youtu.be/NrVuVXsbloA?si=fDCPpXUIpSlCHsYw\&t=405). You can download it from the [release page](https://github.com/InseeFrLab/onyxia/releases). Specific instructions for loading the theme in your Onyxia instance can be found [in this guide](https://docs.keycloakify.dev/deploying-your-theme).  
 
-### Deciding wich claim of the Access Token to use as unique user identifier
+If you are deploying Keycloak using Helm, as instructed in the installation guide, [here are the relevant lines](https://github.com/InseeFrLab/onyxia-ops/blob/35f86c848a3ddeef6bfe4a9a4f41e5d516eb66db/apps/keycloak/values.yaml#L60-L79) in the Onyxia-ops repository.
 
-Onyxia needs to have an unique identifier for your users. To configure this you tell onyxia in wich claim of the Access Token issued by your provider onyxia should find the unique identifier. &#x20;
+### Choosing the Unique User Identifier Claim
 
-It is nice to be able to use the `preffered_usename` as identifier however if you want to do so you must ensure that it matches the [RFC 1123](https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#dns-label-names) that is to say that it contain only lowercase alphanumerical character and -.\
-\
-This is a pretty restrictive format. If you already have an existing userbase you can't use `preferred_username`, so you have two option, either configure a custom mapper in your keycloak instance so that a complying claim is generated on your access token, or simply use `"sub"`.
+Onyxia requires a unique user identifier. You must specify which claim in the Access Token should be used for this purpose.
 
-On the other hand, if you are starting with no existing user you can define a rexept on the User Profile Attributes of "username" so that users are forced to pick a username that comply with the restrictions.
+Ideally, you can use `preferred_username` as an identifier, but this requires ensuring it complies with [RFC 1123](https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#dns-label-names). This means it must contain only lowercase alphanumeric characters and `-`. 
 
-There are info on how to do so in [the installation guide](https://docs.onyxia.sh/admin-doc/readme/user-authentication) (search for the word "pattern").
+Since this format is restrictive, if you already have an existing user base, `preferred_username` may not be an option. In that case, you have two alternatives:
+- **Define a custom claim**: Configure a Keycloak mapper to generate an RFC 1123-compliant claim in the Access Token.
+- **Use `"sub"`**: This claim is guaranteed to be unique and always present, but ensure that the `sub` values comply with RFC 1123.
 
-### Getting specific instuction on how to configure Keycloak.
+If you are starting fresh with no existing users, you can enforce a regex pattern in the **User Profile Attributes** to require usernames that comply with the restriction.
 
-Beyond what's explained in the installation guide, if you want more generic instruction on how to configure a Keycloak public Keycloak OIDC client like Onyxia you can refer to the following guide, it comes with a simple project to let you test your configuration.
+More details can be found in [the installation guide](https://docs.onyxia.sh/admin-doc/readme/user-authentication) (search for "pattern").
 
-This guide is generic, in the context of Onyxia you here are the sugested substitutions:
+### Configuring Keycloak
+
+Beyond what's covered in the installation guide, if you need a more general tutorial on setting up a public Keycloak OIDC client like Onyxia, refer to the following guide. It includes a test project to validate your configuration.
+
+For Onyxia, use these substitutions in the guide:
 
 * **\<KC\_DOMAIN>**: `auth.lab.my-domain.net`
-* **\<KC\_RELATIVE\_PATH>:** `/auth`
+* **\<KC\_RELATIVE\_PATH>**: `/auth`
 * **\<REALM\_NAME>**: `datalab`
-* **\<APP\_DOMAIN>:** `datalab.my-domain.net`
+* **\<APP\_DOMAIN>**: `datalab.my-domain.net`
 * **\<BASE\_URL>**: `/`
 * **\<DEV\_PORT>**: `5173`
 
 {% embed url="https://docs.oidc-spa.dev/providers-configuration/keycloak" %}
 
-Here is an overview of what your onyxia values.yaml should look like:
+Here is an overview of what your Onyxia `values.yaml` should look like:
 
 {% code title="apps/onyxia/values.yaml" %}
 ```yaml
@@ -131,23 +131,23 @@ onyxia:
       # Example: "onyxia"
       oidc.clientID: "<ONYXIA_CLIENT_ID>"
       # Examples:
-      # `"preferred_username"` if you have configured a regexp for the username
-      # `"my-custom-claim"`    if you have setup a custom mapper.
-      # `"sub"`                will always work
+      # `"preferred_username"` if a regex pattern is enforced for usernames.
+      # `"my-custom-claim"`    if a custom Keycloak mapper is configured.
+      # `"sub"`                always works and is unique.
       oidc.username-claim: "..."
 ```
 {% endcode %}
 {% endtab %}
 
 {% tab title="Microsoft Entra ID" %}
-Follow the following guide for instruction on how to configure an Entra ID application for Onyxia.
+Follow this guide to configure a Microsoft Entra ID application for Onyxia.
 
-This guide is generic, in the context of Onyxia, here are the recommended substitution:
+For Onyxia, use these substitutions:
 
-* "My App" -> "Onyxia"
-* "My App - API" -> "Onyxia - API"
-* "api://my-app-api" -> "api://onyxia-api"
-* "https://my-app.com/" -> "https://datalab.my-domain.net/"
+* `"My App"` → `"Onyxia"`
+* `"My App - API"` → `"Onyxia - API"`
+* `"api://my-app-api"` → `"api://onyxia-api"`
+* `"https://my-app.com/"` → `"https://datalab.my-domain.net/"`
 
 {% embed url="https://docs.oidc-spa.dev/providers-configuration/microsoft-entra-id" %}
 
@@ -161,90 +161,72 @@ onyxia:
       authentication.mode: "openidconnect"
       oidc.issuer-uri: "https://login.microsoftonline.com/<Directory (tenant) ID (Onyxia)>/v2.0"
       oidc.clientID: "<Application (client) ID (Onyxia)>"
-      # ⚠️ Do **not** use `"sub"` or `"upn"` since they may contain 
-      # non-alphanumeric characters.  
+      # ⚠️ Do **not** use `"sub"` or `"upn"` as they may contain 
+      # non-alphanumeric characters.
       oidc.username-claim: "oid"
       # Example: "profile api://onyxia-api/access_as_user"
       oidc.scope: "profile <Application ID URI (Onyxia - API)>/<scope name (usually access_as_user)>"
       # Example: "api://onyxia-api"
-      onyxia.audience: "<Application ID URI (Onyxia - API)>"
+      oidc.audience: "<Application ID URI (Onyxia - API)>"
 ```
 {% endcode %}
 {% endtab %}
 
 {% tab title="Auth0" %}
-Follow the following guide for instruction on how to configure an Entra ID application for Onyxia.
+Follow this guide to configure an Auth0 application for Onyxia.
 
-This guide is generic, in the context of Onyxia, here are the recommended substitution:
+For Onyxia, use these substitutions:
 
-* "My App" -> "Onyxia"
-* **\<APP\_DOMAIN>:** `datalab.my-domain.net`
-* **\<BASE\_URL>**: `/`
-* **\<DEV\_PORT>**: `5173`
-* "My App - API" -> "Onyxia - API"
-* `https://myapp.my-company.com/api` -> `https://datalab.my-domain.net/api`
-* auth.my-company.com -> auth.my-domain.net
+* `"My App"` → `"Onyxia"`
+* **\<APP\_DOMAIN>** → `datalab.my-domain.net`
+* **\<BASE\_URL>** → `/`
+* **\<DEV\_PORT>** → `5173`
+* `"My App - API"` → `"Onyxia - API"`
+* `https://myapp.my-company.com/api` → `https://datalab.my-domain.net/api`
+* `"auth.my-company.com"` → `"auth.my-domain.net"`
 
-{% embed url="https://docs.oidc-spa.dev/providers-configuration/microsoft-entra-id" %}
+{% embed url="https://docs.oidc-spa.dev/providers-configuration/auth0" %}
 
-### Generating an RFC 1123 Compliant Claim in the Access Token
+### Generating an RFC 1123-Compliant Claim in the Access Token
 
-By default, Auth0 does not issue any claim that Onyxia can use as a unique user identifier, so you need to create one.\
-This can be achieved by defining a **custom claim** in the access token using an Auth0 **Trigger Action**.
+By default, Auth0 does not issue a claim that Onyxia can use as a unique user identifier. You must create one by defining a **custom claim** in the access token using an Auth0 **Trigger Action**.
 
 #### Steps to Create the `onyxia-username` Claim
 
-Follow these steps to configure Auth0 to include a **RFC 1123-compliant** identifier in your access token.
-
-1️⃣ Create a Custom Action: &#x20;
-
+1️⃣ **Create a Custom Action**:  
 1. Go to **Auth0 Dashboard** → **Actions** → **Library**.
 2. Click **Create Action**.
-3. Set the following values:
-   * **Name**: `GenerateOnyxiaUsername`
-   * **Trigger**: **Post Login**
-   * **Runtime**: `Node 22`
+3. Set:
+   - **Name**: `GenerateOnyxiaUsername`
+   - **Trigger**: **Post Login**
+   - **Runtime**: `Node 22`
 4. Click **Create**.
 
-2️⃣ Add the Custom Code
-
-Replace the default content with the following JavaScript code:
+2️⃣ **Add the Custom Code**:  
+Replace the default content with:
 
 ```js
 function toRFC1123(input) {
   if (!input) return "";
-  let output = input.toLowerCase();
-  output = output.replace(/[^a-z0-9-]/g, "-");
-  output = output.replace(/^-+|-+$/g, "");
-  if (output.length > 63) {
-    output = output.substring(0, 63);
-    output = output.replace(/-+$/, "");
-  }
-  return output;
+  let output = input.toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/^-+|-+$/g, "");
+  return output.length > 63 ? output.substring(0, 63).replace(/-+$/, "") : output;
 }
 
 exports.onExecutePostLogin = async (event, api) => {
   const sub = event.user.user_id;
-  if (sub) {
-    api.accessToken.setCustomClaim("onyxia-username", toRFC1123(sub));
-  }
+  if (sub) api.accessToken.setCustomClaim("onyxia-username", toRFC1123(sub));
 };
 ```
 
-3️⃣ Deploy and Activate the Action
-
+3️⃣ **Deploy and Activate the Action**:  
 1. Click **Deploy**.
-2. Navigate to **Auth0 Dashboard** → **Actions** → **Triggers** → **Post Login**.
-3. Drag and drop the newly created `GenerateOnyxiaUsername` action into the flow.
+2. Go to **Auth0 Dashboard** → **Actions** → **Triggers** → **Post Login**.
+3. Drag & drop `GenerateOnyxiaUsername` into the flow.
 4. Click **Apply Changes**.
 
-Now your access token should be generated with an `onyxia-username` claim!
+Now, your access token will include the `onyxia-username` claim.
 
-<figure><img src="../.gitbook/assets/image (52).png" alt="" width="375"><figcaption><p>Preview of the decoded JWT of the Access Token issued by Auth0<br>with the custom action enabled when previewed with the<br>test app of the oidc-spa guide</p></figcaption></figure>
-
-### Final configuration
-
-Here is what your configuration should look like:
+### Final Configuration
 
 {% code title="apps/onyxia/values.yaml" %}
 ```yaml
@@ -256,18 +238,14 @@ onyxia:
       oidc.clientID: "<Onyxia Application Client ID>"  
       oidc.username-claim: "onyxia-username"
       oidc.audience: "https://datalab.my-domain.net/api"
-      # If you have configured Auto Logout:
+      # Optional: Auto logout after inactivity.
       oidc.idleSessionLifetimeInSeconds: "300"
 ```
 {% endcode %}
 {% endtab %}
 
 {% tab title="Other" %}
-If you are using another OIDC provider and you have issue configuring Onyxia to work with it. Please reach out [on Slack](https://join.slack.com/t/3innovation/shared_invite/zt-2skhjkavr-xO~uTRLgoNOCm6ubLpKG7Q) we'll be happy to shedule a call and help with the integration.&#x20;
-
-Here are, however some generic instruction on how to create an OIDC client for Onyxia.
-
-In the context of Onyxia, `https://my-app.com/` is `https://datalab.my-domain.net/`.
+If you're using another OIDC provider and need help configuring Onyxia, reach out [on Slack](https://join.slack.com/t/3innovation/shared_invite/zt-2skhjkavr-xO~uTRLgoNOCm6ubLpKG7Q). We’ll be happy to schedule a call and assist with the integration. &#x20;
 
 {% embed url="https://docs.oidc-spa.dev/providers-configuration/other" %}
 {% endtab %}
@@ -303,7 +281,7 @@ If no `oidcConfiguration` is provided for a service, Onyxia will **reuse its own
 and the same Access Token for authentication. However, it is **recommended** to provide\
 a **separate client ID** for each service to improve access control and security.
 
-Example configuration in `values.yaml`:
+### Example Configuration in `values.yaml`
 
 {% code title="" %}
 ```yaml
@@ -342,13 +320,17 @@ onyxia:
 ```
 {% endcode %}
 
-⚠ ️ Important: Consistency of Claims Across Services:
+---
+
+⚠ **Important: Consistency of Claims Across Services**
 
 When configuring OIDC for Onyxia, you define specific claims that indicate where to find\
 the **user identifier**, **groups**, and **roles** within the Access Token's JWT.
 
 These claims **cannot be configured separately for each service** Onyxia interacts with (e.g., S3, Vault, Kubernetes API).\
 They must remain **consistent across all OIDC-enabled services** to ensure proper authentication and authorization.
+
+### Ensuring Claim Consistency Across Services
 
 When a user logs in, the OIDC provider issues an Access Token for the `onyxia` client.\
 This token includes claims such as:
@@ -358,17 +340,17 @@ This token includes claims such as:
   "sub": "abcd1234",
   "preferred_username": "jhondoe",
   "groups": [ "funathon", "spark-lab" ],
-  "roles": [ "vip", "admin-keycloak" ],
+  "roles": [ "vip", "admin-keycloak" ]
 }
 ```
 
-If you have configured `oidc.username-claim: "preferred_username"` in the main Onyxia configuration,\
-Onyxia expects that all other services it interacts with—such as `onyxia-minio`, `onyxia-vault`, and `onyxia-k8s`—\
-will also receive Access Tokens where the **same claim (`preferred_username`) exists and holds the same value**.
+If `oidc.username-claim: "preferred_username"` is configured in Onyxia’s main configuration,\
+then all services it connects to—such as `onyxia-minio`, `onyxia-vault`, and `onyxia-k8s`—\
+**must also receive Access Tokens where the `preferred_username` claim exists and holds the same value**.
 
-To avoid any issue, **all OIDC clients** (`onyxia`, `onyxia-minio`, `onyxia-vault`, `onyxia-k8s`)\
+To prevent issues, **all OIDC clients** (`onyxia`, `onyxia-minio`, `onyxia-vault`, `onyxia-k8s`)\
 should be configured within **the same SSO realm** in your OIDC provider.\
-This ensures that each issued Access Token follows the same claim structure and contains\
+This ensures that every issued Access Token follows the same claim structure and contains\
 consistent values for the same user.
 
 If you're unsure whether your setup meets this requirement, **check the JWT of each Access Token**\
