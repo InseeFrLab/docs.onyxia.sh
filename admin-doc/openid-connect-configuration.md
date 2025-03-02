@@ -4,13 +4,13 @@ icon: key-skeleton
 
 # OpenID Connect Configuration
 
-The installation guides explain how to set up a new Keycloak instance to enable authentication on your datalab.
+[The installation guide](readme/user-authentication.md) explain how to set up a new [Keycloak](https://www.keycloak.org/) instance to enable authentication on your datalab.
 
-However, chances are that your organization already has an existing IAM system in place. This guide covers how to integrate Onyxia with various commonly used OIDC providers, including [Keycloak](https://www.keycloak.org/), [Auth0](https://auth0.com/), and [Microsoft Entra ID](https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id). &#x20;
+However, chances are that your organization already has an existing IAM system in place. This guide covers how to integrate Onyxia with various commonly used OIDC providers, including [Keycloak](https://www.keycloak.org/), [Auth0](https://auth0.com/), and [Microsoft Entra ID](https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id).
 
 ## Overview of Available Parameters
 
-Before diving into specific OIDC providers, review the available parameters. &#x20;
+Before diving into specific OIDC providers, review the available parameters.
 
 {% code title="apps/onyxia/values.yaml" %}
 ```yaml
@@ -39,6 +39,7 @@ onyxia:
       oidc.username-claim: "..."
 
       # Optional: Defaults to `"groups"`. Defines which claim represents user groups.
+      # See: https://docs.onyxia.sh/admin-doc/setting-up-group-projects
       oidc.groups-claim: "..."
 
       # Optional: Defaults to `"roles"`. Defines which claim represents user roles.
@@ -83,27 +84,28 @@ onyxia:
 
 {% tabs %}
 {% tab title="Keycloak" %}
-### Onyxia Login Theme
+#### Onyxia Login Theme
 
-Each version of Onyxia ships with [a custom Keycloak login theme](https://youtu.be/NrVuVXsbloA?si=fDCPpXUIpSlCHsYw\&t=405). You can download it from the [release page](https://github.com/InseeFrLab/onyxia/releases). Specific instructions for loading the theme in your Onyxia instance can be found [in this guide](https://docs.keycloakify.dev/deploying-your-theme).  
+Each version of Onyxia ships with [a custom Keycloak login theme](https://youtu.be/NrVuVXsbloA?si=fDCPpXUIpSlCHsYw\&t=405). You can download it from the [release page](https://github.com/InseeFrLab/onyxia/releases). Specific instructions for loading the theme in your Onyxia instance can be found [in this guide](https://docs.keycloakify.dev/deploying-your-theme).
 
 If you are deploying Keycloak using Helm, as instructed in the installation guide, [here are the relevant lines](https://github.com/InseeFrLab/onyxia-ops/blob/35f86c848a3ddeef6bfe4a9a4f41e5d516eb66db/apps/keycloak/values.yaml#L60-L79) in the Onyxia-ops repository.
 
-### Choosing the Unique User Identifier Claim
+#### Choosing the Unique User Identifier Claim
 
 Onyxia requires a unique user identifier. You must specify which claim in the Access Token should be used for this purpose.
 
-Ideally, you can use `preferred_username` as an identifier, but this requires ensuring it complies with [RFC 1123](https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#dns-label-names). This means it must contain only lowercase alphanumeric characters and `-`. 
+Ideally, you can use `preferred_username` as an identifier, but this requires ensuring it complies with [RFC 1123](https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#dns-label-names). This means it must contain only lowercase alphanumeric characters and `-`.
 
 Since this format is restrictive, if you already have an existing user base, `preferred_username` may not be an option. In that case, you have two alternatives:
-- **Define a custom claim**: Configure a Keycloak mapper to generate an RFC 1123-compliant claim in the Access Token.
-- **Use `"sub"`**: This claim is guaranteed to be unique and always present, but ensure that the `sub` values comply with RFC 1123.
+
+* **Define a custom claim**: Configure a Keycloak mapper to generate an RFC 1123-compliant claim in the Access Token.
+* **Use `"sub"`**: This claim is guaranteed to be unique and always present, but ensure that the `sub` values comply with RFC 1123.
 
 If you are starting fresh with no existing users, you can enforce a regex pattern in the **User Profile Attributes** to require usernames that comply with the restriction.
 
 More details can be found in [the installation guide](https://docs.onyxia.sh/admin-doc/readme/user-authentication) (search for "pattern").
 
-### Configuring Keycloak
+#### Configuring Keycloak
 
 Beyond what's covered in the installation guide, if you need a more general tutorial on setting up a public Keycloak OIDC client like Onyxia, refer to the following guide. It includes a test project to validate your configuration.
 
@@ -187,22 +189,23 @@ For Onyxia, use these substitutions:
 
 {% embed url="https://docs.oidc-spa.dev/providers-configuration/auth0" %}
 
-### Generating an RFC 1123-Compliant Claim in the Access Token
+#### Generating an RFC 1123-Compliant Claim in the Access Token
 
 By default, Auth0 does not issue a claim that Onyxia can use as a unique user identifier. You must create one by defining a **custom claim** in the access token using an Auth0 **Trigger Action**.
 
-#### Steps to Create the `onyxia-username` Claim
+**Steps to Create the `onyxia-username` Claim**
 
-1️⃣ **Create a Custom Action**:  
+1️⃣ **Create a Custom Action**:
+
 1. Go to **Auth0 Dashboard** → **Actions** → **Library**.
 2. Click **Create Action**.
 3. Set:
-   - **Name**: `GenerateOnyxiaUsername`
-   - **Trigger**: **Post Login**
-   - **Runtime**: `Node 22`
+   * **Name**: `GenerateOnyxiaUsername`
+   * **Trigger**: **Post Login**
+   * **Runtime**: `Node 22`
 4. Click **Create**.
 
-2️⃣ **Add the Custom Code**:  
+2️⃣ **Add the Custom Code**:\
 Replace the default content with:
 
 ```js
@@ -218,7 +221,8 @@ exports.onExecutePostLogin = async (event, api) => {
 };
 ```
 
-3️⃣ **Deploy and Activate the Action**:  
+3️⃣ **Deploy and Activate the Action**:
+
 1. Click **Deploy**.
 2. Go to **Auth0 Dashboard** → **Actions** → **Triggers** → **Post Login**.
 3. Drag & drop `GenerateOnyxiaUsername` into the flow.
@@ -226,7 +230,7 @@ exports.onExecutePostLogin = async (event, api) => {
 
 Now, your access token will include the `onyxia-username` claim.
 
-### Final Configuration
+#### Final Configuration
 
 {% code title="apps/onyxia/values.yaml" %}
 ```yaml
@@ -245,7 +249,7 @@ onyxia:
 {% endtab %}
 
 {% tab title="Other" %}
-If you're using another OIDC provider and need help configuring Onyxia, reach out [on Slack](https://join.slack.com/t/3innovation/shared_invite/zt-2skhjkavr-xO~uTRLgoNOCm6ubLpKG7Q). We’ll be happy to schedule a call and assist with the integration. &#x20;
+If you're using another OIDC provider and need help configuring Onyxia, reach out [on Slack](https://join.slack.com/t/3innovation/shared_invite/zt-2skhjkavr-xO~uTRLgoNOCm6ubLpKG7Q). We’ll be happy to schedule a call and assist with the integration.
 
 {% embed url="https://docs.oidc-spa.dev/providers-configuration/other" %}
 {% endtab %}
@@ -320,7 +324,7 @@ onyxia:
 ```
 {% endcode %}
 
----
+***
 
 ⚠ **Important: Consistency of Claims Across Services**
 
