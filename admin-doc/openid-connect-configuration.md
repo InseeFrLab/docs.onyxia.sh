@@ -230,6 +230,8 @@ exports.onExecutePostLogin = async (event, api) => {
 
 Now, your access token will include the `onyxia-username` claim.
 
+
+
 #### Final Configuration
 
 {% code title="apps/onyxia/values.yaml" %}
@@ -250,6 +252,8 @@ onyxia:
 
 {% tab title="Other" %}
 If you're using another OIDC provider and need help configuring Onyxia, reach out [on Slack](https://join.slack.com/t/3innovation/shared_invite/zt-2skhjkavr-xO~uTRLgoNOCm6ubLpKG7Q). We’ll be happy to schedule a call and assist with the integration.
+
+However, here are some generic instructions. (Replace `https://my-app.com/` by `https://datalab.my-domain.net/`.)
 
 {% embed url="https://docs.oidc-spa.dev/providers-configuration/other" %}
 {% endtab %}
