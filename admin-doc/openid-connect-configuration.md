@@ -6,7 +6,7 @@ icon: key-skeleton
 
 The instalation guides instruct you on how to instantiate a new Keycloak to enable authentication on your datalab.
 
-However chance are your organization already have an existing IAM system in place in your organization. This guide covers how to integrate Onyxia with various commonly used OIDC providers, namely Keycloak, Auth0 and Entra ID. &#x20;
+However chance are your organization already have an existing IAM system in place in your organization. This guide covers how to integrate Onyxia with various commonly used OIDC providers, namely [Keycloak](https://www.keycloak.org/), [Auth0](https://auth0.com/) and [Microsoft Entra ID](https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id). &#x20;
 
 ## Overview of the avalible parameters
 
