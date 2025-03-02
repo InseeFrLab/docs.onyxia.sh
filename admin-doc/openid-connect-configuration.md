@@ -84,13 +84,13 @@ onyxia:
 
 {% tabs %}
 {% tab title="Keycloak" %}
-#### Onyxia Login Theme
+**Onyxia Login Theme**
 
 Each version of Onyxia ships with [a custom Keycloak login theme](https://youtu.be/NrVuVXsbloA?si=fDCPpXUIpSlCHsYw\&t=405). You can download it from the [release page](https://github.com/InseeFrLab/onyxia/releases). Specific instructions for loading the theme in your Onyxia instance can be found [in this guide](https://docs.keycloakify.dev/deploying-your-theme).
 
 If you are deploying Keycloak using Helm, as instructed in the installation guide, [here are the relevant lines](https://github.com/InseeFrLab/onyxia-ops/blob/35f86c848a3ddeef6bfe4a9a4f41e5d516eb66db/apps/keycloak/values.yaml#L60-L79) in the Onyxia-ops repository.
 
-#### Choosing the Unique User Identifier Claim
+**Choosing the Unique User Identifier Claim**
 
 Onyxia requires a unique user identifier. You must specify which claim in the Access Token should be used for this purpose.
 
@@ -105,7 +105,7 @@ If you are starting fresh with no existing users, you can enforce a regex patter
 
 More details can be found in [the installation guide](https://docs.onyxia.sh/admin-doc/readme/user-authentication) (search for "pattern").
 
-#### Configuring Keycloak
+**Configuring Keycloak**
 
 Beyond what's covered in the installation guide, if you need a more general tutorial on setting up a public Keycloak OIDC client like Onyxia, refer to the following guide. It includes a test project to validate your configuration.
 
@@ -189,7 +189,7 @@ For Onyxia, use these substitutions:
 
 {% embed url="https://docs.oidc-spa.dev/providers-configuration/auth0" %}
 
-#### Generating an RFC 1123-Compliant Claim in the Access Token
+**Generating an RFC 1123-Compliant Claim in the Access Token**
 
 By default, Auth0 does not issue a claim that Onyxia can use as a unique user identifier. You must create one by defining a **custom claim** in the access token using an Auth0 **Trigger Action**.
 
@@ -230,9 +230,9 @@ exports.onExecutePostLogin = async (event, api) => {
 
 Now, your access token will include the `onyxia-username` claim.
 
-<figure><img src="../.gitbook/assets/image (52).png" alt="" width="375"><figcaption><p>Preview of the decoded JWT of the Access Token issued by Auth0<br>with the custom action enabled when previewed with the<br>test app of the oidc-spa guide</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image.png" alt="" width="375"><figcaption><p>Preview of the decoded JWT of the Access Token issued by Auth0<br>with the custom action enabled when previewed with the<br>test app of the oidc-spa guide</p></figcaption></figure>
 
-#### Final Configuration
+**Final Configuration**
 
 {% code title="apps/onyxia/values.yaml" %}
 ```yaml

@@ -1,6 +1,6 @@
 ---
-description: Onyxia has his own extension of json schema
 icon: plus
+description: Onyxia has his own extension of json schema
 ---
 
 # Onyxia extension
@@ -305,7 +305,7 @@ You can also concatenate string values using by wrapping the XOnyxia targeted va
 
 This is an option for customizing the options of the forms fields rendered as select.
 
-<figure><img src="../../../.gitbook/assets/image.png" alt="" width="375"><figcaption><p>Example of select form field in the onyxia launcher</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (1).png" alt="" width="375"><figcaption><p>Example of select form field in the onyxia launcher</p></figcaption></figure>
 
 In your values shema such a field would be defined like:
 
