@@ -8,9 +8,11 @@ icon: key-skeleton
 
 However, chances are that your organization already has an existing IAM system in place. This guide covers how to integrate Onyxia with various commonly used OIDC providers, including [Keycloak](https://www.keycloak.org/), [Auth0](https://auth0.com/), and [Microsoft Entra ID](https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id).
 
-## Overview of Available Parameters
+## API Reference
 
-Before diving into specific OIDC providers, review the available parameters.
+<details>
+
+<summary>Overview of all the available parameters</summary>
 
 {% code title="apps/onyxia/values.yaml" %}
 ```yaml
@@ -78,6 +80,8 @@ onyxia:
       oidc.skip-tls-verify: "true|false"
 ```
 {% endcode %}
+
+</details>
 
 ***
 
