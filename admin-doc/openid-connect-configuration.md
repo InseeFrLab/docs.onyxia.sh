@@ -66,7 +66,8 @@ onyxia:
       # regardless of this setting.
       oidc.scope: "..."
       
-      # Optional: Automatically logs out users after a set period of inactivity.  
+      # Optional: Automatically logs out users after a set period of inactivity. 
+      # If you are using Keycloak do not provide this value, it's inferred automatically. 
       oidc.idleSessionLifetimeInSeconds: "..."
 
       # Optional: The Onyxia API fetches `<issuer-uri>/.well-known/openid-configuration` 
@@ -117,6 +118,7 @@ For Onyxia, use these substitutions in the guide:
 * **\<APP\_DOMAIN>**: `datalab.my-domain.net`
 * **\<BASE\_URL>**: `/`
 * **\<DEV\_PORT>**: `5173`
+* ✅ Note that Onyxia implement an auto logout countdown that will start to display once minute befor auto logout if you configure your client as [a sensible app](https://docs.oidc-spa.dev/providers-configuration/keycloak#security-sensitive-apps-banking-admin-panels-etc).
 
 {% embed url="https://docs.oidc-spa.dev/providers-configuration/keycloak" %}
 
