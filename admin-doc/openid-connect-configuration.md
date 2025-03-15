@@ -8,6 +8,14 @@ icon: key-skeleton
 
 However, chances are that your organization already has an existing IAM system in place. This guide covers how to integrate Onyxia with various commonly used OIDC providers, including [Keycloak](https://www.keycloak.org/), [Auth0](https://auth0.com/), and [Microsoft Entra ID](https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id).
 
+{% hint style="warning" %}
+Onyxia use **Public** OpenID Connect client: **no client Secret**.
+
+The technical term for a public OIDC client is **Authorization Code Flow + PKCE**.
+
+It's the type of client that you create for Single Page Application (SPA).
+{% endhint %}
+
 ## API Reference
 
 <details>
