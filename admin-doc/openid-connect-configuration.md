@@ -122,17 +122,16 @@ More details can be found in [the installation guide](https://docs.onyxia.sh/adm
 
 Beyond what's covered in the installation guide, if you need a more general tutorial on setting up a public Keycloak OIDC client like Onyxia, refer to the following guide. It includes a test project to validate your configuration.
 
-For Onyxia, use these substitutions in the guide:
-
-* **\<KC\_DOMAIN>**: `auth.lab.my-domain.net`
-* **\<KC\_RELATIVE\_PATH>**: `/auth`
-* **\<REALM\_NAME>**: `datalab`
-* **\<APP\_DOMAIN>**: `datalab.my-domain.net`
-* **\<BASE\_URL>**: `/`
-* **\<DEV\_PORT>**: `5173`
-* ✅ Note that Onyxia implement an auto logout countdown that will start to display once minute befor auto logout if you configure your client as [a sensible app](https://docs.oidc-spa.dev/providers-configuration/keycloak#security-sensitive-apps-banking-admin-panels-etc).
-
 {% embed url="https://docs.oidc-spa.dev/providers-configuration/keycloak" %}
+For Onyxia, use these substitutions in the guide:\
+&#xNAN;**\<KC\_DOMAIN>**: `auth.lab.my-domain.net`\
+&#xNAN;**\<KC\_RELATIVE\_PATH>**: `/auth`\
+&#xNAN;**\<REALM\_NAME>**: `datalab`\
+&#xNAN;**\<APP\_DOMAIN>**: `datalab.my-domain.net`\
+&#xNAN;**\<BASE\_URL>**: `/`\
+&#xNAN;**\<DEV\_PORT>**: `5173`\
+✅ Note that Onyxia implement an auto logout countdown that will start to display once minute befor auto logout if you configure your client as [a sensible app](https://docs.oidc-spa.dev/providers-configuration/keycloak#security-sensitive-apps-banking-admin-panels-etc)
+{% endembed %}
 
 Here is an overview of what your Onyxia `values.yaml` should look like:
 
@@ -158,14 +157,13 @@ onyxia:
 {% tab title="Microsoft Entra ID" %}
 Follow this guide to configure a Microsoft Entra ID application for Onyxia.
 
-For Onyxia, use these substitutions:
-
-* `"My App"` → `"Onyxia"`
-* `"My App - API"` → `"Onyxia - API"`
-* `"api://my-app-api"` → `"api://onyxia-api"`
-* `"https://my-app.com/"` → `"https://datalab.my-domain.net/"`
-
 {% embed url="https://docs.oidc-spa.dev/providers-configuration/microsoft-entra-id" %}
+For Onyxia, use these substitutions:\
+`"My App"` → `"Onyxia"`\
+`"My App - API"` → `"Onyxia - API"`\
+`"api://my-app-api"` → `"api://onyxia-api"`\
+`"https://my-app.com/"` → `"https://datalab.my-domain.net/"`
+{% endembed %}
 
 Here is what your configuration should look like:
 
@@ -191,17 +189,16 @@ onyxia:
 {% tab title="Auth0" %}
 Follow this guide to configure an Auth0 application for Onyxia.
 
-For Onyxia, use these substitutions:
-
-* `"My App"` → `"Onyxia"`
-* **\<APP\_DOMAIN>** → `datalab.my-domain.net`
-* **\<BASE\_URL>** → `/`
-* **\<DEV\_PORT>** → `5173`
-* `"My App - API"` → `"Onyxia - API"`
-* `https://myapp.my-company.com/api` → `https://datalab.my-domain.net/api`
-* `"auth.my-company.com"` → `"auth.my-domain.net"`
-
 {% embed url="https://docs.oidc-spa.dev/providers-configuration/auth0" %}
+For Onyxia, use these substitutions:\
+`"My App"` → `"Onyxia"`\
+&#xNAN;**\<APP\_DOMAIN>** → `datalab.my-domain.net`\
+&#xNAN;**\<BASE\_URL>** → `/`\
+&#xNAN;**\<DEV\_PORT>** → `5173`\
+`"My App - API"` → `"Onyxia - API"`\
+`https://myapp.my-company.com/api` → `https://datalab.my-domain.net/api`\
+`"auth.my-company.com"` → `"auth.my-domain.net"`
+{% endembed %}
 
 **Generating an RFC 1123-Compliant Claim in the Access Token**
 
@@ -267,9 +264,11 @@ onyxia:
 {% tab title="Other" %}
 If you're using another OIDC provider and need help configuring Onyxia, reach out [on Slack](https://join.slack.com/t/3innovation/shared_invite/zt-2skhjkavr-xO~uTRLgoNOCm6ubLpKG7Q). We’ll be happy to schedule a call and assist with the integration.
 
-However, here are some generic instructions. (Replace `https://my-app.com/` by `https://datalab.my-domain.net/`.)
+However, here are some generic instructions.&#x20;
 
 {% embed url="https://docs.oidc-spa.dev/providers-configuration/other" %}
+Replace `https://my-app.com/` by `https://datalab.my-domain.net/`.
+{% endembed %}
 {% endtab %}
 {% endtabs %}
 
