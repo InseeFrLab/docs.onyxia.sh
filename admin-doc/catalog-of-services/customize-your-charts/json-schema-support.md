@@ -58,12 +58,12 @@ In Onyxia’s JSON Schema implementation, string elements include various `rende
       "description": "Enter your API key"
     }
     ```
-3.  **Multi-line Text (`render: "textarea"`)**: Creates a resizable, multi-line text box for longer text entries, such as configuration scripts or notes, enhancing readability and usability.
+3.  **Multi-line Text (`render: "textArea"`)**: Creates a resizable, multi-line text box for longer text entries, such as configuration scripts or notes, enhancing readability and usability.
 
     ```json
     {
       "type": "string",
-      "render": "textarea",
+      "render": "textArea",
       "description": "Enter configuration details\n Thank you!"
     }
     ```
