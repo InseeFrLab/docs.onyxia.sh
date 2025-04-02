@@ -13,6 +13,6 @@ Next community call will take place on Friday April 25th.
 
 \
 List of previous community calls minutes : \
-\- [March 2025 (03/28/2025)](https://app.gitbook.com/o/-MTonteJTxRu_i7hrHy3/s/x3LIftMZY501x5liXUPV/~/changes/32/contributors-doc/community-meetings/march-2025-community-meeting)\
-\- [February 2025 (02/28/2025)](https://app.gitbook.com/o/-MTonteJTxRu_i7hrHy3/s/x3LIftMZY501x5liXUPV/~/changes/32/contributors-doc/community-calls/february-2025-community-call)\
-\- [January 2025 (01/31/2025)](https://app.gitbook.com/o/-MTonteJTxRu_i7hrHy3/s/x3LIftMZY501x5liXUPV/~/changes/32/contributors-doc/community-calls/january-2025-community-call)
+\- [March 2025 (03/28/2025)](https://docs.onyxia.sh/contributors-doc/community-calls/march-2025-community-call)\
+\- [February 2025 (02/28/2025)](february-2025-community-call.md)\
+\- [January 2025 (01/31/2025)](january-2025-community-call.md)
