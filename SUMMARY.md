@@ -27,6 +27,10 @@
   * [Architecture](contributors-doc/onyxia/architecture.md)
 * [The REST API](contributors-doc/onyxia-api.md)
 * [Roadmap](contributors-doc/roadmap.md)
+* [Community calls](contributors-doc/community-calls/README.md)
+  * [March 2025 community call](contributors-doc/community-calls/march-2025-community-call.md)
+  * [February 2025 community call](contributors-doc/community-calls/february-2025-community-call.md)
+  * [January 2025 community call](contributors-doc/community-calls/january-2025-community-call.md)
 
 ## user doc
 
