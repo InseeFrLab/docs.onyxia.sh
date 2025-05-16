@@ -16,6 +16,7 @@
     * [Onyxia extension](admin-doc/catalog-of-services/customize-your-charts/onyxia-extension.md)
   * [Override schema for a specific instance](admin-doc/catalog-of-services/override-schema-for-a-specific-instance.md)
 * [OpenID Connect Configuration](admin-doc/openid-connect-configuration.md)
+* [Custom Pages](admin-doc/custom-pages.md)
 * [S3 Configuration](admin-doc/s3-configuration.md)
 * [Setting up group projects](admin-doc/setting-up-group-projects.md)
 * [Security consideration](admin-doc/security-consideration.md)
