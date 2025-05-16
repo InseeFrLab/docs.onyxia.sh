@@ -7,7 +7,7 @@ icon: memo
 You can host your own custom documentation pages directly within your Onyxia instance.\
 This is ideal if you want to provide onboarding instructions or write step-by-step tutorials specifically tailored to your users.
 
-\<VIDEO DEMO>
+{% embed url="https://youtu.be/aQVu-vsf51w" %}
 
 ## How It Works
 
