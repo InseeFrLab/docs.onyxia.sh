@@ -4,48 +4,48 @@ icon: memo
 
 # Custom Pages
 
-Your can host your custom documentation pages directly within your Onyxia instance.  \
-It's perfect if you want to provide some custom instruction for getting starter or write your own step by step tutorial specifically tailored to your users. &#x20;
+You can host your own custom documentation pages directly within your Onyxia instance.\
+This is ideal if you want to provide onboarding instructions or write step-by-step tutorials specifically tailored to your users.
 
 \<VIDEO DEMO>
 
-## How it work
+## How It Works
 
-Your document have to be Markdown files. They will be renderd as HTML within Onyxia.\
-Your documents should be hosted directly within your Onyxia instance, they can't be external: You must include them in the ZIP file that you provide as CUSTOM\_RESOURCES.  \
-More info in theme and branding documentation page.  \
-You can point to one of your Mardown document from every customisable link, in the header, leftbar, fooder and other.  \
-You can point to markdown document from other markdown documents.  \
-\
-Example:
+Your documentation must consist of Markdown files. These files will be rendered as HTML within the Onyxia UI.\
+The documents must be hosted within your Onyxia instance; external links are not supported. You need to include them in the `custom-resources.zip` file, provided through the `CUSTOM_RESOURCES` configuration key.\
+More details are available in the [theme and branding documentation](../theme-and-branding.md).
 
-Assuming we have the following document inside the custom-resources.zip that we provide to our onyxia instalce:
+You can link to your Markdown files from any customizable section of the interface: header, sidebar, footer, and even from other Markdown files.
+
+### Example
+
+Assume we include the following files in `custom-resources.zip`:
 
 ```
 /onboarding_en.md
 /onboarding_fr.md
 ```
 
-We can write: &#x20;
+We can reference them in our configuration:
 
 <pre class="language-yaml" data-title="onyxia/values.yaml"><code class="lang-yaml">onyxia:
   web:
     env:
-<strong>      CUSTOM_RESOURCES: "https://.../custom-resources.zip"
-</strong>      HEADER_TEXT_BOLD: My Organization
+      CUSTOM_RESOURCES: "https://.../custom-resources.zip"
+      HEADER_TEXT_BOLD: My Organization
       HEADER_TEXT_FOCUS: Datalab
       HEADER_LINKS: |
         [
           {
             label: {
               en: "Onboarding Guide",
-              fr: "Guide d'intégration",
+              fr: "Guide d'intégration"
             },
             icon: "School",
             url: {
-<strong>              en: "%PUBLIC_URL%/custom-resources/onboarding_en.md",
-</strong><strong>              fr: "%PUBLIC_URL%/custom-resources/onboarding_fr.md"
-</strong>            },
+              en: "%PUBLIC_URL%/custom-resources/onboarding_en.md",
+              fr: "%PUBLIC_URL%/custom-resources/onboarding_fr.md"
+            }
           }
         ]
       FOOTER_LINKS: |
@@ -53,31 +53,31 @@ We can write: &#x20;
           {
             label: {
               en: "Onboarding Guide",
-              fr: "Guide d'intégration",
+              fr: "Guide d'intégration"
             },
             icon: "School",
             url: {
-<strong>              en: "%PUBLIC_URL%/custom-resources/onboarding_en.md",
-</strong><strong>              fr: "%PUBLIC_URL%/custom-resources/onboarding_fr.md"
-</strong>            },
+              en: "%PUBLIC_URL%/custom-resources/onboarding_en.md",
+              fr: "%PUBLIC_URL%/custom-resources/onboarding_fr.md"
+            }
           }
         ]
       HOMEPAGE_BELOW_HERO_TEXT: |
         {
-<strong>          en: "See our [onboarding guide](%PUBLIC_URL%/custom-resources/onboarding_en.md)",
-</strong><strong>          fr: "Consultez notre [guide d'intégration](%PUBLIC_URL%/custom-resources/onboarding_fr.md)"
-</strong>        }
+          en: "See our [onboarding guide](%PUBLIC_URL%/custom-resources/onboarding_en.md)",
+          fr: "Consultez notre [guide d'intégration](%PUBLIC_URL%/custom-resources/onboarding_fr.md)"
+        }
       HOMEPAGE_CALL_TO_ACTION_BUTTON: |
         {
-          "label": {
-<strong>            en: "Read our get started guide",
-</strong><strong>            fr: "Lire notre guide de démarrage",
-</strong>          },
-          "startIcon": "School",
-          "url": {
-<strong>              en: "%PUBLIC_URL%/custom-resources/onboarding_en.md",
-</strong><strong>              fr: "%PUBLIC_URL%/custom-resources/onboarding_fr.md"
-</strong>          }
+          label: {
+            en: "Read our get started guide",
+            fr: "Lire notre guide de démarrage"
+          },
+          startIcon: "School",
+          url: {
+            en: "%PUBLIC_URL%/custom-resources/onboarding_en.md",
+            fr: "%PUBLIC_URL%/custom-resources/onboarding_fr.md"
+          }
         }
       TERMS_OF_SERVICES: "%PUBLIC_URL%/custom-resources/tos_fr.md"
 </code></pre>
