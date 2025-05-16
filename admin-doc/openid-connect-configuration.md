@@ -343,14 +343,6 @@ onyxia:
 
 ***
 
-⚠ **Important: Consistency of Claims Across Services**
-
-When configuring OIDC for Onyxia, you define specific claims that indicate where to find\
-the **user identifier**, **groups**, and **roles** within the Access Token's JWT.
-
-These claims **cannot be configured separately for each service** Onyxia interacts with (e.g., S3, Vault, Kubernetes API).\
-They must remain **consistent across all OIDC-enabled services** to ensure proper authentication and authorization.
-
 ### Ensuring Claim Consistency Across Services
 
 When a user logs in, the OIDC provider issues an Access Token for the `onyxia` client.\
