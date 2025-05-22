@@ -16,7 +16,7 @@ layout:
 
 # Kubernetes
 
-First you'll need a Kubernetes cluster. If you have one already you can skip and directly go to [the Onyxia instalation section](gitops.md).
+First you'll need a Kubernetes cluster. If you have one already you can skip and directly go to [the Onyxia installation section](gitops.md).
 
 {% tabs %}
 {% tab title="Provisioning a cluster on AWS, GCP or Azure" %}

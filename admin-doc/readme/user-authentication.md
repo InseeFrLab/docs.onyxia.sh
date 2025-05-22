@@ -20,7 +20,7 @@ Let's setup Keycloak to enable users to create account and login to our Onyxia i
 
 
 
-Note that in this instalation guide we make you use Keycloak but you can use any OIDC compliant provider like Entra ID or Auth0. See the following gide for specific instructions for different provider and detailed authentication related configuration options.
+Note that in this installation guide we make you use Keycloak but you can use any OIDC compliant provider like Entra ID or Auth0. See the following gide for specific instructions for different provider and detailed authentication related configuration options.
 
 {% content-ref url="../openid-connect-configuration.md" %}
 [openid-connect-configuration.md](../openid-connect-configuration.md)

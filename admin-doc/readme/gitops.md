@@ -42,7 +42,7 @@ helm install argocd argo-cd \
 ```
 
 Now you have to get the password that have been automatically generated to protect ArgoCD's admin console.  \
-Allow some time for ArgoCD to strart, you can follow the progress by running `kubectl get pods` and making sure that all pod are ready 1/1. After that running this command will print the password:
+Allow some time for ArgoCD to start, you can follow the progress by running `kubectl get pods` and making sure that all pod are ready 1/1. After that running this command will print the password:
 
 ```bash
 kubectl get secret argocd-initial-admin-secret \
