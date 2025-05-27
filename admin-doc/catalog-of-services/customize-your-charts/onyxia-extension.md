@@ -1,6 +1,6 @@
 ---
-icon: plus
 description: Onyxia has his own extension of json schema
+icon: plus
 ---
 
 # Onyxia extension
@@ -23,7 +23,7 @@ Let's consider a sample of the `values.schema.json` of the InseeFrLab/helm-chart
             "description": "user name for git",
             "default": "",
 <strong>            "x-onyxia": {
-</strong><strong>                "overwriteDefaultWith": "git.name"
+</strong><strong>                "overwriteDefaultWith": "{{git.name}}"
 </strong><strong>            },
 </strong>            "hidden": {
                 "value": false,
@@ -35,7 +35,7 @@ Let's consider a sample of the `values.schema.json` of the InseeFrLab/helm-chart
             "description": "user email for git",
             "default": "",
 <strong>            "x-onyxia": {
-</strong><strong>                "overwriteDefaultWith": "git.email"
+</strong><strong>                "overwriteDefaultWith": "{{git.email}}"
 </strong><strong>            },
 </strong>            "hidden": {
                 "value": false,
@@ -47,7 +47,7 @@ Let's consider a sample of the `values.schema.json` of the InseeFrLab/helm-chart
             "description": "duration in seconds of the credentials cache duration",
             "default": "",
 <strong>            "x-onyxia": {
-</strong><strong>                "overwriteDefaultWith": "git.credentials_cache_duration"
+</strong><strong>                "overwriteDefaultWith": "{{git.credentials_cache_duration}}"
 </strong><strong>            },
 </strong>            "hidden": {
                 "value": false,
@@ -59,7 +59,7 @@ Let's consider a sample of the `values.schema.json` of the InseeFrLab/helm-chart
             "description": "personal access token",
             "default": "",
 <strong>            "x-onyxia": {
-</strong><strong>                "overwriteDefaultWith": "git.token"
+</strong><strong>                "overwriteDefaultWith": "{{git.token}}"
 </strong><strong>            },
 </strong>            "hidden": {
                 "value": false,
@@ -331,8 +331,8 @@ For example if you need to let the user select one of the groups he belongs to y
 <strong>  "default": "",
 </strong><strong>  "listEnum": [""],
 </strong>  "x-onyxia": {
-<strong>    "overwriteDefaultWith": "user.decodedIdToken.groups[0]",
-</strong><strong>    "overwriteListEnumWith": "user.decodedIdToken.groups"
+<strong>    "overwriteDefaultWith": "{{user.decodedIdToken.groups[0]}}",
+</strong><strong>    "overwriteListEnumWith": "{{user.decodedIdToken.groups}}"
 </strong>  }
 }
 </code></pre>
