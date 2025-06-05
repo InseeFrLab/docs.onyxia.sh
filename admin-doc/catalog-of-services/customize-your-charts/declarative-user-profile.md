@@ -4,11 +4,11 @@ icon: user
 
 # Declarative User Profile
 
-You can create a custom form that will appear in the user's profile section. &#x20;
+You can define a custom user profile form that appears directly within the user interface.
 
-<figure><img src="../../../.gitbook/assets/image.png" alt=""><figcaption><p>Custom form defined by the Onxia instance administrator</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image.png" alt=""><figcaption><p>Custom form defined by the Onyxia instance administrator</p></figcaption></figure>
 
-To make this form appear, you must provide a JSON Schema in your Onyxia's values. Let's see a schema that generates the above form:
+This form is configured using a JSON Schema provided via your Onyxia `values.yaml`. Here's an example that produces the form shown above:
 
 {% code title="onyxia/values.yaml" %}
 ```yaml
@@ -28,26 +28,26 @@ onyxia:
                   "firstName": {
                     "type": "string",
                     "title": "First name",
+                    "description": "Your first name",
                     "x-onyxia": {
                       "overwriteDefaultWith": "{{user.decodedIdToken.given_name}}"
-                    },
-                    "description": "Your first name"
+                    }
                   },
                   "familyName": {
                     "type": "string",
                     "title": "Family name",
+                    "description": "Your family name",
                     "x-onyxia": {
                       "overwriteDefaultWith": "{{user.decodedIdToken.family_name}}"
-                    },
-                    "description": "Your family name"
+                    }
                   },
                   "email": {
                     "type": "string",
                     "title": "Email",
+                    "description": "Your email address",
                     "x-onyxia": {
                       "overwriteDefaultWith": "{{user.decodedIdToken.email}}"
-                    },
-                    "description": "Your email address"
+                    }
                   }
                 }
               },
@@ -58,15 +58,15 @@ onyxia:
                   "username": {
                     "type": "string",
                     "title": "Git username",
+                    "description": "Your username for Git operations (e.g. git commit, git push)",
                     "x-onyxia": {
                       "overwriteDefaultWith": "{{git.name}}"
-                    },
-                    "description": "Your username for git operations (e.g. git commit, git push)"
+                    }
                   },
                   "email": {
                     "type": "string",
                     "title": "Git email",
-                    "description": "Your username for git operations (e.g. git commit, git push)",
+                    "description": "Your email for Git operations",
                     "x-onyxia": {
                       "overwriteDefaultWith": "{{git.email}}"
                     }
@@ -76,17 +76,20 @@ onyxia:
             }
           }
       roles:
-        # NOTE: You can have different shema depending on the role that the use has.
+        # NOTE: You can define role-specific schemas if needed.
         #- roleName: datascientist
         #  profileSchema: |
         #    ...
 ```
 {% endcode %}
 
-Now you might ask, what's the pupose of this form right?  \
-Well you can use the values that the user might have populated in your custom chart.
+---
 
-In the XOnyxiaContext, with the above JSON Shema configured, and the user having filled the form as in the first screenshot you will get:
+## Why Use a Custom User Profile?
+
+Once defined, this form allows users to fill in personal and development-related information. These values become programmatically accessible, enabling dynamic behavior within your charts and deployments.
+
+For example, with the schema above, and assuming the user has filled out the form as shown in the screenshot, the following values will be available in the Onyxia context:
 
 {% code title="xOnyxiaContext.user.profile" %}
 ```json
@@ -104,12 +107,20 @@ In the XOnyxiaContext, with the above JSON Shema configured, and the user having
 ```
 {% endcode %}
 
-This means you can have a chart that defines:
+These values can be injected into Helm charts. For instance:
 
 ```json
 "x-onyxia": {
-    "overwriteDefaultWith": "{{user.profile.generalInfo.lastName}}"
-},
+  "overwriteDefaultWith": "{{user.profile.generalInfo.lastName}}"
+}
 ```
 
-And the value will be auto filled by "Garrone".
+This will auto-fill the corresponding field with `"Garrone"`.
+
+---
+
+## Recap
+
+- Define your schema in `onyxia.values.yaml`.
+- Enable role-based customization if needed.
+- Use the collected values in your Helm charts for a tailored, user-aware deployment experience.
