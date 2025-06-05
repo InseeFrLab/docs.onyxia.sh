@@ -165,6 +165,8 @@ export type XOnyxiaContext = {
         decodedIdToken: Record<string, unknown>;
         accessToken: string;
         refreshToken: string;
+        
+        profile: Record<string, Stringifyable> | undefined;
     };
     service: {
         oneTimePassword: string;
@@ -305,7 +307,7 @@ You can also concatenate string values using by wrapping the XOnyxia targeted va
 
 This is an option for customizing the options of the forms fields rendered as select.
 
-<figure><img src="../../../.gitbook/assets/image (1).png" alt="" width="375"><figcaption><p>Example of select form field in the onyxia launcher</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (1) (1).png" alt="" width="375"><figcaption><p>Example of select form field in the onyxia launcher</p></figcaption></figure>
 
 In your values shema such a field would be defined like:
 

@@ -80,3 +80,11 @@ In Onyxia’s JSON Schema implementation, string elements include various `rende
       "description": "Set the CPU limit"
     }
     ```
+
+
+
+Onyxia also define some extention to the JSON Schema standard in order to let you pre-fill some values levraging what we know about the user. &#x20;
+
+{% content-ref url="onyxia-extension.md" %}
+[onyxia-extension.md](onyxia-extension.md)
+{% endcontent-ref %}

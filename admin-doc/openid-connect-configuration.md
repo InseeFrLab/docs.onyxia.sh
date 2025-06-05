@@ -241,7 +241,7 @@ exports.onExecutePostLogin = async (event, api) => {
 
 Now, your access token will include the `onyxia-username` claim.
 
-<figure><img src="../.gitbook/assets/image.png" alt="" width="375"><figcaption><p>Preview of the decoded JWT of the Access Token issued by Auth0<br>with the custom action enabled when previewed with the<br>test app of the oidc-spa guide</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1).png" alt="" width="375"><figcaption><p>Preview of the decoded JWT of the Access Token issued by Auth0<br>with the custom action enabled when previewed with the<br>test app of the oidc-spa guide</p></figcaption></figure>
 
 **Final Configuration**
 

@@ -14,6 +14,7 @@
   * [Customize your charts](admin-doc/catalog-of-services/customize-your-charts/README.md)
     * [JSON Schema Support](admin-doc/catalog-of-services/customize-your-charts/json-schema-support.md)
     * [Onyxia extension](admin-doc/catalog-of-services/customize-your-charts/onyxia-extension.md)
+    * [Declarative User Profile](admin-doc/catalog-of-services/customize-your-charts/declarative-user-profile.md)
   * [Override schema for a specific instance](admin-doc/catalog-of-services/override-schema-for-a-specific-instance.md)
 * [OpenID Connect Configuration](admin-doc/openid-connect-configuration.md)
 * [Custom Pages](admin-doc/custom-pages.md)
