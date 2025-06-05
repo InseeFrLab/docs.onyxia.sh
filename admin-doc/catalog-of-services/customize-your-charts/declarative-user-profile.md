@@ -83,7 +83,7 @@ onyxia:
 ```
 {% endcode %}
 
----
+***
 
 ## Why Use a Custom User Profile?
 
@@ -117,10 +117,14 @@ These values can be injected into Helm charts. For instance:
 
 This will auto-fill the corresponding field with `"Garrone"`.
 
----
+{% hint style="warning" %}
+Each time you update the JSON Schema you provide to define the user profile, all existing values that the user might have filled will be lost. &#x20;
+{% endhint %}
+
+***
 
 ## Recap
 
-- Define your schema in `onyxia.values.yaml`.
-- Enable role-based customization if needed.
-- Use the collected values in your Helm charts for a tailored, user-aware deployment experience.
+* Define your schema in `onyxia.values.yaml`.
+* Enable role-based customization if needed.
+* Use the collected values in your Helm charts for a tailored, user-aware deployment experience.
