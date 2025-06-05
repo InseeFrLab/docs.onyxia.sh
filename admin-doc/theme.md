@@ -33,7 +33,7 @@ onyxia:
   web:
     env:
       #ONYXIA_API_URL: https://datalab.sspcloud.fr/api
-      CUSTOM_RESOURCES: "https://www.sspcloud.fr/ultraviolet/onyxia-theme.zip"
+      CUSTOM_RESOURCES: "https://www.sspcloud.fr/ultraviolet/custom-resources.zip"
       FONT: |
         { 
           fontFamily: "Geist", 
@@ -206,7 +206,7 @@ onyxia:
   web:
     env:
       #ONYXIA_API_URL: https://datalab.sspcloud.fr/api
-      CUSTOM_RESOURCES: "https://www.sspcloud.fr/france/onyxia-theme.zip"
+      CUSTOM_RESOURCES: "https://www.sspcloud.fr/france/custom-resources.zip"
       FONT: |
         { 
           fontFamily: "Marianne", 
@@ -258,7 +258,7 @@ onyxia:
   web:
     env:
       #ONYXIA_API_URL: https://datalab.sspcloud.fr/api
-      CUSTOM_RESOURCES: "https://www.sspcloud.fr/honey/onyxia-theme.zip"
+      CUSTOM_RESOURCES: "https://www.sspcloud.fr/honey/custom-resources.zip"
       HEADER_LOGO: "%PUBLIC_URL%/custom-resources/dapla_honey.svg"
       HEADER_TEXT_BOLD: "Onyxia Preview"
       HEADER_TEXT_FOCUS: "v10"
