@@ -115,7 +115,9 @@ These values can be injected into Helm charts. For instance:
 }
 ```
 
-This will auto-fill the corresponding field with `"Garrone"`.
+This will auto-fill the corresponding field with `"Garrone"`.  \
+\
+(Here this example is not very inspired since we already have a Git configuration tab so there's no reason to define a Git configuration section in the declarative user profile but you get the idea)
 
 {% hint style="warning" %}
 Each time you update the JSON Schema you provide to define the user profile, all existing values that the user might have filled will be lost. &#x20;
