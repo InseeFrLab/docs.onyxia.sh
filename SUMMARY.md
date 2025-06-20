@@ -20,7 +20,8 @@
 * [Custom Pages](admin-doc/custom-pages.md)
 * [S3 Configuration](admin-doc/s3-configuration.md)
 * [Setting up group projects](admin-doc/setting-up-group-projects.md)
-* [Security consideration](admin-doc/security-consideration.md)
+* [Security considerations](admin-doc/security-consideration.md)
+* [Offline / airgap considerations](admin-doc/offline-airgap-considerations.md)
 
 ## Contributors doc
 
