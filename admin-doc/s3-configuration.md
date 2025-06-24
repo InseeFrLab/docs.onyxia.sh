@@ -25,7 +25,7 @@ onyxia:
 ```
 {% endcode %}
 
-```typescript
+````typescript
 type S3 = {
   /**
    * The URL of the S3 server.
@@ -103,7 +103,77 @@ type S3 = {
         bucketNamePrefix: string;
         bucketNamePrefixGroup: string;
       };
-
+  /**
+   * Defines a list of S3 directory bookmarks to display in the user's file explorer interface.
+   * 
+   * Bookmarks can be:
+   * - Static: shown to all users.
+   * - Dynamic: shown only if specific conditions based on the user's identity token are met.
+   *
+   * Each bookmark must define:
+   * - `fullPath`: The absolute S3 path to the bookmarked folder.
+   * - `title`: The display title, supporting dynamic content via template variables.
+   * - `description` (optional): A short description of the bookmark.
+   * - `tags` (optional): An array of string tags for UI categorization.
+   *
+   * For static bookmarks:
+   * - Set `claimName` to `undefined` (or omit it entirely).
+   * - The bookmark is shown to all users.
+   *
+   * For dynamic bookmarks:
+   * - Set `claimName` to the name of a claim (e.g., `"groups"`) from the user's **ID token**.
+   * - The ID token is the one issued by the **OIDC configuration associated with the S3 client** (i.e., from `sts.oidcConfiguration`).
+   * - `includedClaimPattern` is a regular expression that must match at least one value in the specified claim for the bookmark to be shown.
+   * - `excludedClaimPattern` is a regular expression that, if matched by any value in the claim, causes the bookmark to be ignored.
+   * - If a `claimValue` matches both, exclusion takes precedence (i.e., the bookmark is not shown).
+   *
+   * Template placeholders:
+   * - `$1`, `$2`, ...: inserts corresponding capture groups from `includedClaimPattern` (useful for custom rendering in `fullPath`, `title`, `description`, or `tags`).
+   *
+   * 🔁 Example (static):
+   * ```json
+   * {
+   *   "bookmarkedDirectories": [
+   *     {
+   *       "fullPath": "onyxia/project-share",
+   *       "title": "Shared project data",
+   *       "description": "A static folder visible to all users.",
+   *       "tags": ["read-only"]
+   *     }
+   *   ]
+   * }
+   * ```
+   *
+   * 🔁 Example (dynamic):
+   * ```json
+   * {
+   *   "bookmarkedDirectories": [
+   *     {
+   *       "fullPath": "group-$1/",
+   *       "claimName": "groups",
+   *       "includedClaimPattern": "^group-(.*)$",
+   *       "excludedClaimPattern": "^group-secret$",
+   *       "title": "Group: $1",
+   *       "description": "Files accessible to group $1",
+   *       "tags": ["group", "$1"]
+   *     }
+   *   ]
+   * }
+   * ```
+   */
+  bookmarkedDirectories?: ({
+    fullPath: string;
+    title: LocalizedString;
+    description: LocalizedString | undefined;
+    tags: string[] | undefined;
+  } & (
+    | { claimName: undefined }
+    | {
+        claimName: string;
+        includedClaimPattern: string;
+        excludedClaimPattern: string;
+      }
+  ))[];
   /**
    * Configuration for Onyxia to dynamically request S3 tokens on behalf of users.
    * Enabling S3 allows users to avoid manual configuration of a service account via the Onyxia interface.
@@ -144,4 +214,4 @@ type S3 = {
     oidcConfiguration?: OidcConfiguration;
   };
 };
-```
+````
