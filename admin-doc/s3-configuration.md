@@ -25,8 +25,7 @@ onyxia:
 ```
 {% endcode %}
 
-````typescript
-type S3 = {
+<pre class="language-typescript"><code class="lang-typescript">type S3 = {
   /**
    * The URL of the S3 server.
    * Examples: "https://minio.lab.sspcloud.fr" or "https://s3.amazonaws.com".
@@ -114,7 +113,7 @@ type S3 = {
    * - `fullPath`: The absolute S3 path to the bookmarked folder.
    * - `title`: The display title, supporting dynamic content via template variables.
    * - `description` (optional): A short description of the bookmark.
-   * - `tags` (optional): An array of string tags for UI categorization.
+   * - `tags` (optional): An array of LocalizedString tags for UI categorization.
    *
    * For static bookmarks:
    * - Set `claimName` to `undefined` (or omit it entirely).
@@ -135,10 +134,21 @@ type S3 = {
    * {
    *   "bookmarkedDirectories": [
    *     {
-   *       "fullPath": "onyxia/project-share",
-   *       "title": "Shared project data",
-   *       "description": "A static folder visible to all users.",
-   *       "tags": ["read-only"]
+   *       "fullPath": "data/public",
+   *       "title": {
+   *         "fr": "Données publiques",
+   *         "en": "Public Data"
+   *       },
+   *       "description": {
+   *         "fr": "Dossier partagé contenant des jeux de données publics.",
+   *         "en": "Shared folder containing public datasets."
+   *       },
+   *       "tags": [
+   *         {
+   *           "fr": "lecture seule",
+   *           "en": "read-only"
+<strong>   *         }
+</strong>   *       ]
    *     }
    *   ]
    * }
@@ -165,8 +175,8 @@ type S3 = {
     fullPath: string;
     title: LocalizedString;
     description: LocalizedString | undefined;
-    tags: string[] | undefined;
-  } & (
+    tags: LocalizedString[] | undefined;
+  } &#x26; (
     | { claimName: undefined }
     | {
         claimName: string;
@@ -214,4 +224,4 @@ type S3 = {
     oidcConfiguration?: OidcConfiguration;
   };
 };
-````
+</code></pre>
