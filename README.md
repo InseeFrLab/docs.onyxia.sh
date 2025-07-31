@@ -1,17 +1,6 @@
 ---
 description: Convinced by Onyxia? Let's see how you can get your own instance today!
 icon: sign-posts-wrench
-layout:
-  title:
-    visible: true
-  description:
-    visible: true
-  tableOfContents:
-    visible: true
-  outline:
-    visible: true
-  pagination:
-    visible: false
 ---
 
 # Install

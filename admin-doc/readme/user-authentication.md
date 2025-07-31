@@ -1,24 +1,11 @@
 ---
-icon: key
 description: Using Keycloak to enable user authentication
-layout:
-  title:
-    visible: true
-  description:
-    visible: true
-  tableOfContents:
-    visible: true
-  outline:
-    visible: true
-  pagination:
-    visible: false
+icon: key
 ---
 
 # User authentication
 
 Let's setup Keycloak to enable users to create account and login to our Onyxia instance.
-
-
 
 Note that in this installation guide we make you use Keycloak but you can use any OIDC compliant provider like Entra ID or Auth0. See the following gide for specific instructions for different provider and detailed authentication related configuration options.
 
@@ -28,9 +15,9 @@ Note that in this installation guide we make you use Keycloak but you can use an
 
 ### Deploying Keycloak
 
-We're going to install Keycloak just like we installed Onyxia. &#x20;
+We're going to install Keycloak just like we installed Onyxia.
 
-Before anything open [`apps/keycloak/values.yaml`](https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/keycloak/values.yaml) in your onyxia-ops repo and [change the passwords](#user-content-fn-1)[^1]. Also write down the [`keycloak.auth.adminPassword`](https://github.com/InseeFrLab/onyxia-ops/blob/bad75636d72c20c48f1b34ec08593df83ee6c9a6/apps/keycloak/values.yaml#L11), you'll need it to connect to the Keycloak console. &#x20;
+Before anything open [`apps/keycloak/values.yaml`](https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/keycloak/values.yaml) in your onyxia-ops repo and [change the passwords](#user-content-fn-1)[^1]. Also write down the [`keycloak.auth.adminPassword`](https://github.com/InseeFrLab/onyxia-ops/blob/bad75636d72c20c48f1b34ec08593df83ee6c9a6/apps/keycloak/values.yaml#L11), you'll need it to connect to the Keycloak console.
 
 {% embed url="https://app.tango.us/app/embed/dbb21e90-db2c-41f4-b2ab-5f8b9f4d33c0" %}
 
@@ -120,7 +107,7 @@ Now our Keycloak server is fully configured we just need to update our Onyxia de
 
 ### Updating the Onyxia configuration
 
-In your GitOps repo you now want to update your onyxia configuration. &#x20;
+In your GitOps repo you now want to update your onyxia configuration.
 
 ```bash
 git clone https://github.com/<your-github-org>/onyxia-ops
@@ -131,7 +118,7 @@ git commit -am "Enable keycloak"
 git push
 ```
 
-Here is the DIFF of the onyxia configuration: &#x20;
+Here is the DIFF of the onyxia configuration:
 
 {% embed url="https://github.com/InseeFrLab/onyxia-ops/commit/37faa6390c9bc8c1efddfd3488dc06b38427b424" %}
 
@@ -139,7 +126,7 @@ Now your users should be able to create account, log-in, and start services on t
 
 <figure><img src="../../.gitbook/assets/image (49).png" alt=""><figcaption><p>The screen you shoud see when clicking on "login" in your Onyxia deployment</p></figcaption></figure>
 
-Next step in the installation proccess it to enable all the S3 related features of Onyxia: &#x20;
+Next step in the installation proccess it to enable all the S3 related features of Onyxia:
 
 {% content-ref url="data-s3.md" %}
 [data-s3.md](data-s3.md)

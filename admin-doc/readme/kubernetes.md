@@ -1,17 +1,6 @@
 ---
 description: Provision a Kubernetes cluster
 icon: ferry
-layout:
-  title:
-    visible: true
-  description:
-    visible: true
-  tableOfContents:
-    visible: true
-  outline:
-    visible: true
-  pagination:
-    visible: false
 ---
 
 # Kubernetes
@@ -121,7 +110,7 @@ Lastly, we want to tell our ingress controller to use this TLS certificate, to d
 kubectl edit deployment ingress-nginx-controller -n ingress-nginx
 ```
 
-This command will open your configured text editor, go to containers -> args and add:&#x20;
+This command will open your configured text editor, go to containers -> args and add:
 
 ```
       - --default-ssl-certificate=ingress-nginx/onyxia-tls
@@ -140,7 +129,7 @@ If you are on a Mac or Window computer you can install [Docker desktop](https://
 <figure><img src="../../.gitbook/assets/image (47).png" alt=""><figcaption><p>Enabling Kubernetes in the Docker desktop App</p></figcaption></figure>
 
 {% hint style="warning" %}
-WARNING: If you are folowing this installating guide on an Apple Sillicon Mac, be aware that many of the services that comes by default with Onyxia like Jupyter RStudio and VSCode won't run because we do not yet compile our datacience stack for the ARM64 architecture.  \
+WARNING: If you are folowing this installating guide on an Apple Sillicon Mac, be aware that many of the services that comes by default with Onyxia like Jupyter RStudio and VSCode won't run because we do not yet compile our datacience stack for the ARM64 architecture.\
 If you would like to see this change please [sumit an issue about it](https://github.com/InseeFrLab/helm-charts-interactive-services/issues).
 {% endhint %}
 
@@ -237,7 +226,7 @@ helm install ingress-nginx ingress-nginx \
 {% endtab %}
 {% endtabs %}
 
-Now that we have a Kubernetes cluster  ready to use let's levrage ArgoCD and GitOps practices to deploy and monitor the core services of our Onyxia Datalab. &#x20;
+Now that we have a Kubernetes cluster ready to use let's levrage ArgoCD and GitOps practices to deploy and monitor the core services of our Onyxia Datalab.
 
 {% content-ref url="gitops.md" %}
 [gitops.md](gitops.md)

@@ -1,17 +1,6 @@
 ---
 description: Enable S3 storage via MinIO S3
 icon: folder
-layout:
-  title:
-    visible: true
-  description:
-    visible: true
-  tableOfContents:
-    visible: true
-  outline:
-    visible: true
-  pagination:
-    visible: false
 ---
 
 # Data (S3)

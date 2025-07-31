@@ -1,12 +1,14 @@
-# June 2025 community call
+# July 2025 community call
 
-Community call 05/26/2025\
+Community call 07/31/2025\
 \
-Project news :
+Project news
 
-* Release v10.23
-  * [Declarative user profile](../../admin-doc/catalog-of-services/customize-your-charts/declarative-user-profile.md)&#x20;
-  * [S3 bookmarks](../../admin-doc/s3-configuration.md)
-* Work in progress\
-  [overwriteDefaultWith for object and array #992](https://github.com/InseeFrLab/onyxia/issues/992)\
-  [FR : Hidden Profile Fields as Hints #995](https://github.com/InseeFrLab/onyxia/issues/995)
+* Release v10.25
+  * API v4.8.0 : cache for packages retrieval (recommended update !)
+  * S3 bookmarks + dynamic
+* New onboarding module in Go available for testing : https://github.com/onyxia-datalab/onyxia-onboarding , chart with new module as an option WIP (will be merged soon (tm) to the regular Helm chart) : https://github.com/InseeFrLab/helm-charts-dev/tree/main/charts/onyxia
+* Poster session at kubecon North America in Atlanta from 10 to 13 Nov
+
+
+
