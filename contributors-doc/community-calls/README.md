@@ -21,20 +21,20 @@ To join, simply head over to our Slack workspace and join the [_#community-meeti
 \
 List of previous community calls minutes :&#x20;
 
+{% content-ref url="august-2025-community-call.md" %}
+[august-2025-community-call.md](august-2025-community-call.md)
+{% endcontent-ref %}
+
+{% content-ref url="july-2025-community-call.md" %}
+[july-2025-community-call.md](july-2025-community-call.md)
+{% endcontent-ref %}
+
+{% content-ref url="june-2025-community-call.md" %}
+[june-2025-community-call.md](june-2025-community-call.md)
+{% endcontent-ref %}
+
 {% content-ref url="may-2025-community-call.md" %}
 [may-2025-community-call.md](may-2025-community-call.md)
-{% endcontent-ref %}
-
-{% content-ref url="may-2025-community-call-1.md" %}
-[may-2025-community-call-1.md](may-2025-community-call-1.md)
-{% endcontent-ref %}
-
-{% content-ref url="may-2025-community-call-2.md" %}
-[may-2025-community-call-2.md](may-2025-community-call-2.md)
-{% endcontent-ref %}
-
-{% content-ref url="may-2025-community-call-3.md" %}
-[may-2025-community-call-3.md](may-2025-community-call-3.md)
 {% endcontent-ref %}
 
 {% content-ref url="april-2025-community-call.md" %}
