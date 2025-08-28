@@ -33,6 +33,10 @@ List of previous community calls minutes :&#x20;
 [may-2025-community-call-2.md](may-2025-community-call-2.md)
 {% endcontent-ref %}
 
+{% content-ref url="may-2025-community-call-3.md" %}
+[may-2025-community-call-3.md](may-2025-community-call-3.md)
+{% endcontent-ref %}
+
 {% content-ref url="april-2025-community-call.md" %}
 [april-2025-community-call.md](april-2025-community-call.md)
 {% endcontent-ref %}
