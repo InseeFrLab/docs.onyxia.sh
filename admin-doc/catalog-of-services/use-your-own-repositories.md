@@ -7,8 +7,8 @@ icon: house-flag
 
 If you do not specify catalogs in your `onyxia/values.yaml,` these are the ones that are used by default: [See file](https://github.com/InseeFrLab/onyxia-api/blob/main/onyxia-api/src/main/resources/catalogs.json).
 
-To configure your onyxia instance to use your own custom helm repositories as onyxia catalogs you need to use the onyxia configuration `onyxia.api.catalogs`.  \
-Let's say we're NASA and we want to have an "_Aerospace services"_ catalog on our onyxia instance. Our onyxia configuration would look a bit like this: &#x20;
+To configure your onyxia instance to use your own custom helm repositories as onyxia catalogs you need to use the onyxia configuration `onyxia.api.catalogs`.\
+Let's say we're NASA and we want to have an "_Aerospace services"_ catalog on our onyxia instance. Our onyxia configuration would look a bit like this:
 
 {% code title="onyxia/values.yaml" %}
 ```yaml
@@ -44,7 +44,7 @@ onyxia:
         },
         # Can be "PROD" or "TEST". If test the catalogs will be accessible if you type the url in the search bar
         # but you won't have a tab to select it.
-        status": "PROD",
+        status: "PROD",
         # Optional. If true the certificate verification for `${location}/index.yaml` will be skipped.
         skipTlsVerify: false,
         # Optional. certificate authority file to use for the TLS verification
