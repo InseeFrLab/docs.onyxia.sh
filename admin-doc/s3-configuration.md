@@ -121,7 +121,7 @@ type S3 = {
    * - `tags` (optional): An array of LocalizedString tags for UI categorization.
    *
    * For static bookmarks:
-   * - Set `claimName` to `undefined` (or omit it entirely).
+   * - Do not specify any `claimName`.
    * - The bookmark is shown to all users.
    *
    * For dynamic bookmarks:
