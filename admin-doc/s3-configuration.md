@@ -25,7 +25,8 @@ onyxia:
 ```
 {% endcode %}
 
-<pre class="language-typescript"><code class="lang-typescript">type S3 = {
+````typescript
+type S3 = {
   /**
    * The URL of the S3 server.
    * Examples: "https://minio.lab.sspcloud.fr" or "https://s3.amazonaws.com".
@@ -40,7 +41,8 @@ onyxia:
   region?: string;
 
   /**
-   * This parameter informs Onyxia how to format file download URLs for the configured S3 server.
+   * This parameter informs Onyxia how to format file download URLs for the configured 
+   * S3 server.
    * Default: true
    *
    * Example:
@@ -75,8 +77,9 @@ onyxia:
    *       "prefixGroup": "project-"
    *   }
    *
-   * In this configuration Onyxia will assumes that Bob has read/write access to objects starting
-   * with "user-bob/" and "project-exploration/" in the "onyxia" bucket.
+   * In this configuration Onyxia will assumes that Bob has read/write access to 
+   * objects starting with "user-bob/" and "project-exploration/" in the "onyxia" 
+   * bucket.
    *
    * Multi bucket mode:
    *   "workingDirectory": {
@@ -85,8 +88,8 @@ onyxia:
    *       "bucketNamePrefixGroup": "project-",
    *   }
    *
-   * In this configuration Onyxia will assumes that Bob has read/wite access to the entire
-   * "user-bob" and "project-exploration" buckets.
+   * In this configuration Onyxia will assumes that Bob has read/wite access to the 
+   * entire "user-bob" and "project-exploration" buckets.
    *
    * If STS is enabled and a bucket doesn't exist, Onyxia will try to create it.
    */
@@ -103,11 +106,13 @@ onyxia:
         bucketNamePrefixGroup: string;
       };
   /**
-   * Defines a list of S3 directory bookmarks to display in the user's file explorer interface.
+   * Defines a list of S3 directory bookmarks to display in the user's file explorer 
+   * interface.
    * 
    * Bookmarks can be:
    * - Static: shown to all users.
-   * - Dynamic: shown only if specific conditions based on the user's identity token are met.
+   * - Dynamic: shown only if specific conditions based on the user's identity token 
+   *   are met.
    *
    * Each bookmark must define:
    * - `fullPath`: The absolute S3 path to the bookmarked folder.
@@ -120,14 +125,21 @@ onyxia:
    * - The bookmark is shown to all users.
    *
    * For dynamic bookmarks:
-   * - Set `claimName` to the name of a claim (e.g., `"groups"`) from the user's **ID token**.
-   * - The ID token is the one issued by the **OIDC configuration associated with the S3 client** (i.e., from `sts.oidcConfiguration`).
-   * - `includedClaimPattern` is a regular expression that must match at least one value in the specified claim for the bookmark to be shown.
-   * - `excludedClaimPattern` is a regular expression that, if matched by any value in the claim, causes the bookmark to be ignored.
-   * - If a `claimValue` matches both, exclusion takes precedence (i.e., the bookmark is not shown).
+   * - Set `claimName` to the name of a claim (e.g., `"groups"`) from the user's 
+   *   **ID token**.
+   * - The ID token is the one issued by the **OIDC configuration associated 
+   *   with the S3 client** (i.e., from `sts.oidcConfiguration`).
+   * - `includedClaimPattern` is a regular expression that must match at least one 
+   *    value in the specified claim for the bookmark to be shown.
+   * - `excludedClaimPattern` is a regular expression that, if matched by any value 
+   *    in the claim, causes the bookmark to be ignored.
+   * - If a `claimValue` matches both, exclusion takes precedence 
+   *   (i.e., the bookmark is not shown).
    *
    * Template placeholders:
-   * - `$1`, `$2`, ...: inserts corresponding capture groups from `includedClaimPattern` (useful for custom rendering in `fullPath`, `title`, `description`, or `tags`).
+   * - `$1`, `$2`, ...: inserts corresponding capture groups from 
+   *   `includedClaimPattern` (useful for custom rendering in `fullPath`, `title`, 
+   *   `description`, or `tags`).
    *
    * 🔁 Example (static):
    * ```json
@@ -147,8 +159,8 @@ onyxia:
    *         {
    *           "fr": "lecture seule",
    *           "en": "read-only"
-<strong>   *         }
-</strong>   *       ]
+   *         }
+   *       ]
    *     }
    *   ]
    * }
@@ -174,16 +186,17 @@ onyxia:
   bookmarkedDirectories?: ({
     fullPath: string;
     title: LocalizedString;
-    description: LocalizedString | undefined;
-    tags: LocalizedString[] | undefined;
-  } &#x26; (
-    | { claimName: undefined }
+    description?: LocalizedString;
+    tags?: LocalizedString[];
+  } & (
+    | {}
     | {
         claimName: string;
         includedClaimPattern: string;
         excludedClaimPattern: string;
       }
   ))[];
+  
   /**
    * Configuration for Onyxia to dynamically request S3 tokens on behalf of users.
    * Enabling S3 allows users to avoid manual configuration of a service account via the Onyxia interface.
@@ -224,4 +237,4 @@ onyxia:
     oidcConfiguration?: OidcConfiguration;
   };
 };
-</code></pre>
+````
