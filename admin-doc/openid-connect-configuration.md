@@ -65,9 +65,12 @@ onyxia:
       # Example: `"foo=foo%20value&bar=bar%20value"`
       oidc.extra-query-params: "..."
 
-      # Optional: Specifies the expected audience (`aud`) value in the Access Token.  
-      # If provided, Onyxia will validate the `aud` claim in the token and reject 
-      # requests where it does not match (or does not include a matching entry if `aud` is an array).
+      # Optional: Expected audience (`aud`) value in the Access Token.  
+      # If set, Onyxia-API validates the `aud` claim and rejects requests
+      # where it doesn’t match (or isn’t included if `aud` is an array).  
+      # This setting applies only on the server side.
+      # Defining it here won’t change how the OIDC client requests tokens.  
+      # Refer to your provider’s documentation below for details.
       oidc.audience: "..."
 
       # Optional: Specifies the OIDC scopes requested by the Onyxia client.  
@@ -150,6 +153,10 @@ onyxia:
       # `"my-custom-claim"`    if a custom Keycloak mapper is configured.
       # `"sub"`                always works and is unique.
       oidc.username-claim: "..."
+      # NOTE: By default, Access Tokens issued by Keycloak have an `aud` claim 
+      # of "account". You can change this value in your protocol mapper and 
+      # update this setting accordingly.  
+      oidc.audience: "account"
 ```
 {% endcode %}
 {% endtab %}
@@ -254,6 +261,7 @@ onyxia:
       oidc.issuer-uri: "https://auth.my-domain.net"
       oidc.clientID: "<Onyxia Application Client ID>"  
       oidc.username-claim: "onyxia-username"
+      oidc.extra-query-params: "audience=https://datalab.my-domain.net/api"
       oidc.audience: "https://datalab.my-domain.net/api"
       # Optional: Auto logout after inactivity.
       oidc.idleSessionLifetimeInSeconds: "300"
@@ -275,8 +283,7 @@ Replace `https://my-app.com/` by `https://datalab.my-domain.net/`.
 ## **OIDC Configuration for Services Onyxia Connects To**
 
 Onyxia uses an OIDC client for authentication, but it also connects to other OIDC-enabled services.\
-Each of these services **can** have its own OIDC configuration, allowing Onyxia to authenticate\
-using a separate client identity.
+Each of these services **can** have its own OIDC client instance configuration, allowing Onyxia to authenticate using a separate client identity.
 
 In the **region configuration**, you can specify an optional `oidcConfiguration` object for\
 each service:
@@ -293,14 +300,21 @@ type OidcConfiguration = {
     clientID?: string;
     extraQueryParams?: string;
     scope?: string;
-    audience?: string;
     idleSessionLifetimeInSeconds?: number;
 };
 ```
 
-If no `oidcConfiguration` is provided for a service, Onyxia will **reuse its own OIDC client**\
-and the same Access Token for authentication. However, it is **recommended** to provide\
-a **separate client ID** for each service to improve access control and security.
+If no `oidcConfiguration` is provided for a service, Onyxia will reuse the same access\_token used for onyxia-api.
+
+However, defining a separate OIDC client for each service is recommended to improve access control and security.
+
+You might find it strange that Onyxia requires creating multiple OIDC clients to communicate with different resource servers (e.g. `onyxia-api`, `minio`, `vault`, or the Kubernetes API). You’ll typically end up with several clients such as `onyxia`, `onyxia-vault`, `onyxia-minio`, and `onyxia-kube`.\
+At first, this can feel counterintuitive, a _client ID_ seems like it should represent one application, not multiple variants of it.
+
+Conceptually, a single client requesting tokens for multiple resource servers (each with its own audience and claims) would make more sense.\
+However, Keycloak doesn’t model things that way. While Onyxia supports any OpenID Connect provider, it’s primarily designed around Keycloak’s behavior and limitations.
+
+In Keycloak’s model, an OIDC _client_ actually represents **an application talking to a specific resource server**, not just an application itself.
 
 ### Example Configuration in `values.yaml`
 
