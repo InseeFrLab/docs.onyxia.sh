@@ -1,5 +1,5 @@
 ---
-description: Unserstand how Onyxia catalogs work and potentially create your own!
+description: Understand how Onyxia catalogs work and potentially create your own!
 icon: microscope
 ---
 
