@@ -5,9 +5,9 @@ icon: plus
 
 # x-onyxia
 
-Onyxia defines a custom extention to the [JSON Schema spec](json-schema-support.md). It's a set of Onyxia specific properties that lives under a reserved property name (x-onyxia) and that let you specify onyxia specific configuration. &#x20;
+Onyxia defines a custom extension to the [JSON Schema spec](json-schema-support.md). It adds Onyxia-specific properties under a reserved key: `x-onyxia`.
 
-The number one usecase of this is to enable every user to have different default service configuration based on their identity on your platofrm. Eg. Setting the correct git and S3 credentials on an user by user basis. &#x20;
+The main use case is per-user defaults based on identity. For example, you can inject the right Git and S3 credentials for each user.
 
 ### overwriteDefaultWith
 
