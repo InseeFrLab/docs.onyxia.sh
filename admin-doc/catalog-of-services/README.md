@@ -18,7 +18,7 @@ As an instance admin, you can heavily customize what users see and can do:
 * Fork our catalogs or build your own.
 * Turn any Helm-deployable software into a service.
 
-Example: [Doom launched as an Onyxia service](https://youtu.be/7SuXRfQqdGM?si=Y4_lXozJfh3ajyT7).
+Example: [Doom launched as an Onyxia service](https://youtu.be/7SuXRfQqdGM?si=2Y_jrQyW-fMfGn6M\&t=731).
 
 ## Mental model: Onyxia is a UI for Helm
 
