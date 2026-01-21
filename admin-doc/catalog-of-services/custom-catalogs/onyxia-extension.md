@@ -1,11 +1,15 @@
 ---
-description: Onyxia has his own extension of json schema
+description: Onyxia's JSON Schema extention
 icon: plus
 ---
 
-# Onyxia extension
+# x-onyxia
 
-### \[x-onyxia] overwriteDefaultWith
+Onyxia defines a custom extention to the [JSON Schema spec](json-schema-support.md). It's a set of Onyxia specific properties that lives under a reserved property name (x-onyxia) and that let you specify onyxia specific configuration. &#x20;
+
+The number one usecase of this is to enable every user to have different default service configuration based on their identity on your platofrm. Eg. Setting the correct git and S3 credentials on an user by user basis. &#x20;
+
+### overwriteDefaultWith
 
 Let's consider a sample of the `values.schema.json` of the InseeFrLab/helm-charts-interactive-services' Jupyter chart:
 
@@ -305,9 +309,11 @@ You can also concatenate string values using by wrapping the XOnyxia targeted va
 ```
 {% endcode %}
 
+### overwriteListEnumWith
+
 This is an option for customizing the options of the forms fields rendered as select.
 
-<figure><img src="../../../.gitbook/assets/image (1) (1).png" alt="" width="375"><figcaption><p>Example of select form field in the onyxia launcher</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (1) (1) (1).png" alt="" width="375"><figcaption><p>Example of select form field in the onyxia launcher</p></figcaption></figure>
 
 In your values shema such a field would be defined like:
 
@@ -339,290 +345,6 @@ For example if you need to let the user select one of the groups he belongs to y
 }
 </code></pre>
 
-### \[x-onyxia] overwriteSchemaWith
+### overwriteSchemaWith
 
-Certain elements of a Helm chart should be customized for each instance of Onyxia, such as resource requests and limits, node selectors and tolerations. For this purpose, chart developers can use `x-onyxia.overwriteSchemaWith` to allow administrators to override specific parts of the schema. Our default charts use this specification.
-
-{% code title="values.shema.json" %}
-```json
-"nodeSelector": {
-    "type": "object",
-    "description": "NodeSelector",
-    "default": {},
-    "x-onyxia": {
-        "overwriteSchemaWith": "nodeSelector.json"
-    }
-}
-```
-{% endcode %}
-
-You can see [here](https://github.com/InseeFrLab/onyxia-api/tree/main/onyxia-api/src/main/resources/schemas) the list of default schemas included in the Onyxia API. We also provide examples demonstrating how you [can customize your services using our interactive services charts with the provided schemas](https://github.com/InseeFrLab/helm-charts-interactive-services/).
-
-The following node selector schema provided by Onyxia API is a generic definition, which may not provide the best experience for a specific Kubernetes cluster in Onyxia.
-
-{% code title="nodeSelector.json" %}
-```json
-{
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Node Selector",
-    "type": "object",
-    "description": "Node selector constraints for the pod",
-    "additionalProperties": {
-      "type": "string",
-      "description": "Key-value pairs to select nodes"
-    }
-}
-```
-{% endcode %}
-
-As an administrator of Onyxia, you can provide your own schemas to refine and restrict the initial schemas provided in the Helm chart.
-
-#### node selectors
-
-You can provide this schema to allow your users to choose between SSD or HDD disk types, and A2 or H100 NVIDIA GPUs. Any other values or labels are disallowed, and Onyxia will reject starting a service that does not comply with the provided schema.
-
-{% code title="nodeSelector.json" %}
-```json
-{
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Node Selector",
-  "type": "object",
-  "properties": {
-    "disktype": {
-      "description": "The type of disk",
-      "type": "string",
-      "enum": ["ssd", "hdd"],
-      "default": "ssd"
-    },
-    "gpu": {
-      "description": "The type of GPU",
-      "type": "string",
-      "enum": ["A2", "H100"],
-      "default": "A2"
-    }
-  },
-  "additionalProperties": false //any other label is disallowed
-}
-```
-{% endcode %}
-
-#### rolebindings for IDE pods
-
-This is the default role for IDE pods in our charts. It is very permissive, and you may want to restrict it to view-only access.
-
-{% code title="ide/role.json" %}
-```json
-{
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Role",
-    "type": "object",
-    "properties": {
-        "enabled": {
-            "type": "boolean",
-            "description": "allow your service to access your namespace ressources",
-            "default": true
-        },
-        "role": {
-            "type": "string",
-            "description": "bind your service account to this kubernetes default role",
-            "default": "view",
-            "enum": [
-                "view",
-                "edit",
-                "admin"
-            ]
-        }
-    }
-}
-
-```
-{% endcode %}
-
-Here is the refined version
-
-{% code title="ide/role.json" %}
-```json
-{
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Role",
-  "type": "object",
-  "properties": {
-    "enabled": {
-      "type": "boolean",
-      "const": true,
-      "description": "This value must always be true, allowing your service to access your namespace resources."
-    },
-    "role": {
-      "type": "string",
-      "const": "view",
-      "description": "This value must always be 'view', binding your service account to this Kubernetes default role.",
-    }
-  }
-}
-
-```
-{% endcode %}
-
-#### resources for IDE
-
-You may want to modify the slide bar for resources
-
-{% code title="ide/resources.json" %}
-```json
-{
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Resources",
-    "description": "Your service will have at least the requested resources and never more than its limits. No limit for a resource and you can consume everything left on the host machine.",
-    "type": "object",
-    "properties": {
-        "requests": {
-            "description": "Guaranteed resources",
-            "type": "object",
-            "properties": {
-                "cpu": {
-                    "description": "The amount of cpu guaranteed",
-                    "title": "CPU",
-                    "type": "string",
-                    "default": "100m",
-                    "render": "slider",
-                    "sliderMin": 50,
-                    "sliderMax": 40000,
-                    "sliderStep": 50,
-                    "sliderUnit": "m",
-                    "sliderExtremity": "down",
-                    "sliderExtremitySemantic": "guaranteed",
-                    "sliderRangeId": "cpu"
-                },
-                "memory": {
-                    "description": "The amount of memory guaranteed",
-                    "title": "memory",
-                    "type": "string",
-                    "default": "2Gi",
-                    "render": "slider",
-                    "sliderMin": 1,
-                    "sliderMax": 200,
-                    "sliderStep": 1,
-                    "sliderUnit": "Gi",
-                    "sliderExtremity": "down",
-                    "sliderExtremitySemantic": "guaranteed",
-                    "sliderRangeId": "memory"
-                }
-            }
-        },
-        "limits": {
-            "description": "max resources",
-            "type": "object",
-            "properties": {
-                "cpu": {
-                    "description": "The maximum amount of cpu",
-                    "title": "CPU",
-                    "type": "string",
-                    "default": "30000m",
-                    "render": "slider",
-                    "sliderMin": 50,
-                    "sliderMax": 40000,
-                    "sliderStep": 50,
-                    "sliderUnit": "m",
-                    "sliderExtremity": "up",
-                    "sliderExtremitySemantic": "Maximum",
-                    "sliderRangeId": "cpu"
-                },
-                "memory": {
-                    "description": "The maximum amount of memory",
-                    "title": "Memory",
-                    "type": "string",
-                    "default": "50Gi",
-                    "render": "slider",
-                    "sliderMin": 1,
-                    "sliderMax": 200,
-                    "sliderStep": 1,
-                    "sliderUnit": "Gi",
-                    "sliderExtremity": "up",
-                    "sliderExtremitySemantic": "Maximum",
-                    "sliderRangeId": "memory"
-                }
-            }
-        }
-    }
-}
-
-```
-{% endcode %}
-
-<pre class="language-json" data-title="ide/resources.json"><code class="lang-json"><strong>{
-</strong>    "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Resources",
-    "description": "Your service will have at least the requested resources and never more than its limits. No limit for a resource and you can consume everything left on the host machine.",
-    "type": "object",
-    "properties": {
-        "requests": {
-            "description": "Guaranteed resources",
-            "type": "object",
-            "properties": {
-                "cpu": {
-                    "description": "The amount of cpu guaranteed",
-                    "title": "CPU",
-                    "type": "string",
-                    "default": "100m",
-                    "render": "slider",
-                    "sliderMin": 50,
-                    "sliderMax": 10000,
-                    "sliderStep": 50,
-                    "sliderUnit": "m",
-                    "sliderExtremity": "down",
-                    "sliderExtremitySemantic": "guaranteed",
-                    "sliderRangeId": "cpu"
-                },
-                "memory": {
-                    "description": "The amount of memory guaranteed",
-                    "title": "memory",
-                    "type": "string",
-                    "default": "2Gi",
-                    "render": "slider",
-                    "sliderMin": 1,
-                    "sliderMax": 200,
-                    "sliderStep": 1,
-                    "sliderUnit": "Gi",
-                    "sliderExtremity": "down",
-                    "sliderExtremitySemantic": "guaranteed",
-                    "sliderRangeId": "memory"
-                }
-            }
-        },
-        "limits": {
-            "description": "max resources",
-            "type": "object",
-            "properties": {
-                "cpu": {
-                    "description": "The maximum amount of cpu",
-                    "title": "CPU",
-                    "type": "string",
-                    "default": "5000m",
-                    "render": "slider",
-                    "sliderMin": 50,
-                    "sliderMax": 10000,
-                    "sliderStep": 50,
-                    "sliderUnit": "m",
-                    "sliderExtremity": "up",
-                    "sliderExtremitySemantic": "Maximum",
-                    "sliderRangeId": "cpu"
-                },
-                "memory": {
-                    "description": "The maximum amount of memory",
-                    "title": "Memory",
-                    "type": "string",
-                    "default": "50Gi",
-                    "render": "slider",
-                    "sliderMin": 1,
-                    "sliderMax": 200,
-                    "sliderStep": 1,
-                    "sliderUnit": "Gi",
-                    "sliderExtremity": "up",
-                    "sliderExtremitySemantic": "Maximum",
-                    "sliderRangeId": "memory"
-                }
-            }
-        }
-    }
-}
-</code></pre>
+See: [override-schema-for-a-specific-instance.md](../override-schema-for-a-specific-instance.md "mention")

@@ -1,5 +1,6 @@
 ---
 description: This section describes JSON Schema support in the launcher.
+hidden: true
 icon: bagel
 ---
 

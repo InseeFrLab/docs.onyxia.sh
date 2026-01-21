@@ -13,15 +13,12 @@ These calls are open to **everyone** — a great opportunity to:
 * Get the latest project updates &#x20;
 * Ask questions
 * Discuss the roadmap
-* Showcase how you're using the project\
-
+* Showcase how you're using the project<br>
 
 To join, simply head over to our Slack workspace and join the [_#community-meeting_](https://3innovation.slack.com/archives/C0664UVJ77W) channel.
 
 \
 List of previous community calls minutes :&#x20;
-
-
 
 {% content-ref url="september-2025-community-call.md" %}
 [september-2025-community-call.md](september-2025-community-call.md)

@@ -6,7 +6,7 @@ icon: user
 
 You can define a custom user profile form that appears directly within the user interface.
 
-<figure><img src="../../../.gitbook/assets/image.png" alt=""><figcaption><p>Custom form defined by the Onyxia instance administrator</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (1).png" alt=""><figcaption><p>Custom form defined by the Onyxia instance administrator</p></figcaption></figure>
 
 This form is configured using a JSON Schema provided via your Onyxia `values.yaml`. Here's an example that produces the form shown above:
 

@@ -3,9 +3,9 @@ description: Declare your own repository of charts
 icon: house-flag
 ---
 
-# Use your own repositories
+# Custom Catalogs
 
-If you do not specify catalogs in your `onyxia/values.yaml,` these are the ones that are used by default: [See file](https://github.com/InseeFrLab/onyxia-api/blob/main/onyxia-api/src/main/resources/catalogs.json).
+If you do not specify catalogs in your `apps/onyxia/values.yaml,` these are the ones that are used by default: [See file](https://github.com/InseeFrLab/onyxia-api/blob/main/onyxia-api/src/main/resources/catalogs.json).
 
 To configure your onyxia instance to use your own custom helm repositories as onyxia catalogs you need to use the onyxia configuration `onyxia.api.catalogs`.\
 Let's say we're NASA and we want to have an "_Aerospace services"_ catalog on our onyxia instance. Our onyxia configuration would look a bit like this:
@@ -66,3 +66,13 @@ onyxia:
     ]
 ```
 {% endcode %}
+
+***
+
+Now the next step for you is probably to fork one of our catalog of service, for example [InseeFrLab/helm-charts-datacience](https://github.com/inseefrlab/helm-charts-interactive-services). And start editing the charts/\*/values.schema.json files to meet the special needs of your organization. &#x20;
+
+To do that, you'll need to understand how the Onyxia extension of the JSON Schema spec works:
+
+{% content-ref url="onyxia-extension.md" %}
+[onyxia-extension.md](onyxia-extension.md)
+{% endcontent-ref %}
