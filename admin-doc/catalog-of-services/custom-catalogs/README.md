@@ -5,12 +5,27 @@ icon: house-flag
 
 # Custom Catalogs
 
-If you do not specify catalogs in your `apps/onyxia/values.yaml,` these are the ones that are used by default: [See file](https://github.com/InseeFrLab/onyxia-api/blob/main/onyxia-api/src/main/resources/catalogs.json).
+Use custom catalogs when you want to:
 
-To configure your onyxia instance to use your own custom helm repositories as onyxia catalogs you need to use the onyxia configuration `onyxia.api.catalogs`.\
-Let's say we're NASA and we want to have an "_Aerospace services"_ catalog on our onyxia instance. Our onyxia configuration would look a bit like this:
+* fork the official catalogs and maintain your own variants
+* publish internal charts (private org tooling)
+* expose non-official charts as first-class Onyxia services
 
-{% code title="onyxia/values.yaml" %}
+{% hint style="info" %}
+If you don’t configure `onyxia.api.catalogs`, Onyxia loads the defaults from [`catalogs.json`](https://github.com/InseeFrLab/onyxia-api/blob/main/onyxia-api/src/main/resources/catalogs.json).
+{% endhint %}
+
+{% hint style="info" %}
+If you only need to change defaults/constraints, avoid forking catalogs. Use [values.schema.json overrides](../override-schema-for-a-specific-instance.md).
+{% endhint %}
+
+### Configure catalogs
+
+Catalogs are configured in `apps/onyxia/values.yaml` under `onyxia.api.catalogs`.
+
+Example: you’re NASA and you want an “Aerospace services” tab.
+
+{% code title="apps/onyxia/values.yaml" %}
 ```yaml
 onyxia:
   web:
@@ -67,11 +82,13 @@ onyxia:
 ```
 {% endcode %}
 
-***
+### Next: fork or build a catalog repo
 
-Now the next step for you is probably to fork one of our catalog of service, for example [InseeFrLab/helm-charts-datacience](https://github.com/inseefrlab/helm-charts-interactive-services). And start editing the charts/\*/values.schema.json files to meet the special needs of your organization. &#x20;
+Most setups start by forking an official catalog and editing `charts/*/values.schema.json` and chart defaults.
 
-To do that, you'll need to understand how the Onyxia extension of the JSON Schema spec works:
+Good starting point: [InseeFrLab/helm-charts-interactive-services](https://github.com/inseefrlab/helm-charts-interactive-services).
+
+To go further, you’ll want the Onyxia JSON Schema extensions:
 
 {% content-ref url="onyxia-extension.md" %}
 [onyxia-extension.md](onyxia-extension.md)
