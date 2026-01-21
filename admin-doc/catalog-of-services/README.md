@@ -1,55 +1,78 @@
 ---
+description: How Onyxia catalogs map to Helm repositories and how to customize them.
 icon: microscope
 ---
 
 # Catalog of services
 
-By default Onyxia instances will features the following serices catalogs:
+Onyxia ships with a set of **official service catalogs**.
 
-<table data-view="cards"><thead><tr><th></th><th data-type="content-ref"></th><th data-hidden data-card-cover data-type="image">Cover image</th></tr></thead><tbody><tr><td>Interactive Servicies (IDEs)</td><td><a href="https://github.com/inseefrlab/helm-charts-interactive-services">https://github.com/inseefrlab/helm-charts-interactive-services</a></td><td><a href="../../.gitbook/assets/Screenshot 2026-01-21 at 16.33.24.png">Screenshot 2026-01-21 at 16.33.24.png</a></td></tr><tr><td>Databases</td><td><a href="https://github.com/inseefrlab/helm-charts-databases">https://github.com/inseefrlab/helm-charts-databases</a></td><td><a href="../../.gitbook/assets/hero (1).webp">hero (1).webp</a></td></tr><tr><td>Automation</td><td><a href="https://github.com/InseeFrLab/helm-charts-automation/">https://github.com/InseeFrLab/helm-charts-automation/</a></td><td><a href="../../.gitbook/assets/mlflow-argo (2).png">mlflow-argo (2).png</a></td></tr><tr><td>Dataviz - Not enabled by default</td><td><a href="https://github.com/InseeFrLab/helm-charts-datavisualization">https://github.com/InseeFrLab/helm-charts-datavisualization</a></td><td><a href="../../.gitbook/assets/65dcd5fadc1df1b15af75c1e_Metabase vs Redash.png">65dcd5fadc1df1b15af75c1e_Metabase vs Redash.png</a></td></tr></tbody></table>
+If you don’t configure anything, these are the defaults:
 
-However as an Onyxia instance administrator there are many ways you can customize the experience of your users.
+<table data-view="cards"><thead><tr><th></th><th data-type="content-ref"></th><th data-hidden data-card-cover data-type="image">Cover image</th></tr></thead><tbody><tr><td>Interactive services (IDEs)</td><td><a href="https://github.com/inseefrlab/helm-charts-interactive-services">https://github.com/inseefrlab/helm-charts-interactive-services</a></td><td><a href="../../.gitbook/assets/Screenshot 2026-01-21 at 16.33.24.png">Screenshot 2026-01-21 at 16.33.24.png</a></td></tr><tr><td>Databases</td><td><a href="https://github.com/inseefrlab/helm-charts-databases">https://github.com/inseefrlab/helm-charts-databases</a></td><td><a href="../../.gitbook/assets/hero (1).webp">hero (1).webp</a></td></tr><tr><td>Automation</td><td><a href="https://github.com/InseeFrLab/helm-charts-automation/">https://github.com/InseeFrLab/helm-charts-automation/</a></td><td><a href="../../.gitbook/assets/mlflow-argo (2).png">mlflow-argo (2).png</a></td></tr><tr><td>Data visualization (optional)</td><td><a href="https://github.com/InseeFrLab/helm-charts-datavisualization">https://github.com/InseeFrLab/helm-charts-datavisualization</a></td><td><a href="../../.gitbook/assets/65dcd5fadc1df1b15af75c1e_Metabase vs Redash.png">65dcd5fadc1df1b15af75c1e_Metabase vs Redash.png</a></td></tr></tbody></table>
 
-* You can change the default configuration of your services of your instance, for example adjust a default resource allocation policy.
-* You can have different policies that apply on different group of users of your platforms. For example you can enforce that only a certain subset of user can allocate H100 to their services.
-* You can even fork our base catalog, customize them, extend them or create your own service from scratch. Anything software that can be deployed on a kubernetes clusted can be turned into an onyxia service. See [Doom launched as an Onyxia service as an illustration](https://youtu.be/7SuXRfQqdGM?si=Y4_lXozJfh3ajyT7). &#x20;
+As an instance admin, you can heavily customize what users see and can do:
 
-## Base Principles
+* Change defaults for a service (resources, images, features).
+* Apply different policies per user group (example: who can request H100).
+* Fork our catalogs or build your own.
+* Turn any Helm-deployable software into a service.
 
-You can think of Onyxia as a graphical user interface for Helm.
+Example: [Doom launched as an Onyxia service](https://youtu.be/7SuXRfQqdGM?si=Y4_lXozJfh3ajyT7).
 
-### Baseline Facts - Not specific to Onyxia
+## Mental model: Onyxia is a UI for Helm
 
-A Helm repository is a collection of helm chart.
+If you already know Helm, most of this will feel familiar.
 
-A helm chart is a recipe to deploy a software on kubernetes, you can think of it as an installer for K8s.
+### Helm concepts (baseline)
 
-Each helm chart accept a certain number of configuration and knobs to parametrize the deployment. The default values are specified in the [values.yaml](https://github.com/InseeFrLab/helm-charts-interactive-services/blob/main/charts/jupyter-python/values.yaml) of the helm chart.
+* A **Helm repository** is a collection of Helm charts.
+* A **Helm chart** is a recipe to deploy software on Kubernetes.
+* Charts expose configuration via **values**.
 
-When deploying a specific helm chart on a kuberneted cluster you can overwirte any of those default values. &#x20;
+Defaults live in `values.yaml`.
 
-The expected shape of of the values object used to launch the service can be specified by the chart author by providing a [values.schema.json](https://github.com/InseeFrLab/helm-charts-interactive-services/blob/main/charts/jupyter-python/values.schema.json). This essencially tells the user of the chart what are the available deployment option for a given chart and the expected format to specify them. &#x20;
+Example: [`values.yaml` (jupyter-python)](https://github.com/InseeFrLab/helm-charts-interactive-services/blob/main/charts/jupyter-python/values.yaml).
 
-### How Onyxia Levrages the Helm to deliver it's UX
+When installing a chart, you can override any default value.
 
-The administrator of an Onyxia instance can configure Onyxia to specify which helm chart repositories should be used.
+Charts can also ship a `values.schema.json`.
 
-If no specific catalog are configured onyxia will load with [this configuration](https://github.com/InseeFrLab/onyxia-api/blob/main/onyxia-api/src/main/resources/catalogs.json) - Three catalog: Interactive Services - Databases - Automation.
+This JSON Schema describes:
 
-Each helm chart repository will represent a tab in the "Service Catalog" page (Interactive Services, Databases, Automation...)
+* which options exist
+* the expected types / formats
+* constraints (min/max, enums, patterns, …)
 
-Each service card correspond to a specific helm chart (Jupyter-Python, RStudio, Jupyter-tensorflow).
+Example: [`values.schema.json` (jupyter-python)](https://github.com/InseeFrLab/helm-charts-interactive-services/blob/main/charts/jupyter-python/values.schema.json).
+
+### How Onyxia uses Helm to build the UX
+
+You configure which Helm repositories Onyxia should load as catalogs.
+
+{% hint style="info" %}
+If you don’t configure catalogs, Onyxia loads the defaults from [`catalogs.json`](https://github.com/InseeFrLab/onyxia-api/blob/main/onyxia-api/src/main/resources/catalogs.json).
+{% endhint %}
+
+On the “Service catalog” page:
+
+* Each **Helm repo** becomes a **tab** (Interactive services, Databases, Automation, …).
+* Each **chart** becomes a **service card** (Jupyter, RStudio, …).
 
 <figure><img src="../../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
 
-Once on the launch page, Onyxia will read the values.schema.json of the selected chart and turn it into a graphical form so that user can see what option are available to configure a chart and adapt to their need without having to write a complex command. &#x20;
+When a user opens a service:
 
-Aditionally, onyxia can inject relevent default in the configuration based on the identity of the user, like for example pre filling the user's S3 credential as shown here. &#x20;
+* Onyxia reads the chart’s `values.schema.json`.
+* It renders a form from the schema.
+* It generates a final `values` object that Helm will apply.
+
+Onyxia can also inject user-specific defaults. For example, it can prefill S3 credentials:
 
 <figure><img src="../../.gitbook/assets/onyxia-helm.png" alt=""><figcaption></figcaption></figure>
 
-## Customization
+## Customizing the catalog
 
-Now that you get the biger picture let's see what are you options for customizing the catalog of your Onyxia Instance: &#x20;
+You have two main customization paths:
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th data-type="content-ref"></th></tr></thead><tbody><tr><td>Instance Level Configuration</td><td><a href="override-schema-for-a-specific-instance.md">override-schema-for-a-specific-instance.md</a></td></tr><tr><td>Helm Chart Repository Customization - Craft your own catalog of services</td><td><a href="custom-catalogs/">custom-catalogs</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th data-type="content-ref"></th></tr></thead><tbody><tr><td>Instance-level overrides (recommended for most setups)</td><td><a href="override-schema-for-a-specific-instance.md">override-schema-for-a-specific-instance.md</a></td></tr><tr><td>Bring your own catalogs (or a fork of ours)</td><td><a href="custom-catalogs/">custom-catalogs</a></td></tr></tbody></table>
