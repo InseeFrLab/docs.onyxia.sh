@@ -55,7 +55,8 @@ onyxia:
       # Optional: Defaults to `"roles"`. Defines which claim represents user roles.
       oidc.roles-claim: "..."
 
-      # Optional: Additional query parameters to append to the OIDC provider login URL.  
+      # Optional: Additional query parameters to append to the OIDC authorization
+      # endpoint (the login url).   
       # Example: If using Keycloak with Google OAuth as an identity provider, you might want  
       # to preselect Google as the login option using `"kc_idp_hint=google"`.  
       # 
@@ -63,6 +64,10 @@ onyxia:
       # If adding multiple parameters, separate them with `&`.  
       #
       # Example: `"foo=foo%20value&bar=bar%20value"`
+      #
+      # duct-taping case: If you provide an audience as query param like
+      # `"audience=onyxia"`, the audience will also be passed as an extra
+      # token param because some AS might expect it.  
       oidc.extra-query-params: "..."
 
       # Optional: Expected audience (`aud`) value in the Access Token.  
