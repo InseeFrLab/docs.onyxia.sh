@@ -188,7 +188,8 @@ onyxia:
       # Example: "profile api://onyxia-api/access_as_user"
       oidc.scope: "profile <Application ID URI (Onyxia - API)>/<scope name (usually access_as_user)>"
       # Example: "api://onyxia-api"
-      oidc.audience: "<Application ID URI (Onyxia - API)>"
+      oidc.audience: "<Application (client) ID (Onyxia - API)>"
+      
 ```
 {% endcode %}
 {% endtab %}
