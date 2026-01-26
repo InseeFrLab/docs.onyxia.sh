@@ -171,10 +171,10 @@ Follow this guide to configure a Microsoft Entra ID application for Onyxia.
 
 {% embed url="https://docs.oidc-spa.dev/providers-configuration/microsoft-entra-id" %}
 For Onyxia, use these substitutions:\
-`"My App"` → `"Onyxia"`\
-`"My App - API"` → `"Onyxia - API"`\
-`"api://my-app-api"` → `"api://onyxia-api"`\
-`"https://my-app.com/"` → `"https://datalab.my-domain.net/"`
+`My App - API` -> `Onyxia - API`\
+`api://my-app-api` -> `api://onyxia-api`\
+`My App` -> `Onyxia`\
+[`https://my-app.com/`](https://my-app.com/) -> `https://datalab.my-domain.net/`
 {% endembed %}
 
 Here is what your configuration should look like:
@@ -187,12 +187,10 @@ onyxia:
       authentication.mode: "openidconnect"
       oidc.issuer-uri: "https://login.microsoftonline.com/<Directory (tenant) ID (Onyxia)>/v2.0"
       oidc.clientID: "<Application (client) ID (Onyxia)>"
-      # ⚠️ Do **not** use `"sub"` or `"upn"` as they may contain 
+      # Do **not** use `"sub"` or `"upn"` as they may contain 
       # non-alphanumeric characters.
       oidc.username-claim: "oid"
-      # Example: "profile api://onyxia-api/access_as_user"
-      oidc.scope: "profile <Application ID URI (Onyxia - API)>/<scope name (usually access_as_user)>"
-      # Example: "api://onyxia-api"
+      oidc.scope: "profile api://onyxia-api/access_as_user"
       oidc.audience: "<Application (client) ID (Onyxia - API)>"
       
 ```
@@ -267,7 +265,7 @@ onyxia:
       oidc.issuer-uri: "https://auth.my-domain.net"
       oidc.clientID: "<Onyxia Application Client ID>"  
       oidc.username-claim: "onyxia-username"
-      oidc.extra-query-params: "audience=https://datalab.my-domain.net/api"
+      oidc.extra-query-params: "audience=https%3A%2F%2Fdatalab.my-domain.net%2Fapi"
       oidc.audience: "https://datalab.my-domain.net/api"
       # Optional: Auto logout after inactivity.
       oidc.idleSessionLifetimeInSeconds: "300"
