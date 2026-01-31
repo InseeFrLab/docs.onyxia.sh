@@ -20,6 +20,14 @@ To join, simply head over to our Slack workspace and join the [_#community-meeti
 \
 List of previous community calls minutes :&#x20;
 
+{% content-ref url="january-2026-community-call.md" %}
+[january-2026-community-call.md](january-2026-community-call.md)
+{% endcontent-ref %}
+
+{% content-ref url="october-2025-community-call.md" %}
+[october-2025-community-call.md](october-2025-community-call.md)
+{% endcontent-ref %}
+
 {% content-ref url="september-2025-community-call.md" %}
 [september-2025-community-call.md](september-2025-community-call.md)
 {% endcontent-ref %}
