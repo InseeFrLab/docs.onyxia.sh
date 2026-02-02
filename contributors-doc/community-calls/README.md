@@ -4,9 +4,9 @@ icon: bullhorn
 
 # Community calls
 
-Our community calls take place **on the last Thursday of each month at 16:30 (Paris time)**.
+Our community calls take place **on the last Friday of each month at 13:00 (Paris time)**.
 
-{% file src="../../.gitbook/assets/onyxia-call.ics" %}
+{% file src="../../.gitbook/assets/onyxia-call-every-last-friday-a-month-1pm.ics" %}
 
 These calls are open to **everyone** — a great opportunity to:
 
