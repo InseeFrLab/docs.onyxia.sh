@@ -19,13 +19,13 @@ We also heavily rely on [tsafe](https://github.com/garronej/tsafe). It's a colle
 
 ## For working on what the end user 👁
 
-Anything contained in the [src/ui](https://github.com/InseeFrLab/onyxia-web/tree/main/src/ui) directory.
+Anything contained in the [src/ui](https://github.com/InseeFrLab/onyxia-web/tree/main/web/src/ui) directory.
 
 ### Onyxia-UI 🐔
 
 {% embed url="https://github.com/InseeFrLab/onyxia-ui" %}
 
-The UI toolkit used in the project, you can find the setup of [onyxia-UI](https://github.com/InseeFrLab/onyxia-ui) in onyxia-web here: [src/ui/theme.tsx](https://github.com/InseeFrLab/onyxia/blob/main/web/src/ui/theme.tsx).
+The UI toolkit used in the project, you can find the setup of [onyxia-UI](https://github.com/InseeFrLab/onyxia-ui) in onyxia-web here: [web/src/ui/theme/theme.tsx](https://github.com/InseeFrLab/onyxia/blob/main/web/src/ui/theme/theme.tsx).
 
 #### [MUI](https://mui.com) integration
 
@@ -73,7 +73,7 @@ Rules of thumbs when it comes to styling:
 
 * Every component should accept[ an optional `className`](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/src/app/components/App/Footer.tsx#L9)prop it should always [overwrite the internal styles](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/src/app/components/App/Footer.tsx#L55).
 * A component should not size or position itself. It should always be the responsibility of the parent component to do it. In other words, you should never have `height`, `width`, `top`, `left`, `right`, `bottom` or `margin` in [the root styles](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/src/app/components/App/Footer.tsx#L16-L23) of your components.
-* You should never have a color or a dimension hardcoded elsewhere than in [the theme configuration](https://github.com/InseeFrLab/onyxia-web/blob/main/src/app/theme.tsx). Use `theme.spacing()` ([ex1](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/src/app/components/pages/MyServices/MyServicesCards/MyServicesCard/MyServicesCard.tsx#L24), [ex2](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/src/app/components/pages/MyServices/MyServicesCards/MyServicesCard/MyServicesCard.tsx#L31), [ex3](https://github.com/InseeFrLab/onyxia-web/blob/95667d66cc6ee835ede8d9d6a9bca5299d11bc1a/src/app/components/pages/MyServices/MyServicesSavedConfigs/MyServicesSavedConfig/MyServicesSavedConfig.tsx#L30)) and [`theme.colors.useCases.xxx`](https://github.com/InseeFrLab/onyxia-web/blob/08addbc60c820b8306cf8b0ccbe4793bd2f85661/src/app/components/pages/MyServices/MyServicesSavedConfigs/MyServicesSavedConfig/MyServicesSavedConfigOptions.tsx#L23-L32).
+* You should never have a color or a dimension hardcoded elsewhere than in the theme configuration. Use `theme.spacing()` ([ex1](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/src/app/components/pages/MyServices/MyServicesCards/MyServicesCard/MyServicesCard.tsx#L24), [ex2](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/src/app/components/pages/MyServices/MyServicesCards/MyServicesCard/MyServicesCard.tsx#L31), [ex3](https://github.com/InseeFrLab/onyxia-web/blob/95667d66cc6ee835ede8d9d6a9bca5299d11bc1a/src/app/components/pages/MyServices/MyServicesSavedConfigs/MyServicesSavedConfig/MyServicesSavedConfig.tsx#L30)) and [`theme.colors.useCases.xxx`](https://github.com/InseeFrLab/onyxia-web/blob/08addbc60c820b8306cf8b0ccbe4793bd2f85661/src/app/components/pages/MyServices/MyServicesSavedConfigs/MyServicesSavedConfig/MyServicesSavedConfigOptions.tsx#L23-L32).
 
 ### screen-scaler 🐔
 
@@ -87,7 +87,7 @@ It also asks to rotate the screen when the app is rendered in protrait mode. &#x
 
 {% embed url="https://storybook.js.org/" %}
 
-It enables us to test the graphical components in isolation. [See sources](https://github.com/InseeFrLab/onyxia/tree/main/web/src/stories).
+It enables us to test the graphical components in isolation.
 
 To launch Storybook locally run the following command:
 
@@ -128,8 +128,7 @@ Checkout [the helm chart](https://github.com/InseeFrLab/paris-sspcloud/blob/812b
       TITLE: SSP Cloud
 ```
 
-* All the accepted environment variables are defined here: [.env](https://github.com/InseeFrLab/onyxia-web/blob/main/.env). They are all prefixed with `REACT_APP_` to be compatible [with create-react-app](https://create-react-app.dev/docs/adding-custom-environment-variables/#adding-development-environment-variables-in-env). Default values are defined in this file.
-* Only in development (`yarn start`) [`.env.local`](https://github.com/InseeFrLab/onyxia-web/blob/main/.env.local.sample) is also loaded and have priority over `.env`
+* All the accepted environment variables are defined here: [.env](https://github.com/InseeFrLab/onyxia-web/blob/main/web/.env). They are all prefixed with `REACT_APP_` to be compatible [with create-react-app](https://create-react-app.dev/docs/adding-custom-environment-variables/#adding-development-environment-variables-in-env). Default values are defined in this file.
 * Then, in the code the variable can be accessed [like this](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/src/app/libApi/LibProvider.tsx#L32).
 
 {% hint style="warning" %}
@@ -190,7 +189,7 @@ For internalization and translation.
 
 ## For working on 🧠 of the App
 
-Anything contained in the [src/core](https://github.com/InseeFrLab/onyxia/tree/main/src/core) directory.
+Anything contained in the [src/core](https://github.com/InseeFrLab/onyxia/tree/main/web/src/core) directory.
 
 ### clean-architecture 🐔
 
