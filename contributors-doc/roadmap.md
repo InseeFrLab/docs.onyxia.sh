@@ -20,7 +20,4 @@ We prioritize our work based on community feedback ! &#x20;
 
 Or you can ask us on Slack, we're very prompt to respond ! &#x20;
 
-{% embed url="https://join.slack.com/t/3innovation/shared_invite/zt-1hnzukjcn-6biCSmVy4qvyDGwbNI~sWg" %}
-Onyxia Community Slack Server
-{% endembed %}
-
+{% embed url="https://join.slack.com/t/3innovation/shared_invite/zt-3r26584mp-SGPr9XvTukNkJiDZfRjZiQ" %}
