@@ -115,7 +115,7 @@ In theory it shouldn't be possible, onyxia-web is an SPA, it is just static JS/C
 
 It enables to run onyxia-web again a specific infrastructure while keeping the app docker image generic.
 
-Checkout [the helm chart](https://github.com/InseeFrLab/paris-sspcloud/blob/812b12e00e8c24f031083ab41949335bd24b9f4b/apps/onyxia/values.yaml#L18-L33):
+Checkout [the helm chart](https://github.com/InseeFrLab/onyxia/tree/main/helm-chart):
 
 ```
   web:
