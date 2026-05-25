@@ -4,237 +4,394 @@ icon: folder
 
 # S3 Configuration
 
-Configuration parameters for integrating your Onyxia service with S3.
+Configuration parameters for integrating your Onyxia instance with S3 or an
+S3-compatible object store.
 
-[The installation guide](readme/data-s3.md) provides instructions on how to set up [Minio](https://min.io/) with a basic configuration. However, you may want more control or need to connect to a different S3-compatible system.
+[The installation guide](/admin-doc/readme/data-s3.md) provides instructions on
+how to set up [MinIO](https://min.io/) with a basic configuration. This page
+focuses on the region configuration used by Onyxia to expose S3 access to users.
 
-Below are all the available configuration options.
+Onyxia exposes S3 access through **profiles**, following the same idea as AWS CLI
+profiles. An administrator can define one or more profiles in
+`onyxia.api.regions[].data.S3`. Each profile tells Onyxia:
+
+- which S3 endpoint to use;
+- how to request temporary S3 credentials with STS;
+- which profile name users will see and use in code snippets;
+- which bookmarked S3 directories should appear in the file explorer.
+
+Most installations should configure S3 with STS. In that mode, Onyxia requests
+temporary credentials with `AssumeRoleWithWebIdentity`.
+
+## Minimal Example
+
+This example creates one profile named `default` for each user. The STS role ARN
+and the bookmark are generated from the user's `preferred_username` claim.
 
 {% code title="apps/onyxia/values.yaml" %}
+
 ```yaml
 onyxia:
   api:
-    regions: [
-      {
+    regions:
+      - id: default
         # ...
-        data: {
-          S3 : { ... } # ...See expected format below
-        }
-      }
-    ]
+        data:
+          S3:
+            URL: https://minio.lab.example.com
+            region: us-east-1
+            pathStyleAccess: true
+            sts:
+              # Optional for MinIO when it is the same as S3.URL.
+              # For AWS, use: https://sts.amazonaws.com
+              URL: https://minio.lab.example.com
+              durationSeconds: 3600
+              role:
+                profileName: default
+                roleARN: arn:aws:iam::123456789012:role/onyxia-user-$1
+                roleSessionName: onyxia-$1
+                claimName: preferred_username
+              oidcConfiguration:
+                clientId: onyxia-s3
+            bookmarkedDirectories:
+              - fullPath: "$1/"
+                title: Personal
+                claimName: preferred_username
+                forProfileName: default
 ```
+
 {% endcode %}
 
-````typescript
-type S3 = {
+For a user whose decoded OIDC ID token contains:
+
+```json
+{
+  "preferred_username": "alice"
+}
+```
+
+Onyxia exposes one S3 profile:
+
+```yaml
+profileName: default
+endpoint: https://minio.lab.example.com
+roleARN: arn:aws:iam::123456789012:role/onyxia-user-alice
+roleSessionName: onyxia-alice
+bookmarks:
+  - s3://alice/
+```
+
+The role must already exist on the S3 or cloud provider side, and it must trust
+the OIDC identity provider used by Onyxia for this S3 client.
+
+## Multiple Profiles From Claims
+
+`data.S3` can be a single object or an array of objects. A single S3 object can
+also generate several profiles when `sts.role` is an array or when a role uses a
+claim whose value is an array.
+
+The following example creates:
+
+- one personal profile named `default`;
+- one project profile per user group, except groups matching
+  `^USER_ONYXIA.*`;
+- one public bookmark attached to all generated profiles.
+
+```yaml
+onyxia:
+  api:
+    regions:
+      - id: default
+        # ...
+        data:
+          S3:
+            URL: https://ceph.lab.sspcloud.fr
+            region: us-east-1
+            pathStyleAccess: true
+            sts:
+              role:
+                - profileName: default
+                  roleARN: arn:aws:iam::123456789012:role/$1
+                  roleSessionName: onyxia-personal-bucket
+                  claimName: preferred_username
+
+                - profileName: project-$1
+                  roleARN: arn:aws:iam::329456783432:role/projet-$1
+                  roleSessionName: onyxia-project-bucket-$1
+                  claimName: groups
+                  excludedClaimPattern: "^USER_ONYXIA.*"
+
+              oidcConfiguration:
+                clientId: onyxia-ceph
+
+            bookmarkedDirectories:
+              - fullPath: "$1/"
+                title: Personal
+                claimName: preferred_username
+                forProfileName: default
+
+              - fullPath: "project-$1/"
+                title: "Group $1"
+                claimName: groups
+                excludedClaimPattern: "^USER_ONYXIA.*"
+                forProfileName: project-$1
+
+              - fullPath: donnees-insee/diffusion/
+                title:
+                  fr: Données de diffusion
+                  en: Dissemination Data
+                forProfileName:
+                  - default
+                  - project-*
+```
+
+For this decoded OIDC ID token:
+
+```json
+{
+  "preferred_username": "johnd",
+  "groups": ["sspcloud", "codegouv", "USER_ONYXIA_admin"]
+}
+```
+
+Onyxia exposes these profiles:
+
+```yaml
+- profileName: default
+  roleARN: arn:aws:iam::123456789012:role/johnd
+  roleSessionName: onyxia-personal-bucket
+  bookmarks:
+    - s3://johnd/
+    - s3://donnees-insee/diffusion/
+
+- profileName: project-sspcloud
+  roleARN: arn:aws:iam::329456783432:role/projet-sspcloud
+  roleSessionName: onyxia-project-bucket-sspcloud
+  bookmarks:
+    - s3://project-sspcloud/
+    - s3://donnees-insee/diffusion/
+
+- profileName: project-codegouv
+  roleARN: arn:aws:iam::329456783432:role/projet-codegouv
+  roleSessionName: onyxia-project-bucket-codegouv
+  bookmarks:
+    - s3://project-codegouv/
+    - s3://donnees-insee/diffusion/
+```
+
+No profile is generated for `USER_ONYXIA_admin` because it matches
+`excludedClaimPattern`.
+
+## Main Options
+
+```typescript
+type RegionData = {
+  /**
+   * One S3 configuration object, or an array of S3 configuration objects.
+   */
+  S3?: S3Config | S3Config[];
+};
+
+type S3Config = {
   /**
    * The URL of the S3 server.
-   * Examples: "https://minio.lab.sspcloud.fr" or "https://s3.amazonaws.com".
+   * Examples: "https://minio.lab.example.com", "https://s3.amazonaws.com".
    */
   URL: string;
 
   /**
-   * The AWS S3 region. This parameter is optional if you are configuring
-   * integration with a MinIO server.
-   * Example: "us-east-1"
+   * The S3 region.
+   * Optional for some S3-compatible systems such as MinIO.
    */
   region?: string;
 
   /**
-   * This parameter informs Onyxia how to format file download URLs for the configured 
-   * S3 server.
+   * Controls how object URLs are built.
+   *
+   * true:
+   *   https://minio.lab.example.com/my-bucket/path/to/file.parquet
+   *
+   * false:
+   *   https://my-bucket.minio.lab.example.com/path/to/file.parquet
+   *
    * Default: true
-   *
-   * Example:
-   * Assume "https://minio.lab.sspcloud.fr" as the value for region.data.S3.URL.
-   * For a file "a/b/c/foo.parquet" in the bucket "user-bob":
-   *
-   * With pathStyleAccess set to true, the download link will be:
-   *   https://minio.lab.sspcloud.fr/user-bob/a/b/c/foo.parquet
-   *
-   * With pathStyleAccess set to false (virtual-hosted style), the link will be:
-   *   https://user-bob.minio.lab.sspcloud.fr/a/b/c/foo.parquet
-   *
-   * For MinIO, pathStyleAccess is typically set to true.
-   * For Amazon Web Services S3, is has to be set to false.
    */
   pathStyleAccess?: boolean;
 
   /**
-   * Defines where users are permitted to read/write S3 files,
-   * specifying the allocated storage space in terms of bucket and object name prefixes.
-   *
-   * Mandatory unless data.S3.sts is not defined then it's optional.
-   *
-   * Example:
-   * For a user "bob" in the "exploration" group, using the configuration:
-   *
-   * Shared bucket mode, all the users share a single bucket:
-   *   "workingDirectory": {
-   *       "bucketMode": "shared",
-   *       "bucketName": "onyxia",
-   *       "prefix": "user-",
-   *       "prefixGroup": "project-"
-   *   }
-   *
-   * In this configuration Onyxia will assumes that Bob has read/write access to 
-   * objects starting with "user-bob/" and "project-exploration/" in the "onyxia" 
-   * bucket.
-   *
-   * Multi bucket mode:
-   *   "workingDirectory": {
-   *       "bucketMode": "multi",
-   *       "bucketNamePrefix": "user-",
-   *       "bucketNamePrefixGroup": "project-",
-   *   }
-   *
-   * In this configuration Onyxia will assumes that Bob has read/wite access to the 
-   * entire "user-bob" and "project-exploration" buckets.
-   *
-   * If STS is enabled and a bucket doesn't exist, Onyxia will try to create it.
+   * Use this only when sts.role is omitted.
+   * When sts.role is present, the generated profile names come from
+   * sts.role.profileName.
+   * If sts.role is omitted and profileName is also omitted, Onyxia uses
+   * "default" when there is only one S3 configuration.
    */
-  workingDirectory?:
-    | {
-        bucketMode: "shared";
-        bucketName: string;
-        prefix: string;
-        prefixGroup: string;
-      }
-    | {
-        bucketMode: "multi";
-        bucketNamePrefix: string;
-        bucketNamePrefixGroup: string;
-      };
+  profileName?: string;
+
   /**
-   * Defines a list of S3 directory bookmarks to display in the user's file explorer 
-   * interface.
-   * 
-   * Bookmarks can be:
-   * - Static: shown to all users.
-   * - Dynamic: shown only if specific conditions based on the user's identity token 
-   *   are met.
-   *
-   * Each bookmark must define:
-   * - `fullPath`: The absolute S3 path to the bookmarked folder.
-   * - `title`: The display title, supporting dynamic content via template variables.
-   * - `description` (optional): A short description of the bookmark.
-   * - `tags` (optional): An array of LocalizedString tags for UI categorization.
-   *
-   * For static bookmarks:
-   * - Do not specify any `claimName`.
-   * - The bookmark is shown to all users.
-   *
-   * For dynamic bookmarks:
-   * - Set `claimName` to the name of a claim (e.g., `"groups"`) from the user's 
-   *   **ID token**.
-   * - The ID token is the one issued by the **OIDC configuration associated 
-   *   with the S3 client** (i.e., from `sts.oidcConfiguration`).
-   * - `includedClaimPattern` is a regular expression that must match at least one 
-   *    value in the specified claim for the bookmark to be shown.
-   * - `excludedClaimPattern` is a regular expression that, if matched by any value 
-   *    in the claim, causes the bookmark to be ignored.
-   * - If a `claimValue` matches both, exclusion takes precedence 
-   *   (i.e., the bookmark is not shown).
-   *
-   * Template placeholders:
-   * - `$1`, `$2`, ...: inserts corresponding capture groups from 
-   *   `includedClaimPattern` (useful for custom rendering in `fullPath`, `title`, 
-   *   `description`, or `tags`).
-   *
-   * 🔁 Example (static):
-   * ```json
-   * {
-   *   "bookmarkedDirectories": [
-   *     {
-   *       "fullPath": "data/public",
-   *       "title": {
-   *         "fr": "Données publiques",
-   *         "en": "Public Data"
-   *       },
-   *       "description": {
-   *         "fr": "Dossier partagé contenant des jeux de données publics.",
-   *         "en": "Shared folder containing public datasets."
-   *       },
-   *       "tags": [
-   *         {
-   *           "fr": "lecture seule",
-   *           "en": "read-only"
-   *         }
-   *       ]
-   *     }
-   *   ]
-   * }
-   * ```
-   *
-   * 🔁 Example (dynamic):
-   * ```json
-   * {
-   *   "bookmarkedDirectories": [
-   *     {
-   *       "fullPath": "group-$1/",
-   *       "claimName": "groups",
-   *       "includedClaimPattern": "^group-(.*)$",
-   *       "excludedClaimPattern": "^group-secret$",
-   *       "title": "Group: $1",
-   *       "description": "Files accessible to group $1",
-   *       "tags": ["group", "$1"]
-   *     }
-   *   ]
-   * }
-   * ```
-   */
-  bookmarkedDirectories?: ({
-    fullPath: string;
-    title: LocalizedString;
-    description?: LocalizedString;
-    tags?: LocalizedString[];
-  } & (
-    | {}
-    | {
-        claimName: string;
-        includedClaimPattern: string;
-        excludedClaimPattern: string;
-      }
-  ))[];
-  
-  /**
-   * Configuration for Onyxia to dynamically request S3 tokens on behalf of users.
-   * Enabling S3 allows users to avoid manual configuration of a service account via the Onyxia interface.
+   * STS configuration. S3 configurations with sts become administrator-defined
+   * profiles. S3 configurations without sts are not profiles; they only provide
+   * default endpoint values when users create their own profile manually.
    */
   sts?: {
     /**
-     * The STS endpoint URL of your S3 server.
-     * For integration with MinIO, this property is optional as it defaults to region.data.S3.URL.
-     * For Amazon Web Services S3, set this to "https://sts.amazonaws.com".
+     * STS endpoint URL.
+     * For MinIO, this usually defaults to S3.URL.
+     * For AWS, use "https://sts.amazonaws.com".
      */
     URL?: string;
 
     /**
-     * The duration for which temporary credentials are valid.
-     * AWS: Maximum of 43200 seconds (12 hours).
-     * MinIO: Maximum of 604800 seconds (7 days).
-     * Without this parameter, Onyxia requests 7-day validity, subject to the S3 server's policy limits.
+     * Temporary credential duration, in seconds.
+     * AWS maximum: 43200 seconds.
+     * MinIO maximum: 604800 seconds.
+     * Default requested by Onyxia: 604800 seconds.
      */
     durationSeconds?: number;
 
     /**
-     * Optional parameter to specify RoleARN and RoleSessionName for the STS request.
-     *
-     * Example:
-     *   "role": {
-     *     "roleARN": "arn:aws:iam::123456789012:role/onyxia",
-     *     "roleSessionName": "onyxia"
-     *   }
+     * One role definition, or an array of role definitions.
+     * Each resolved role creates one S3 profile.
      */
-    role?: {
-      roleARN: string;
-      roleSessionName: string;
-    };
+    role?: StsRole | StsRole[];
 
     /**
-     * See: https://docs.onyxia.sh/admin-doc/openid-connect-configuration#oidc-configuration-for-services-onyxia-connects-to
+     * OIDC configuration used by Onyxia for the STS web identity flow.
+     * See:
+     * /admin-doc/openid-connect-configuration#oidc-configuration-for-services-onyxia-connects-to
      */
     oidcConfiguration?: OidcConfiguration;
   };
+
+  /**
+   * Bookmarks shown in the S3 file explorer.
+   * Region-defined bookmarks are read-only from the user's point of view.
+   */
+  bookmarkedDirectories?: BookmarkedDirectory[];
 };
-````
+
+type StsRole = {
+  roleARN: string;
+  roleSessionName: string;
+  profileName: string;
+
+  /**
+   * Optional claim used to generate one or more profiles.
+   */
+  claimName?: string;
+  includedClaimPattern?: string;
+  excludedClaimPattern?: string;
+};
+
+type BookmarkedDirectory = {
+  /**
+   * S3 path without the s3:// prefix.
+   * Example: "my-bucket/path/" becomes "s3://my-bucket/path/".
+   */
+  fullPath: string;
+
+  title: LocalizedString;
+  description?: LocalizedString;
+  tags?: LocalizedString[];
+
+  /**
+   * Optional profile selector.
+   * Can be a profile name, an array of profile names, or a wildcard pattern such
+   * as "project-*". If omitted, the bookmark is attached to every profile
+   * generated by the same S3 configuration.
+   */
+  forProfileName?: string | string[];
+
+  /**
+   * Optional claim used to generate one or more bookmarks.
+   */
+  claimName?: string;
+  includedClaimPattern?: string;
+  excludedClaimPattern?: string;
+};
+```
+
+<details>
+<summary>Templating and claim expansion rules</summary>
+
+`claimName` refers to a claim in the decoded OIDC ID token associated with the
+S3 OIDC configuration. Dot notation is supported for nested claims, for example
+`realm_access.roles`.
+
+The claim value must be either a string or an array of strings:
+
+- if the value is a string, Onyxia resolves one role or bookmark;
+- if the value is an array, Onyxia resolves one role or bookmark per accepted
+  value.
+
+`includedClaimPattern` and `excludedClaimPattern` are regular expressions:
+
+- if `includedClaimPattern` is omitted, Onyxia behaves as if it were `^(.+)$`;
+- if `excludedClaimPattern` matches a claim value, that value is ignored;
+- the included pattern is then applied to the remaining values.
+
+In templated fields, `$1`, `$2`, and so on are replaced by the capture groups of
+`includedClaimPattern`. With the default included pattern, `$1` is the full claim
+value.
+
+Templating is available in:
+
+- `sts.role.roleARN`;
+- `sts.role.roleSessionName`;
+- `sts.role.profileName`;
+- `bookmarkedDirectories[].fullPath`;
+- `bookmarkedDirectories[].title`;
+- `bookmarkedDirectories[].description`;
+- `bookmarkedDirectories[].tags`;
+- `bookmarkedDirectories[].forProfileName`.
+
+When `claimName` is not specified, the values are used literally and exactly one
+role or bookmark is produced.
+
+</details>
+
+<details>
+<summary>Using one entry only for manual profile defaults</summary>
+
+An S3 entry without `sts` does not create an administrator-defined profile. It is
+only used to prefill the endpoint fields when a user manually creates an S3
+profile in Onyxia.
+
+```yaml
+onyxia:
+  api:
+    regions:
+      - id: default
+        # ...
+        data:
+          S3:
+            - URL: https://minio.lab.example.com
+              region: us-east-1
+              pathStyleAccess: true
+
+            - URL: https://ceph.lab.example.com
+              region: us-east-1
+              pathStyleAccess: true
+              sts:
+                role:
+                  profileName: default
+                  roleARN: arn:aws:iam::123456789012:role/onyxia-$1
+                  roleSessionName: onyxia-$1
+                  claimName: preferred_username
+                oidcConfiguration:
+                  clientId: onyxia-ceph
+```
+
+In this example, the first entry only provides default values for the manual
+creation form. The second entry creates the `default` profile.
+
+</details>
+
+## Operational Notes
+
+- Onyxia does not create IAM roles or S3 bucket policies. The configured role
+  must already grant the intended S3 permissions.
+- The OIDC client configured in `sts.oidcConfiguration` must be trusted by the
+  STS provider.
+- The claims referenced by `claimName` are read from the decoded OIDC ID token.
+- Prefer a profile named `default` when users should have one obvious primary
+  S3 profile. Onyxia also uses `default` naturally in generated AWS CLI snippets.
