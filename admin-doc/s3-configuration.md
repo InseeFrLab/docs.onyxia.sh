@@ -80,8 +80,6 @@ onyxia:
         data:
           S3:
             URL: https://ceph.lab.sspcloud.fr
-            region: us-east-1
-            pathStyleAccess: true
             sts:
               role:
                 - profileName: default
@@ -100,12 +98,12 @@ onyxia:
 
             bookmarkedDirectories:
               - fullPath: "$1/"
-                title: Personal
+                title: Personal Bucket
                 claimName: preferred_username
                 forProfileName: default
 
               - fullPath: "project-$1/"
-                title: "Group $1"
+                title: "$1 Reserved Bucket"
                 claimName: groups
                 excludedClaimPattern: "^USER_ONYXIA.*"
                 forProfileName: project-$1
