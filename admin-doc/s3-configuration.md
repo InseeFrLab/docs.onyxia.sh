@@ -4,32 +4,24 @@ icon: folder
 
 # S3 Configuration
 
-Configuration parameters for integrating your Onyxia instance with S3 or an
-S3-compatible object store.
+Configuration parameters for integrating your Onyxia instance with S3 or an S3-compatible object store.
 
-[The installation guide](/admin-doc/readme/data-s3.md) provides instructions on
-how to set up [MinIO](https://min.io/) with a basic configuration. This page
-focuses on the region configuration used by Onyxia to expose S3 access to users.
+[The installation guide](readme/data-s3.md) provides instructions on how to set up [MinIO](https://min.io/) with a basic configuration. This page focuses on the region configuration used by Onyxia to expose S3 access to users.
 
-Onyxia exposes S3 access through **profiles**, following the same idea as AWS CLI
-profiles. An administrator can define one or more profiles in
-`onyxia.api.regions[].data.S3`. Each profile tells Onyxia:
+Onyxia exposes S3 access through **profiles**, following the same idea as AWS CLI profiles. An administrator can define one or more profiles in `onyxia.api.regions[].data.S3`. Each profile tells Onyxia:
 
-- which S3 endpoint to use;
-- how to request temporary S3 credentials with STS;
-- which profile name users will see and use in code snippets;
-- which bookmarked S3 directories should appear in the file explorer.
+* which S3 endpoint to use;
+* how to request temporary S3 credentials with STS;
+* which profile name users will see and use in code snippets;
+* which bookmarked S3 directories should appear in the file explorer.
 
-Most installations should configure S3 with STS. In that mode, Onyxia requests
-temporary credentials with `AssumeRoleWithWebIdentity`.
+Most installations should configure S3 with STS. In that mode, Onyxia requests temporary credentials with `AssumeRoleWithWebIdentity`.
 
 ## Minimal Example
 
-This example creates one profile named `default` for each user. The STS role ARN
-and the bookmark are generated from the user's `preferred_username` claim.
+This example creates one profile named `default` for each user. The STS role ARN and the bookmark are generated from the user's `preferred_username` claim.
 
 {% code title="apps/onyxia/values.yaml" %}
-
 ```yaml
 onyxia:
   api:
@@ -39,27 +31,16 @@ onyxia:
         data:
           S3:
             URL: https://minio.lab.example.com
-            region: us-east-1
-            pathStyleAccess: true
             sts:
-              # Optional for MinIO when it is the same as S3.URL.
-              # For AWS, use: https://sts.amazonaws.com
-              URL: https://minio.lab.example.com
-              durationSeconds: 3600
-              role:
-                profileName: default
-                roleARN: arn:aws:iam::123456789012:role/onyxia-user-$1
-                roleSessionName: onyxia-$1
-                claimName: preferred_username
+              profileName: default
               oidcConfiguration:
                 clientId: onyxia-s3
             bookmarkedDirectories:
               - fullPath: "$1/"
-                title: Personal
+                title: Personal Bucket
                 claimName: preferred_username
                 forProfileName: default
 ```
-
 {% endcode %}
 
 For a user whose decoded OIDC ID token contains:
@@ -74,28 +55,21 @@ Onyxia exposes one S3 profile:
 
 ```yaml
 profileName: default
-endpoint: https://minio.lab.example.com
-roleARN: arn:aws:iam::123456789012:role/onyxia-user-alice
-roleSessionName: onyxia-alice
 bookmarks:
   - s3://alice/
 ```
 
-The role must already exist on the S3 or cloud provider side, and it must trust
-the OIDC identity provider used by Onyxia for this S3 client.
+The role must already exist on the S3 or cloud provider side, and it must trust the OIDC identity provider used by Onyxia for this S3 client.
 
 ## Multiple Profiles From Claims
 
-`data.S3` can be a single object or an array of objects. A single S3 object can
-also generate several profiles when `sts.role` is an array or when a role uses a
-claim whose value is an array.
+`data.S3` can be a single object or an array of objects. A single S3 object can also generate several profiles when `sts.role` is an array or when a role uses a claim whose value is an array.
 
 The following example creates:
 
-- one personal profile named `default`;
-- one project profile per user group, except groups matching
-  `^USER_ONYXIA.*`;
-- one public bookmark attached to all generated profiles.
+* one personal profile named `default`;
+* one project profile per user group, except groups matching `^USER_ONYXIA.*`;
+* one public bookmark attached to all generated profiles.
 
 ```yaml
 onyxia:
@@ -158,29 +132,22 @@ Onyxia exposes these profiles:
 
 ```yaml
 - profileName: default
-  roleARN: arn:aws:iam::123456789012:role/johnd
-  roleSessionName: onyxia-personal-bucket
   bookmarks:
     - s3://johnd/
     - s3://donnees-insee/diffusion/
 
 - profileName: project-sspcloud
-  roleARN: arn:aws:iam::329456783432:role/projet-sspcloud
-  roleSessionName: onyxia-project-bucket-sspcloud
   bookmarks:
     - s3://project-sspcloud/
     - s3://donnees-insee/diffusion/
 
 - profileName: project-codegouv
-  roleARN: arn:aws:iam::329456783432:role/projet-codegouv
-  roleSessionName: onyxia-project-bucket-codegouv
   bookmarks:
     - s3://project-codegouv/
     - s3://donnees-insee/diffusion/
 ```
 
-No profile is generated for `USER_ONYXIA_admin` because it matches
-`excludedClaimPattern`.
+No profile is generated for `USER_ONYXIA_admin` because it matches `excludedClaimPattern`.
 
 ## Main Options
 
@@ -311,50 +278,44 @@ type BookmarkedDirectory = {
 ```
 
 <details>
+
 <summary>Templating and claim expansion rules</summary>
 
-`claimName` refers to a claim in the decoded OIDC ID token associated with the
-S3 OIDC configuration. Dot notation is supported for nested claims, for example
-`realm_access.roles`.
+`claimName` refers to a claim in the decoded OIDC ID token associated with the S3 OIDC configuration. Dot notation is supported for nested claims, for example `realm_access.roles`.
 
 The claim value must be either a string or an array of strings:
 
-- if the value is a string, Onyxia resolves one role or bookmark;
-- if the value is an array, Onyxia resolves one role or bookmark per accepted
-  value.
+* if the value is a string, Onyxia resolves one role or bookmark;
+* if the value is an array, Onyxia resolves one role or bookmark per accepted value.
 
 `includedClaimPattern` and `excludedClaimPattern` are regular expressions:
 
-- if `includedClaimPattern` is omitted, Onyxia behaves as if it were `^(.+)$`;
-- if `excludedClaimPattern` matches a claim value, that value is ignored;
-- the included pattern is then applied to the remaining values.
+* if `includedClaimPattern` is omitted, Onyxia behaves as if it were `^(.+)$`;
+* if `excludedClaimPattern` matches a claim value, that value is ignored;
+* the included pattern is then applied to the remaining values.
 
-In templated fields, `$1`, `$2`, and so on are replaced by the capture groups of
-`includedClaimPattern`. With the default included pattern, `$1` is the full claim
-value.
+In templated fields, `$1`, `$2`, and so on are replaced by the capture groups of `includedClaimPattern`. With the default included pattern, `$1` is the full claim value.
 
 Templating is available in:
 
-- `sts.role.roleARN`;
-- `sts.role.roleSessionName`;
-- `sts.role.profileName`;
-- `bookmarkedDirectories[].fullPath`;
-- `bookmarkedDirectories[].title`;
-- `bookmarkedDirectories[].description`;
-- `bookmarkedDirectories[].tags`;
-- `bookmarkedDirectories[].forProfileName`.
+* `sts.role.roleARN`;
+* `sts.role.roleSessionName`;
+* `sts.role.profileName`;
+* `bookmarkedDirectories[].fullPath`;
+* `bookmarkedDirectories[].title`;
+* `bookmarkedDirectories[].description`;
+* `bookmarkedDirectories[].tags`;
+* `bookmarkedDirectories[].forProfileName`.
 
-When `claimName` is not specified, the values are used literally and exactly one
-role or bookmark is produced.
+When `claimName` is not specified, the values are used literally and exactly one role or bookmark is produced.
 
 </details>
 
 <details>
+
 <summary>Using one entry only for manual profile defaults</summary>
 
-An S3 entry without `sts` does not create an administrator-defined profile. It is
-only used to prefill the endpoint fields when a user manually creates an S3
-profile in Onyxia.
+An S3 entry without `sts` does not create an administrator-defined profile. It is only used to prefill the endpoint fields when a user manually creates an S3 profile in Onyxia.
 
 ```yaml
 onyxia:
@@ -381,17 +342,13 @@ onyxia:
                   clientId: onyxia-ceph
 ```
 
-In this example, the first entry only provides default values for the manual
-creation form. The second entry creates the `default` profile.
+In this example, the first entry only provides default values for the manual creation form. The second entry creates the `default` profile.
 
 </details>
 
 ## Operational Notes
 
-- Onyxia does not create IAM roles or S3 bucket policies. The configured role
-  must already grant the intended S3 permissions.
-- The OIDC client configured in `sts.oidcConfiguration` must be trusted by the
-  STS provider.
-- The claims referenced by `claimName` are read from the decoded OIDC ID token.
-- Prefer a profile named `default` when users should have one obvious primary
-  S3 profile. Onyxia also uses `default` naturally in generated AWS CLI snippets.
+* Onyxia does not create IAM roles or S3 bucket policies. The configured role must already grant the intended S3 permissions.
+* The OIDC client configured in `sts.oidcConfiguration` must be trusted by the STS provider.
+* The claims referenced by `claimName` are read from the decoded OIDC ID token.
+* Prefer a profile named `default` when users should have one obvious primary S3 profile. Onyxia also uses `default` naturally in generated AWS CLI snippets.
