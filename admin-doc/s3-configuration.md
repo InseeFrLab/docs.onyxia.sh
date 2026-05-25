@@ -30,9 +30,9 @@ onyxia:
         # ...
         data:
           S3:
+            profileName: default
             URL: https://minio.lab.example.com
             sts:
-              profileName: default
               oidcConfiguration:
                 clientId: onyxia-s3
             bookmarkedDirectories:
