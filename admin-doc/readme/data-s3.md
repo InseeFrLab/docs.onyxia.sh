@@ -15,7 +15,7 @@ Before configuring MinIO, let's create a new Keycloak client (from the previous 
 
 ### Deploying MinIO
 
-Before deploying MinIO on the cluster let's set, in the MinIO configuration file, the OIDC client secret we have copied in the previous step. &#x20;
+Before deploying MinIO on the cluster let's set, in the MinIO configuration file, the OIDC client secret we have copied in the previous step.
 
 ```bash
 git clone https://github.com/<your-github-org>/onyxia-ops
@@ -27,7 +27,7 @@ git commit -am "Set minio OIDC client secret"
 git push
 ```
 
-Once you've done that you can deploy MinIO! &#x20;
+Once you've done that you can deploy MinIO!
 
 {% embed url="https://app.tango.us/app/embed/75b62573-7adc-4a38-b1f9-b96bb0ea50fd" %}
 
@@ -39,7 +39,7 @@ Before configuring the onyxia region to create tokens we should go back to Keycl
 
 ### Updating the Onyxia configuration
 
-Now let's update our Onyxia configuration to let it know that there is now a S3 server available on the cluster. &#x20;
+Now let's update our Onyxia configuration to let it know that there is now a S3 server available on the cluster.
 
 ```bash
 git clone https://github.com/<your-github-org>/onyxia-ops
@@ -50,11 +50,7 @@ git commit -am "Enable MinIO"
 git push
 ```
 
-Diff of the changes applied to the Onyxia configuration: &#x20;
-
-{% embed url="https://github.com/InseeFrLab/onyxia-ops/commit/e8e5d57743d9954f60213346e33b55d2de41f707" %}
-
-Congratulation, all the S3 related features of Onyxia are now enabled in your instance! Now if you navigate to your Onyxia instance you should have `My Files` in the left menu. &#x20;
+Diff of the changes applied to the Onyxia configuration:
 
 <figure><img src="../../.gitbook/assets/image (53).png" alt=""><figcaption></figcaption></figure>
 
