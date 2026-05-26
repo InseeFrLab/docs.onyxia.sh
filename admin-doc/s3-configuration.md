@@ -6,7 +6,25 @@ icon: folder
 
 Configuration parameters for integrating your Onyxia instance with S3 or an S3-compatible object store.
 
-[The installation guide](readme/data-s3.md) provides instructions on how to set up [MinIO](https://min.io/) with a basic configuration. This page focuses on the region configuration used by Onyxia to expose S3 access to users.
+Onyxia integrate with S3 in two ways:
+
+* Providing a file explorer UI akin to Dropbox or Google Drive, but where the underlying storage is your S3 server.
+* Requesting S3 profile credential on behafe of the levraging their OpenID Connect identity, so each user of the platform can have their own bucket or reserved prefix on a shared bucket.
+* Enabling to inject those credential in the services like Jupyter or Rstudio so that their s3 profile is automatically configured.
+
+[The installation guide](readme/data-s3.md) provides instructions on how to set up [MinIO](https://min.io/) with a basic configuration. This page provides more in depth documentation on the different configuration option to integrate Onyxia with any S3 compatible data store.
+
+For context, it's important to understand that Onyxia is most and foremost an app that runs in users browser.  Onyxia doesn't talk to the S3 server through a backend API. Every comunication is done dirrectly in between the browser and and the S3 server (Ceph, Minio, AWS S3, ect...).
+
+It's also important to understand that, when you configure Onyxia to integrate with S3, saying for example "User should have a reserved bucket that match their username", as an Onyxia instance administrator, you are meerly letting Onyxia know what the user is supposed to have access to with their OpenID Connect identity. It's however you're responsability to configure your S3 Server (Minio, Ceph, AWS S3, ect...) separatly to make sure the users acctually have thoses rights. &#x20;
+
+In short. The Onyxia configuration is not the source of truth of your S3 server access policy. The configuration you declare in Onyxia do not magically propagate to your S3 server. &#x20;
+
+Onyxia meerly provide a UI for automating what the user should be able to do manually with CLI like minio or aws s3 and their OpenID Connect access token. &#x20;
+
+The S3 credentials (Access key id, Secret Access Key) are optained by Onyxia by calling the STS endpoint of your S3 server:  "assume role with web identity". Effectively exchanging the OIDC Access Token for S3 Credentials. &#x20;
+
+You're responsible of integrating your S3 server with your OIDC provider so that the S3 server can establish the user identity by verifying the access token. The roles requested by onyxia must also exist on the s3 server. &#x20;
 
 Onyxia exposes S3 access through **profiles**, following the same idea as AWS CLI profiles. An administrator can define one or more profiles in `onyxia.api.regions[].data.S3`. Each profile tells Onyxia:
 
@@ -58,8 +76,6 @@ profileName: default
 bookmarks:
   - s3://alice/
 ```
-
-The role must already exist on the S3 or cloud provider side, and it must trust the OIDC identity provider used by Onyxia for this S3 client.
 
 ## Multiple Profiles From Claims
 
@@ -117,7 +133,7 @@ onyxia:
                   - project-*
 ```
 
-For this decoded OIDC ID token:
+For a user connected with this OIDC ID token:
 
 ```json
 {
@@ -148,6 +164,8 @@ Onyxia exposes these profiles:
 No profile is generated for `USER_ONYXIA_admin` because it matches `excludedClaimPattern`.
 
 ## Main Options
+
+Here is an exhaustive documentation of the available options: &#x20;
 
 ```typescript
 type RegionData = {
