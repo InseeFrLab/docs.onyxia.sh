@@ -16,11 +16,11 @@
     * [Declarative User Profile](admin-doc/catalog-of-services/custom-catalogs/declarative-user-profile.md)
     * [JSON Schema Support](admin-doc/catalog-of-services/custom-catalogs/json-schema-support.md)
 * [OpenID Connect Configuration](admin-doc/openid-connect-configuration.md)
-* [Custom Pages](admin-doc/custom-pages.md)
 * [S3 Configuration](admin-doc/s3-configuration.md)
 * [Setting up group projects](admin-doc/setting-up-group-projects.md)
 * [Security considerations](admin-doc/security-consideration.md)
 * [Offline / airgap considerations](admin-doc/offline-airgap-considerations.md)
+* [Custom Pages](admin-doc/custom-pages.md)
 
 ## Contributors doc
 
