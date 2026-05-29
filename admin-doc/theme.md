@@ -15,7 +15,7 @@ The full documentation of the available parameter can be found here:
 
 ## Theme Galery
 
-Here is a galery of theme that you can try out.&#x20;
+Here is a galery of theme that you can try out.
 
 {% hint style="info" %}
 If you want to test theses theme in your local dev env (as shown in the video) download the ZIP file specified as `CUSTOM_RESOURCES` and extract it in **web/public/custom-resources**.
@@ -83,7 +83,7 @@ onyxia:
   web:
     env:
       #ONYXIA_API_URL: https://datalab.sspcloud.fr/api
-      CUSTOM_RESOURCES: "https://www.sspcloud.fr/onyxia-theme-sspcloud.zip"
+      CUSTOM_RESOURCES: "https://www.sspcloud.fr/onyxia-theme-sspcloud-v0.zip"
       GLOBAL_ALERT: |
         {
           severity: "success",
@@ -328,7 +328,7 @@ onyxia:
 
 ## Additional Notes
 
-Note that your custom assets are imported into your Onyxia instance via the use of the `CUSTOM_RESOURCES` parameter, url of a ZIP archive that should contain your assets.&#x20;
+Note that your custom assets are imported into your Onyxia instance via the use of the `CUSTOM_RESOURCES` parameter, url of a ZIP archive that should contain your assets.
 
 {% hint style="info" %}
 Onyxia is configured to make the the browser cache assets so they are not re-downloaded each time the user access the app.
@@ -339,4 +339,3 @@ If you update some of your asset but keep the same URL, you can force the browse
 {% endhint %}
 
 Make sure to checkout the version of this document that matches the Onyxia version that you are deploying. [See releases](https://github.com/InseeFrLab/onyxia/releases).
-
