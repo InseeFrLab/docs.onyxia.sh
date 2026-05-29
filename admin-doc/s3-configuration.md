@@ -52,8 +52,8 @@ onyxia:
               # See: https://docs.onyxia.sh/v/v11/admin-doc/openid-connect-configuration
               oidcConfiguration:
                 clientId: onyxia-s3
-            bookmarkedDirectories:
-              - fullPath: "$1/"
+            bookmarks:
+              - s3Uri: "s3://$1/"
                 title: Personal Bucket
                 claimName: preferred_username
                 forProfileName: default
@@ -113,19 +113,19 @@ onyxia:
               oidcConfiguration:
                 clientId: onyxia-ceph
 
-            bookmarkedDirectories:
-              - fullPath: "$1/"
+            bookmarks:
+              - s3Uri: "s3://$1/"
                 title: Personal Bucket
                 claimName: preferred_username
                 forProfileName: default
 
-              - fullPath: "project-$1/"
+              - s3Uri: "s3://project-$1/"
                 title: "$1 Reserved Bucket"
                 claimName: groups
                 excludedClaimPattern: "^USER_ONYXIA.*"
                 forProfileName: project-$1
 
-              - fullPath: donnees-insee/diffusion/
+              - s3Uri: "s3://donnees-insee/diffusion/"
                 title:
                   fr: Données de diffusion
                   en: Dissemination Data
@@ -250,7 +250,7 @@ type S3Config = {
    * Bookmarks shown in the S3 file explorer.
    * Region-defined bookmarks are read-only from the user's point of view.
    */
-  bookmarkedDirectories?: BookmarkedDirectory[];
+  bookmarks?: Bookmarks[];
 };
 
 type StsRole = {
@@ -266,16 +266,10 @@ type StsRole = {
   excludedClaimPattern?: string;
 };
 
-type BookmarkedDirectory = {
-  /**
-   * S3 path without the s3:// prefix.
-   * Example: "my-bucket/path/" becomes "s3://my-bucket/path/".
-   */
-  fullPath: string;
+type Bookmarks = {
+  s3Uri: string;
 
   title: LocalizedString;
-  description?: LocalizedString;
-  tags?: LocalizedString[];
 
   /**
    * Optional profile selector.
