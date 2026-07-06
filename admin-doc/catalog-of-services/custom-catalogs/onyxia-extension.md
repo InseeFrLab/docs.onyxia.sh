@@ -105,6 +105,7 @@ If the user took the time to fill its profile information, [onyxia-web](https://
 [Here](https://github.com/InseeFrLab/onyxia/blob/main/web/src/core/ports/OnyxiaApi/XOnyxia.ts) is defined the structure of the context that you can use in the `overwriteDefaultWith` field:
 
 ```typescript
+
 export type XOnyxiaParams = {
     /**
      * This is where you can reference values from the onyxia context so that they
@@ -115,18 +116,11 @@ export type XOnyxiaParams = {
      * "overwriteDefaultWith": "{{project.id}}-{{k8s.randomSubdomain}}.{{k8s.domain}}"
      * "overwriteDefaultWith": [ "a hardcoded value", "some other hardcoded value", "{{region.oauth2.clientId}}" ]
      * "overwriteDefaultWith": { "foo": "bar", "bar": "{{region.oauth2.clientId}}" }
-     *
      */
-    overwriteDefaultWith?:
-        | string
-        | number
-        | boolean
-        | unknown[]
-        | Record<string, unknown>;
-    overwriteListEnumWith?: unknown[] | string;
+    overwriteDefaultWith?: string | Stringifyable[] | Record<string, Stringifyable>;
+    overwriteListEnumWith?: string | Stringifyable[];
     hidden?: boolean;
     readonly?: boolean;
-    useRegionSliderConfig?: string;
 };
 
 export type XOnyxiaContext = {
@@ -186,38 +180,48 @@ export type XOnyxiaContext = {
         credentials_cache_duration: number;
         token: string | undefined;
     };
-    vault: {
-        VAULT_ADDR: string;
-        VAULT_TOKEN: string;
-        VAULT_MOUNT: string;
-        VAULT_TOP_DIR: string;
-    };
-    s3: {
-        AWS_ACCESS_KEY_ID: string;
-        AWS_SECRET_ACCESS_KEY: string;
-        AWS_SESSION_TOKEN: string;
+    vault:
+        | {
+              VAULT_ADDR: string;
+              VAULT_TOKEN: string | undefined;
+              VAULT_MOUNT: string;
+              VAULT_TOP_DIR: string;
+          }
+        | undefined;
+    s3:
+        | {
+              profileName: string;
+              AWS_ACCESS_KEY_ID: string | undefined;
+              AWS_SECRET_ACCESS_KEY: string | undefined;
+              AWS_SESSION_TOKEN: string | undefined;
+              AWS_DEFAULT_REGION: string;
+              AWS_S3_ENDPOINT: string;
+              port: number;
+              pathStyleAccess: boolean;
+              /**
+               * If true the bucket's (directory) should be accessible without any credentials.
+               * In this case s3.AWS_ACCESS_KEY_ID, s3.AWS_SECRET_ACCESS_KEY and s3.AWS_SESSION_TOKEN
+               * are undefined.
+               */
+              isAnonymous: boolean;
+          }
+        | undefined;
+    s3_array: {
+        profileName: string;
+        AWS_ACCESS_KEY_ID: string | undefined;
+        AWS_SECRET_ACCESS_KEY: string | undefined;
+        AWS_SESSION_TOKEN: string | undefined;
         AWS_DEFAULT_REGION: string;
         AWS_S3_ENDPOINT: string;
-        AWS_BUCKET_NAME: string;
         port: number;
         pathStyleAccess: boolean;
         /**
-         * The user is assumed to have read/write access on every
-         * object starting with this prefix on the bucket
-         **/
-        objectNamePrefix: string;
-        /**
-         * Only for making it easier for charts editors.
-         * <AWS_BUCKET_NAME>/<objectNamePrefix>
-         * */
-        workingDirectoryPath: string;
-        /**
          * If true the bucket's (directory) should be accessible without any credentials.
          * In this case s3.AWS_ACCESS_KEY_ID, s3.AWS_SECRET_ACCESS_KEY and s3.AWS_SESSION_TOKEN
-         * will be empty strings.
+         * are undefined.
          */
         isAnonymous: boolean;
-    };
+    }[];
     region: {
         defaultIpProtection: boolean | undefined;
         defaultNetworkPolicy: boolean | undefined;
@@ -252,6 +256,12 @@ export type XOnyxiaContext = {
                   gpu?: `${number}`;
               }
             | undefined;
+        openshiftSCC:
+            | {
+                  scc: string;
+                  enabled: boolean;
+              }
+            | undefined;
     };
     k8s: {
         domain: string;
@@ -271,7 +281,7 @@ export type XOnyxiaContext = {
     };
     proxyInjection:
         | {
-              enabled: string | undefined;
+              enabled: boolean | undefined;
               httpProxyUrl: string | undefined;
               httpsProxyUrl: string | undefined;
               noProxy: string | undefined;
@@ -292,6 +302,9 @@ export type XOnyxiaContext = {
           }
         | undefined;
 };
+
+assert<Equals<XOnyxiaContext["user"]["lang"], Language>>();
+
 ```
 
 You can also concatenate string values using by wrapping the XOnyxia targeted values in `{{}}`.
