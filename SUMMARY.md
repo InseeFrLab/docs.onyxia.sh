@@ -30,6 +30,7 @@
 * [The REST API](contributors-doc/onyxia-api.md)
 * [Roadmap](contributors-doc/roadmap.md)
 * [Community calls](contributors-doc/community-calls/README.md)
+  * [July 2026 community call](contributors-doc/community-calls/july-2026-community-call.md)
   * [January 2026 community call](contributors-doc/community-calls/january-2026-community-call.md)
   * [October 2025 community call](contributors-doc/community-calls/october-2025-community-call.md)
   * [September 2025 community call](contributors-doc/community-calls/september-2025-community-call.md)
