@@ -46,6 +46,8 @@ git clone https://github.com/<your-github-org>/onyxia-ops
 cd onyxia-ops
 cd apps/onyxia
 mv values-minio-enabled.yaml.yaml values.yaml
+# OR: For deploying Onyxia in s3 Explorer standalone mode:
+# mv values-s3-explorer-only.yaml values.yaml
 git commit -am "Enable MinIO"
 git push
 ```

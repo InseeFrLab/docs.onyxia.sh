@@ -5,6 +5,10 @@ icon: sign-posts-wrench
 
 # Install
 
+{% hint style="warning" %}
+If you are only interested in deploying Onyxia for it's S3 explorer, start [here](admin-doc/readme/s3-explorer-standalone-deployment.md).
+{% endhint %}
+
 {% hint style="info" %}
 ## Oneliner
 
@@ -30,7 +34,7 @@ With this minimal configuration, you'll have an Onyxia instance operating in a d
 
 Whether you are a Kubernetes veteran or a beginner with cloud technologies, this guide aims to guide you through the instantiation and configuration of an Onyxia instance with it's full range of features enabled. Let's dive right in! 🤿
 
-First let's make sure we have a suitable deployment environement to work with!&#x20;
+First let's make sure we have a suitable deployment environement to work with!
 
 {% content-ref url="admin-doc/readme/kubernetes.md" %}
 [kubernetes.md](admin-doc/readme/kubernetes.md)

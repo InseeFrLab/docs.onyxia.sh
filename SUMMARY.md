@@ -8,6 +8,7 @@
   * [User authentication](admin-doc/readme/user-authentication.md)
   * [Data (S3)](admin-doc/readme/data-s3.md)
   * [Vault](admin-doc/readme/vault.md)
+  * [S3 Explorer Standalone Deployment](admin-doc/readme/s3-explorer-standalone-deployment.md)
 * [Theme and branding](admin-doc/theme.md)
 * [Catalog of services](admin-doc/catalog-of-services/README.md)
   * [values.schema.json overrides](admin-doc/catalog-of-services/override-schema-for-a-specific-instance.md)

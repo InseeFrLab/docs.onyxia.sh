@@ -18,7 +18,7 @@ The [installation guide](readme/data-s3.md) demonstrates a basic [MinIO](https:/
 
 ## Minimal MinIO Example
 
-This example defines a single administrator-managed profile named `default`. The bookmark resolves to a bucket named after the user's `preferred_username` claim.  
+This example defines a single administrator-managed profile named `default`. The bookmark resolves to a bucket named after the user's `preferred_username` claim.
 
 {% code title="apps/onyxia/values.yaml" %}
 ```yaml
@@ -54,8 +54,9 @@ onyxia:
 ```
 {% endcode %}
 
+`roleARN` and `roleSessionName` must be present in the Onyxia configuration, but they can exceptionally be empty for MinIO. Onyxia omits empty values from the STS request. In MinIO's claim-based OIDC mode, when `RoleArn` is absent, MinIO determines the user's authorization from the configured policy claim in the JWT. MinIO's `AssumeRoleWithWebIdentity` endpoint also does not require a role session name.
 
-`roleARN` and `roleSessionName` must be present in the Onyxia configuration, but they can exceptionally be empty for MinIO. Onyxia omits empty values from the STS request. In MinIO's claim-based OIDC mode, when `RoleArn` is absent, MinIO determines the user's authorization from the configured policy claim in the JWT. MinIO's [`AssumeRoleWithWebIdentity` endpoint](https://docs.min.io/aistor/developers/security-token-service/assumerolewithwebidentity/) also does not require a role session name.
+To configure MinIO so that users automatically receive temporary credentials that gives them read/write access to a bucket that matches their username (the preferred\_username claim in the ID and Access token) see [this example](https://github.com/InseeFrLab/paris-sspcloud/blob/master/apps/onyxia-aws/values.yaml).
 
 This is MinIO-specific. Providers such as AWS STS require a valid role ARN and role session name.
 
