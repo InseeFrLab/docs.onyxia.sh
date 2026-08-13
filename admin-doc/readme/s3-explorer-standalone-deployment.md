@@ -11,7 +11,7 @@ Onyxia includes a client-side S3 explorer with an interface similar to Google Dr
 The explorer runs entirely in the browser: Onyxia does not proxy S3 requests. The bucket you want to browse must therefore allow the origin of the Onyxia application, for example `https://onyxia.example.com`,in its CORS configuration.
 {% endhint %}
 
-## Deploy Without Authentication
+## Deploy Without OpenID Connect Authentication
 
 In this mode, users create their own S3 profiles and provide an endpoint, a region, and, when required, an access key ID and secret access key.
 
