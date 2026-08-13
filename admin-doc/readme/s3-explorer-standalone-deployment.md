@@ -3,12 +3,12 @@ description: Deploy Onyxia's S3 Explorer without the Onyxia API or service catal
 icon: sign-posts-wrench
 ---
 
-# Deploy S3 Explorer as a Standalone Application
+# S3 Explorer Standalone Deployment
 
 Onyxia includes a client-side S3 explorer with an interface similar to Google Drive or Dropbox. You can deploy it without the Onyxia API when you only need a web interface for browsing S3-compatible object storage.
 
 {% hint style="warning" %}
-The explorer runs entirely in the browser: Onyxia does not proxy S3 requests. The bucket you want to browse must therefore allow the origin of the Onyxia application—for example `https://onyxia.example.com`—in its CORS configuration.
+The explorer runs entirely in the browser: Onyxia does not proxy S3 requests. The bucket you want to browse must therefore allow the origin of the Onyxia application, for example `https://onyxia.example.com`,in its CORS configuration.
 {% endhint %}
 
 ## Deploy Without Authentication
@@ -56,10 +56,10 @@ Create a profile with the following values:
 * **Default region:** `us-west-2`
 * **Anonymous access:** enabled
 
-After saving the profile, navigate to `s3://multimedia-commons/` and add it to your bookmarks. 
+After saving the profile, navigate to `s3://multimedia-commons/` and add it to your bookmarks.
 
 {% hint style="warning" %}
-Because there is no backend in this deployment mode, user-created profiles—including any access keys—are stored in the browser's local storage. Do not enter long-lived credentials on a shared or untrusted device.
+Because there is no backend in this deployment mode, user-created profiles, including any access keys, are stored in the browser's local storage. Do not enter long-lived credentials on a shared or untrusted device.
 {% endhint %}
 
 ## Deploy With OpenID Connect Authentication
@@ -73,7 +73,7 @@ Onyxia does not decide which buckets a user can access. Roles and policies are c
 For a complete walkthrough that deploys Kubernetes, Keycloak, MinIO, and Onyxia from scratch, follow the installation tutorial. Its **Data (S3)** section includes the standalone S3 Explorer option.
 
 {% content-ref url="../../" %}
-[Complete Onyxia installation tutorial](../../)
+[..](../../)
 {% endcontent-ref %}
 
 ### Example: MinIO and Keycloak
@@ -140,9 +140,9 @@ minio:
 
 MinIO uses the access token's `policy` claim to select the `stsonly` policy. It then substitutes the token's `preferred_username` claim in the resource names. For `johnd`, the policy grants S3 operations on the `user-johnd` bucket and its objects.
 
-The `user-` prefix is a convention in this example, not an Onyxia requirement. If your user's bucket should be named exactly `johnd`, remove the prefix from both the MinIO policy resources and the Onyxia bookmark so that they continue to match.  
+The `user-` prefix is a convention in this example, not an Onyxia requirement. If your user's bucket should be named exactly `johnd`, remove the prefix from both the MinIO policy resources and the Onyxia bookmark so that they continue to match.
 
-If the bucket does not exist, Onyxia will ask the user if they want to create it.  
+If the bucket does not exist, Onyxia will ask the user if they want to create it.
 
 {% hint style="info" %}
 The `minio` client shown in the MinIO values is used by the MinIO Console and has a client secret. It is separate from the public `onyxia-minio` client used by Onyxia. Never place a client secret in the Onyxia web configuration.
@@ -181,7 +181,7 @@ web:
         bookmarks: [
           {
             s3Uri: "s3://user-$1/",
-            title: "Personal bucket",
+            title: { en: "Personal bucket", fr: "Bucket personnel" },
             claimName: "preferred_username",
             forProfileName: "default"
           }
