@@ -113,18 +113,25 @@ In abbreviated form:
 
 {% tabs %}
 {% tab title="ID token" %}
+Payload of the ID Token. Used to construct the bookmarks.
+
 ```json
 {
+  "aud": "onyxia-minio",
   "preferred_username": "johnd"
 }
 ```
 {% endtab %}
 
 {% tab title="Access token" %}
+Payload of the AccessToken sent to MinIO
+
 ```json
 {
-  "preferred_username": "johnd",
-  "policy": "stsonly"
+  "azp": "onyxia-minio", // Client the token was issued to.
+  "aud": "minio", // Client the token is intended for.
+  "preferred_username": "johnd", // Username used to template the access rules.
+  "policy": "stsonly" // Required claim for the rules to apply.
 }
 ```
 {% endtab %}
