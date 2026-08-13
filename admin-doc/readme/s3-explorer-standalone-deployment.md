@@ -1,5 +1,7 @@
 ---
-description: Deploy a standalone S3 browser with OIDC login and STS-based temporary credentials
+description: >-
+  Deploy a standalone S3 browser with OIDC login and STS-based temporary
+  credentials
 icon: sign-posts-wrench
 ---
 
@@ -8,7 +10,7 @@ icon: sign-posts-wrench
 Onyxia S3 Explorer is a browser-based file manager for S3-compatible object storage. What makes it suitable for multi-user production deployments is its native integration with your organization's identity provider and your storage provider's authorization system:
 
 * users sign in through OpenID Connect (OIDC);
-* Onyxia exchanges their OIDC access token for short-lived S3 credentials through STS—users never need to copy or manage access keys;
+* Onyxia exchanges their OIDC access token for short-lived S3 credentials through STS, users never need to copy or manage access keys;
 * the S3 provider's roles and policies remain authoritative over which buckets and objects each user can access; and
 * administrators can generate built-in bookmarks from identity claims, directing each user to their personal or project buckets.
 
@@ -19,7 +21,7 @@ This page presents two deployment paths:
 * **Quick evaluation without OIDC:** deploy the explorer with almost no configuration and browse a public bucket. This lets you try the interface before setting up identity and storage integration, but it is not intended as a production architecture.
 * **Production deployment with OIDC and STS:** connect Onyxia to your identity provider and let users automatically obtain temporary, policy-scoped credentials.
 
-If you only want to see the product running, start with the quick evaluation. If you are evaluating its production architecture, skip directly to [Production Deployment: OIDC and STS](#production-deployment-oidc-and-sts).
+If you only want to see the product running, start with the quick evaluation. If you are evaluating its production architecture, skip directly to [Production Deployment: OIDC and STS](s3-explorer-standalone-deployment.md#production-deployment-oidc-and-sts).
 
 {% hint style="warning" %}
 The explorer runs entirely in the browser: Onyxia does not proxy S3 requests. The bucket you want to browse must therefore allow the origin of the Onyxia application, for example `https://onyxia.example.com`, in its CORS configuration.
