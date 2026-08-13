@@ -1,58 +1,220 @@
 ---
+description: Deploy Onyxia's S3 Explorer without the Onyxia API or service catalog
 icon: sign-posts-wrench
 ---
 
-# S3 Explorer Standalone Deployment
+# Deploy S3 Explorer as a Standalone Application
 
-Onyxia features a fully client side (the web app talks directly to the s3 server with no proxy in the middle) S3 explorer.  \
-It lets you browse your S3 buckets with an UI that it akin to Google Drive or Dropbox. &#x20;
+Onyxia includes a client-side S3 explorer with an interface similar to Google Drive or Dropbox. You can deploy it without the Onyxia API when you only need a web interface for browsing S3-compatible object storage.
 
-## Simple deployment
+{% hint style="warning" %}
+The explorer runs entirely in the browser: Onyxia does not proxy S3 requests. The bucket you want to browse must therefore allow the origin of the Onyxia application—for example `https://onyxia.example.com`—in its CORS configuration.
+{% endhint %}
 
-No authentication mode:
+## Deploy Without Authentication
 
-{% code title="" %}
-```bash
-helm repo add onyxia https://inseefrlab.github.io/onyxia
+In this mode, users create their own S3 profiles and provide an endpoint, a region, and, when required, an access key ID and secret access key.
 
-cat << EOF > ./onyxia-values.yaml
+Add the Onyxia Helm repository and create a values file:
+
+{% code title="onyxia-values.yaml" %}
+```yaml
 ingress:
   enabled: true
   hosts:
-    - host: onyxia.my-domain.net
+    - host: onyxia.example.com
+
 web:
   env:
     HEADER_TEXT_FOCUS: "S3 Explorer"
+
 api:
   enabled: false
-EOF
-
-helm install onyxia onyxia/onyxia -f onyxia-values.yaml
-
-# Navigate to https://onyxia.my-domain.net
 ```
 {% endcode %}
 
-In this mode, when you access the app (https://onyxia.my-domain.net) you will be asked to create a S3 profile: Give the URL of a S3 server, the region, and optionally the Credentials (Access Key ID, Secret Access Key). Then you'll be able to browse the buckets you have access to.  \
-Note that this configuration is saved in the local storage of the browser.  \
-\
-Note however that, since this explorer is soleiy browser based, if you try to browse an arbitrary S3 bucket it will may fail unless CORS have been enabled for arbitrary browser origins on that bucket.
+Install Onyxia:
 
-## Deployment with user Authentication
+```bash
+helm repo add onyxia https://inseefrlab.github.io/onyxia
+helm repo update
 
-Where the S3 Explorer featured by Onyxia really shine is when enabling OpenID Connect authentication.  \
-What Onyxia enables you to do as an administrator is to make it so that users have to login to Keycloa, Auth0 or EntraID for example, then they can get access to a dedicated bucket or subpath that is only available to them. \
-This is possible if your S3 storage support AssumeRoleWithWebIdentity.  <br>
+helm upgrade --install onyxia onyxia/onyxia \
+  --namespace onyxia \
+  --create-namespace \
+  --values onyxia-values.yaml
+```
 
-If you want a complete tutorial for deploying Onyxia S3 Explorer on Kube alongside a Keycloak and Minio you can follow this tutoriel:
+Open `https://onyxia.example.com`. Onyxia prompts you to create an S3 profile. Credentials are optional for buckets that allow anonymous access.
+
+### Try It With a Public Bucket
+
+Create a profile with the following values:
+
+* **Profile name:** `aws_us-west-2_anonymous` (For example)
+* **URL of the S3 service:** `https://s3.amazonaws.com`
+* **Default region:** `us-west-2`
+* **Anonymous access:** enabled
+
+After saving the profile, navigate to `s3://multimedia-commons/` and add it to your bookmarks. 
+
+{% hint style="warning" %}
+Because there is no backend in this deployment mode, user-created profiles—including any access keys—are stored in the browser's local storage. Do not enter long-lived credentials on a shared or untrusted device.
+{% endhint %}
+
+## Deploy With OpenID Connect Authentication
+
+For a multi-user deployment, users can obtain temporary credentials through OpenID Connect (OIDC). Your storage provider must support [`AssumeRoleWithWebIdentity`](https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoleWithWebIdentity.html).
+
+{% hint style="info" %}
+Onyxia does not decide which buckets a user can access. Roles and policies are configured independently in the S3/STS provider. Onyxia only authenticates the user, requests temporary credentials from STS, and displays administrator-defined bookmarks (example `s3://user-bucket-johnd/`). A bookmark does not grant access to its target.
+{% endhint %}
+
+For a complete walkthrough that deploys Kubernetes, Keycloak, MinIO, and Onyxia from scratch, follow the installation tutorial. Its **Data (S3)** section includes the standalone S3 Explorer option.
 
 {% content-ref url="../../" %}
-[..](../../)
+[Complete Onyxia installation tutorial](../../)
 {% endcontent-ref %}
 
-In the data (S3) section you'll have a specific instruction for the mode S3 standalone.\
-\
-For other S3 storage (other than Minio) and Auth server (other than keycloak) refer to these documentation pages:
+### Example: MinIO and Keycloak
+
+This example follows the [MinIO configuration from `onyxia-ops`](https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/minio/values.yaml). It gives each user read/write access to a bucket derived from their username.
+
+#### 1. Configure the OIDC Client and Token Claims
+
+Create a **public OIDC client** named `onyxia-minio` in Keycloak or your OIDC provider. It must use the Authorization Code flow with PKCE and must not have a client secret.
+
+For a user named `johnd`, tokens issued to this client must contain:
+
+* an ID token with `preferred_username: "johnd"`;
+* a JWT access token with `preferred_username: "johnd"`; and `policy: "stsonly"` (Configure hard coded claim).
+
+In abbreviated form:
+
+{% tabs %}
+{% tab title="ID token" %}
+```json
+{
+  "preferred_username": "johnd"
+}
+```
+{% endtab %}
+
+{% tab title="Access token" %}
+```json
+{
+  "preferred_username": "johnd",
+  "policy": "stsonly"
+}
+```
+{% endtab %}
+{% endtabs %}
+
+Onyxia reads `preferred_username` from the **ID token** to build the bookmark. MinIO reads `policy` and `preferred_username` from the **access token** to authorize the STS request. The username must therefore have the same value in both tokens.
+
+#### 2. Configure MinIO's OIDC Trust and Policy
+
+The relevant parts of the example MinIO values are:
+
+{% code title="apps/minio/values.yaml" %}
+```yaml
+minio:
+  oidc:
+    enabled: true
+    configUrl: "https://auth.example.com/realms/my-realm/.well-known/openid-configuration"
+    clientId: "minio"
+    clientSecret: "<MINIO_OIDC_CLIENT_SECRET>"
+    claimName: "policy"
+    claimPrefix: ""
+
+  policies:
+    - name: stsonly
+      statements:
+        - resources:
+            - 'arn:aws:s3:::user-${jwt:preferred_username}'
+            - 'arn:aws:s3:::user-${jwt:preferred_username}/*'
+          actions:
+            - "s3:*"
+```
+{% endcode %}
+
+MinIO uses the access token's `policy` claim to select the `stsonly` policy. It then substitutes the token's `preferred_username` claim in the resource names. For `johnd`, the policy grants S3 operations on the `user-johnd` bucket and its objects.
+
+The `user-` prefix is a convention in this example, not an Onyxia requirement. If your user's bucket should be named exactly `johnd`, remove the prefix from both the MinIO policy resources and the Onyxia bookmark so that they continue to match.  
+
+If the bucket does not exist, Onyxia will ask the user if they want to create it.  
+
+{% hint style="info" %}
+The `minio` client shown in the MinIO values is used by the MinIO Console and has a client secret. It is separate from the public `onyxia-minio` client used by Onyxia. Never place a client secret in the Onyxia web configuration.
+{% endhint %}
+
+#### 3. Configure Onyxia
+
+The following configuration creates a `default` profile and uses the ID token's `preferred_username` claim to create the matching personal-bucket bookmark:
+
+{% code title="onyxia-values.yaml" %}
+```yaml
+ingress:
+  enabled: true
+  hosts:
+    - host: onyxia.example.com
+
+web:
+  env:
+    HEADER_TEXT_FOCUS: "S3 Explorer"
+    S3: |
+      {
+        URL: "https://minio.example.com",
+        region: "us-east-1",
+        pathStyleAccess: true,
+        sts: {
+          role: {
+            profileName: "default",
+            roleARN: "",
+            roleSessionName: ""
+          },
+          oidcConfiguration: {
+            issuerURI: "https://auth.example.com/realms/my-realm",
+            clientID: "onyxia-minio"
+          }
+        },
+        bookmarks: [
+          {
+            s3Uri: "s3://user-$1/",
+            title: "Personal bucket",
+            claimName: "preferred_username",
+            forProfileName: "default"
+          }
+        ]
+      }
+
+api:
+  enabled: false
+```
+{% endcode %}
+
+Install the chart with the same Helm command used in the unauthenticated example, then open `https://onyxia.example.com`.
+
+For `johnd`, the complete flow is:
+
+1. Onyxia authenticates the user through the public `onyxia-minio` client.
+2. Onyxia resolves the ID token's `preferred_username` and displays `s3://user-johnd/` as a bookmark.
+3. Onyxia sends the access token to MinIO's STS endpoint.
+4. MinIO selects the `stsonly` policy and resolves its resource to `user-johnd`.
+5. MinIO returns temporary credentials that allow the browser to access that bucket.
+
+{% hint style="info" %}
+The empty `roleARN` and `roleSessionName` values are specific to MinIO's claim-based OIDC mode: MinIO derives authorization from the JWT claims instead. Other STS providers, including AWS, require valid role values. See [S3 Configuration](../s3-configuration.md) for provider-independent examples and the complete configuration reference.
+{% endhint %}
+
+## Where to Put the S3 Configuration
+
+The location of the S3 configuration depends on whether the Onyxia API is enabled:
+
+* **Standalone deployment:** set the configuration as JSON5 in `web.env.S3`, as shown above.
+* **Full Onyxia deployment:** set it in `api.regions[].data.S3`. The Helm chart passes the first region's S3 configuration to the web application automatically.
+
+For other identity and storage providers, see:
 
 {% content-ref url="../s3-configuration.md" %}
 [s3-configuration.md](../s3-configuration.md)
@@ -61,8 +223,3 @@ For other S3 storage (other than Minio) and Auth server (other than keycloak) re
 {% content-ref url="../openid-connect-configuration.md" %}
 [openid-connect-configuration.md](../openid-connect-configuration.md)
 {% endcontent-ref %}
-
-Important note for the S3 standalone mode:
-
-When Onyxia is deployed as a datalab, the S3 configuration are passed to the api region. Like [here](https://github.com/InseeFrLab/onyxia-ops/blob/379526d6faa2df935e656427a8b4dd21128d9bf6/apps/onyxia/values-minio-enabled.yaml#L66-L90). But in standalone mode, the parameter are passed as env to the web component. As shown [here](https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/onyxia/values-s3-explorer-only.yaml).&#x20;
-
