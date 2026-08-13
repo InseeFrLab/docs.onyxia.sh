@@ -1,19 +1,33 @@
 ---
-description: Deploy Onyxia's S3 Explorer without the Onyxia API or service catalog
+description: Deploy a standalone S3 browser with OIDC login and STS-based temporary credentials
 icon: sign-posts-wrench
 ---
 
 # S3 Explorer Standalone Deployment
 
-Onyxia includes a client-side S3 explorer with an interface similar to Google Drive or Dropbox. You can deploy it without the Onyxia API when you only need a web interface for browsing S3-compatible object storage.
+Onyxia S3 Explorer is a browser-based file manager for S3-compatible object storage. What makes it suitable for multi-user production deployments is its native integration with your organization's identity provider and your storage provider's authorization system:
+
+* users sign in through OpenID Connect (OIDC);
+* Onyxia exchanges their OIDC access token for short-lived S3 credentials through STS—users never need to copy or manage access keys;
+* the S3 provider's roles and policies remain authoritative over which buckets and objects each user can access; and
+* administrators can generate built-in bookmarks from identity claims, directing each user to their personal or project buckets.
+
+The resulting flow is: **OIDC sign-in → STS → temporary credentials → direct browser access to S3**. Onyxia handles authentication, credential acquisition, and navigation; it does not become a data proxy or replace the authorization rules of the storage provider.
+
+This page presents two deployment paths:
+
+* **Quick evaluation without OIDC:** deploy the explorer with almost no configuration and browse a public bucket. This lets you try the interface before setting up identity and storage integration, but it is not intended as a production architecture.
+* **Production deployment with OIDC and STS:** connect Onyxia to your identity provider and let users automatically obtain temporary, policy-scoped credentials.
+
+If you only want to see the product running, start with the quick evaluation. If you are evaluating its production architecture, skip directly to [Production Deployment: OIDC and STS](#production-deployment-oidc-and-sts).
 
 {% hint style="warning" %}
-The explorer runs entirely in the browser: Onyxia does not proxy S3 requests. The bucket you want to browse must therefore allow the origin of the Onyxia application, for example `https://onyxia.example.com`,in its CORS configuration.
+The explorer runs entirely in the browser: Onyxia does not proxy S3 requests. The bucket you want to browse must therefore allow the origin of the Onyxia application, for example `https://onyxia.example.com`, in its CORS configuration.
 {% endhint %}
 
-## Deploy Without OpenID Connect Authentication
+## Quick Evaluation: Deploy Without OIDC
 
-In this mode, users create their own S3 profiles and provide an endpoint, a region, and, when required, an access key ID and secret access key.
+In this mode, users create their own S3 profiles and provide an endpoint, a region, and, when required, an access key ID and secret access key. Use it to evaluate the explorer, not as a model for a multi-user production deployment.
 
 Add the Onyxia Helm repository and create a values file:
 
@@ -51,7 +65,7 @@ Open `https://onyxia.example.com`. Onyxia prompts you to create an S3 profile. C
 
 Create a profile with the following values:
 
-* **Profile name:** `aws_us-west-2_anonymous` (For example)
+* **Profile name:** `aws_us-west-2_anonymous`, for example
 * **URL of the S3 service:** `https://s3.amazonaws.com`
 * **Default region:** `us-west-2`
 * **Anonymous access:** enabled
@@ -62,9 +76,9 @@ After saving the profile, navigate to `s3://multimedia-commons/` and add it to y
 Because there is no backend in this deployment mode, user-created profiles, including any access keys, are stored in the browser's local storage. Do not enter long-lived credentials on a shared or untrusted device.
 {% endhint %}
 
-## Deploy With OpenID Connect Authentication
+## Production Deployment: OIDC and STS
 
-For a multi-user deployment, users can obtain temporary credentials through OpenID Connect (OIDC). Your storage provider must support [`AssumeRoleWithWebIdentity`](https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoleWithWebIdentity.html).
+In a production multi-user deployment, Onyxia can obtain temporary credentials for each user through OIDC and STS. Your storage provider must support [`AssumeRoleWithWebIdentity`](https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoleWithWebIdentity.html).
 
 {% hint style="info" %}
 Onyxia does not decide which buckets a user can access. Roles and policies are configured independently in the S3/STS provider. Onyxia only authenticates the user, requests temporary credentials from STS, and displays administrator-defined bookmarks (example `s3://user-bucket-johnd/`). A bookmark does not grant access to its target.
@@ -86,8 +100,8 @@ Create a **public OIDC client** named `onyxia-minio` in Keycloak or your OIDC pr
 
 For a user named `johnd`, tokens issued to this client must contain:
 
-* an ID token with `preferred_username: "johnd"`;
-* a JWT access token with `preferred_username: "johnd"`; and `policy: "stsonly"` (Configure hard coded claim).
+* an ID token with `preferred_username: "johnd"`; and
+* a JWT access token with `preferred_username: "johnd"` and a hard-coded `policy: "stsonly"` claim.
 
 In abbreviated form:
 
@@ -193,7 +207,7 @@ api:
 ```
 {% endcode %}
 
-Install the chart with the same Helm command used in the unauthenticated example, then open `https://onyxia.example.com`.
+Install the chart with the same Helm command used in the quick-evaluation example, then open `https://onyxia.example.com`.
 
 For `johnd`, the complete flow is:
 
