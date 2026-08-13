@@ -7,10 +7,14 @@ icon: sign-posts-wrench
 
 # S3 Explorer Standalone Deployment
 
-Onyxia S3 Explorer is a browser-based file manager for S3-compatible object storage. What makes it suitable for multi-user production deployments is its native integration with your organization's identity provider and your storage provider's authorization system:
+Onyxia S3 Explorer is a browser-based file manager for S3-compatible object storage. Files can be previewed without leaving the explorer, including images, videos, PDFs, and text or source code with syntax highlighting.
+
+For data workflows, CSV, JSON, and Parquet files can be explored as tabular data directly in the browser. Powered by DuckDB-Wasm, the explorer queries and streams data from object storage as needed, allowing even large files to be inspected quickly without downloading them in full first.
+
+What makes Onyxia S3 Explorer suitable for multi-user production deployments is its native integration with your organization's identity provider and your storage provider's authorization system:
 
 * users sign in through OpenID Connect (OIDC);
-* Onyxia exchanges their OIDC access token for short-lived S3 credentials through STS, users never need to copy or manage access keys;
+* Onyxia exchanges their OIDC access token for short-lived S3 credentials through STS, so users never need to copy or manage access keys;
 * the S3 provider's roles and policies remain authoritative over which buckets and objects each user can access; and
 * administrators can generate built-in bookmarks from identity claims, directing each user to their personal or project buckets.
 
