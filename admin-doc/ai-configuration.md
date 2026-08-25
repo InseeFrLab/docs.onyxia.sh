@@ -38,38 +38,50 @@ The AI tab requires an authenticated user. User preferences and custom provider 
 
 ## Configure an OpenWebUI gateway
 
-Add `data.ai` to the existing region configuration. It accepts either one gateway object or a list of gateway objects.
+Add `data.ai` to the existing region configuration as a JSON-style array. In `values.yaml`, the flow syntax used below is valid YAML.
 
 {% code title="apps/onyxia/values.yaml (region excerpt)" %}
 ```yaml
 onyxia:
   api:
-    regions:
-      - id: "default"
-        # Keep the other required region properties here.
-        data:
-          # Keep any existing configuration here.
-          ai:
-            - id: "openwebui"
-              name: "Organization AI gateway"
-              provider: "openai"
-              URL: "https://ai.example.com"
-              oauthProvider: "oidc"
-              oidcConfiguration:
-                clientID: "onyxia-ai"
-              description:
-                en: "Use the models hosted by our organization."
+    regions: [
+      {
+        # Keep the other required region properties and existing data configuration here.
+        data: {
+          ai: [
+            {
+              id: "openwebui",
+              name: "Organization AI gateway",
+              URL: "https://ai.example.com",
+              oauthProvider: "oidc",
+              description: {
+                en: "Use the models hosted by our organization.",
                 fr: "Utilisez les modèles hébergés par notre organisation."
-              accountCreation:
-                title:
-                  en: "Activate your AI account"
+              },
+              accountCreation: {
+                title: {
+                  en: "Activate your AI account",
                   fr: "Activez votre compte IA"
-                description:
-                  en: "Open the gateway and sign in once, then return to Onyxia."
+                },
+                description: {
+                  en: "Open the gateway and sign in once, then return to Onyxia.",
                   fr: "Ouvrez la passerelle et connectez-vous une première fois, puis revenez dans Onyxia."
-                buttonLabel:
-                  en: "Open the gateway"
+                },
+                buttonLabel: {
+                  en: "Open the gateway",
                   fr: "Ouvrir la passerelle"
+                },
+                logoURL: "https://ai.example.com/static/logo.png"
+              },
+              oidcConfiguration: {
+                clientID: "onyxia-ai",
+                issuerURI: "https://auth.example.com/realms/example"
+              }
+            }
+          ]
+        }
+      }
+    ]
 ```
 {% endcode %}
 
@@ -85,7 +97,7 @@ Do not add a trailing slash to `URL`. Onyxia derives the API base URL as `<URL>/
 | `name` | No | Label displayed in Onyxia. Defaults to the hostname from `URL`. |
 | `provider` | No | Protocol name injected into charts. Defaults to `openai`, which is appropriate for the OpenWebUI OpenAI-compatible API. |
 | `description` | No | String or localized Markdown displayed below the gateway name. |
-| `accountCreation` | No | Localized title, description, and button label displayed when OpenWebUI returns `403` because the user has no account yet. The button opens `URL`. |
+| `accountCreation` | No | Localized title, description, and button label, plus an optional `logoURL`, displayed when OpenWebUI returns `403` because the user has no account yet. The button opens `URL`. |
 | `oidcConfiguration` | No | OIDC overrides for this gateway: `issuerURI`, `clientID`, `extraQueryParams`, `scope`, or `idleSessionLifetimeInSeconds`. Unspecified values are inherited from the main Onyxia OIDC configuration. |
 
 Use an explicit, stable `id` for every gateway. Changing it makes Onyxia treat the gateway as a new provider and discards the model selection associated with the previous identifier.
