@@ -48,7 +48,7 @@ onyxia:
       - id: "default"
         # Keep the other required region properties here.
         data:
-          # Keep any existing S3 configuration here.
+          # Keep any existing configuration here.
           ai:
             - id: "openwebui"
               name: "Organization AI gateway"
@@ -109,10 +109,6 @@ Create `onyxia-ai` as a public OIDC client using Authorization Code Flow with PK
 
 {% hint style="warning" %}
 Configure the OIDC client used for the AI gateway so that the identity provider issues standard Bearer access tokens; do not require DPoP-bound access tokens for this client. Onyxia hands the access token to OpenWebUI's token-exchange endpoint, which reuses it without access to the private key held by the browser and therefore cannot present the associated DPoP proof. This restriction only applies to the AI client; other Onyxia OIDC clients can still use DPoP.
-{% endhint %}
-
-{% hint style="danger" %}
-Use OpenWebUI **0.11.0 or newer** and configure `OAUTH_TOKEN_EXCHANGE_TRUSTED_CLIENT_IDS`. Earlier token-exchange implementations accepted tokens issued to untrusted OAuth clients. The identity provider must support RFC 7662 token introspection; otherwise, leave region gateway token exchange disabled. See the [OpenWebUI SSO documentation](https://docs.openwebui.com/features/authentication-access/auth/sso/#oauth-token-exchange-for-external-applications) and [security advisory](https://github.com/open-webui/open-webui/security/advisories/GHSA-rq84-p6rr-vf89).
 {% endhint %}
 
 The first exchange can return `403` if the user does not yet exist in OpenWebUI. In that case, Onyxia displays the account-creation content. The user must open the gateway, sign in once, return to Onyxia, and select **Refresh credentials**.
