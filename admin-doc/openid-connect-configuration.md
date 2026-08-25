@@ -297,7 +297,7 @@ each service:
 * **Kubernetes API** → `onyxia.api.regions[].services.k8sPublicEndpoint.oidcConfiguration`
 * **AI gateway** → `onyxia.api.regions[].data.ai[].oidcConfiguration`
 
-AI gateways also require a secure OpenWebUI token-exchange configuration. See [AI integration](ai-configuration.md#configure-openwebui).
+AI gateways also require a secure OpenWebUI token-exchange configuration. The AI client must issue standard Bearer access tokens rather than DPoP-bound access tokens because OpenWebUI reuses the token during the exchange. See [AI integration](ai-configuration.md#configure-openwebui).
 
 Each configuration follows this structure:
 
