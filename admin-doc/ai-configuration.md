@@ -108,7 +108,7 @@ CORS_ALLOW_ORIGIN=https://onyxia.example.com
 Create `onyxia-ai` as a public OIDC client using Authorization Code Flow with PKCE. Configure the Onyxia URL as an allowed redirect URI. A dedicated client is recommended; if `oidcConfiguration` is omitted, add Onyxia's main client ID to `OAUTH_TOKEN_EXCHANGE_TRUSTED_CLIENT_IDS` instead.
 
 {% hint style="warning" %}
-In Keycloak, leave **Require DPoP bound tokens** disabled for the `onyxia-ai` client. Onyxia hands this client's access token to OpenWebUI's token-exchange endpoint, which reuses it without access to the private key held by the browser and therefore cannot present the associated DPoP proof. This flow requires a standard Bearer access token, even if DPoP remains enabled for other Onyxia clients. See the [Keycloak DPoP documentation](https://www.keycloak.org/securing-apps/dpop).
+Configure the OIDC client used for the AI gateway so that the identity provider issues standard Bearer access tokens; do not require DPoP-bound access tokens for this client. Onyxia hands the access token to OpenWebUI's token-exchange endpoint, which reuses it without access to the private key held by the browser and therefore cannot present the associated DPoP proof. This restriction only applies to the AI client; other Onyxia OIDC clients can still use DPoP.
 {% endhint %}
 
 {% hint style="danger" %}
