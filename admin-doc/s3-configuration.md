@@ -10,6 +10,7 @@ Onyxia Web uses this configuration to:
 
 * expose administrator-defined S3 profiles in the file explorer;
 * exchange the user's OIDC access token for temporary credentials through `AssumeRoleWithWebIdentity`;
+* expose public S3 data through an anonymous profile and generate links to public folders;
 * inject the selected profile and its credentials into services such as Jupyter and RStudio.
 
 The browser talks directly to the S3 and STS endpoints. Onyxia API does not proxy these requests, create IAM roles, or install bucket policies. Configure the S3 provider, OIDC trust, roles, and policies separately, and allow requests from the Onyxia Web origin in the S3 provider's CORS configuration.
@@ -191,6 +192,82 @@ Onyxia resolves:
 
 No profile is generated for `USER_ONYXIA_admin` because it matches `excludedClaimPattern`.
 
+## Anonymous Profiles and Public-Folder Sharing
+
+Set `anonymousProfileName` to create an administrator-defined S3 profile that does not use STS or static credentials. Requests made through this profile are unsigned and can access only the buckets, prefixes, and objects that the S3 provider allows anonymous users to access.
+
+An anonymous profile is also required to enable sharing links for public folders in the S3 explorer. For an authenticated profile, configure an anonymous profile with the same `URL` and `region`. The simplest approach is to add `anonymousProfileName` to the same S3 configuration:
+
+{% code title="apps/onyxia/values.yaml" %}
+```yaml
+onyxia:
+  api:
+    regions:
+      - {
+          "id": "default",
+          "data": {
+            "S3": {
+              "URL": "https://s3.lab.example.com",
+              "region": "us-east-1",
+              "pathStyleAccess": true,
+              "sts": {
+                "role": {
+                  "profileName": "default",
+                  "roleARN": "arn:aws:iam::123456789012:role/onyxia-$1",
+                  "roleSessionName": "onyxia-$1",
+                  "claimName": "preferred_username"
+                }
+              },
+              "anonymousProfileName": "public"
+            }
+          }
+        }
+```
+{% endcode %}
+
+This configuration creates two profiles for the same S3 endpoint:
+
+* `default`, which obtains temporary credentials through STS;
+* `public`, which sends no credentials.
+
+When a folder is public, Onyxia can generate a sharing link that opens it with the `public` profile. The recipient can follow that link without signing in to Onyxia.
+
+{% hint style="warning" %}
+`anonymousProfileName` does not make any S3 data public. The folder must already be covered by a public bucket policy, or a user with sufficient permissions must make it public through the S3 explorer. The S3 provider must permit the required anonymous list and read operations and allow the Onyxia Web origin in its CORS configuration.
+{% endhint %}
+
+### Anonymous-Only S3 Profile
+
+An S3 configuration can omit `sts` and define only `anonymousProfileName`. This creates a credential-free profile without creating any STS-backed profile:
+
+{% code title="apps/onyxia/values.yaml" %}
+```yaml
+onyxia:
+  api:
+    regions:
+      - {
+          "id": "default",
+          "data": {
+            "S3": {
+              "URL": "https://s3.public.example.com",
+              "region": "us-east-1",
+              "pathStyleAccess": true,
+              "anonymousProfileName": "public",
+              "bookmarks": [
+                {
+                  "s3Uri": "s3://open-data/",
+                  "title": "Open Data",
+                  "forProfileName": "public"
+                }
+              ]
+            }
+          }
+        }
+```
+{% endcode %}
+
+Here, Onyxia exposes the `public` profile and accesses `s3://open-data/` with unsigned requests. Access succeeds only if the S3 provider's policies allow it.
+
 ## Configuration Reference
 
 The following type describes the complete `data.S3` configuration accepted by Onyxia Web:
@@ -217,7 +294,7 @@ type S3Config = {
    */
   pathStyleAccess?: boolean;
 
-  /** When present, this entry creates administrator-defined profiles. */
+  /** When present, each resolved role creates an STS-backed profile. */
   sts?: {
     /** STS endpoint. Defaults to S3Config.URL. */
     URL?: string;
@@ -234,6 +311,13 @@ type S3Config = {
     /** Partial OIDC override for this S3 service. */
     oidcConfiguration?: OidcConfiguration;
   };
+
+  /**
+   * Creates an administrator-defined profile that sends no credentials.
+   * An anonymous profile also enables sharing links for public folders on
+   * the same S3 endpoint and region.
+   */
+  anonymousProfileName?: string;
 
   /** Read-only, administrator-defined bookmarks in the S3 explorer. */
   bookmarks?: Bookmark[];
@@ -323,9 +407,9 @@ The selector filters bookmarks in the UI. It does not grant S3 permissions.
 
 ### Defaults for User-Created Profiles
 
-An S3 configuration without `sts` does not create an administrator-defined profile. Instead, it supplies the default URL, region, and path-style setting shown when a user creates a profile manually.
+An S3 configuration with neither `sts` nor `anonymousProfileName` does not create an administrator-defined profile. Instead, it supplies the default URL, region, and path-style setting shown when a user creates a profile manually.
 
-If `data.S3` contains several entries, Onyxia uses the first entry without `sts` for those form defaults. If every entry has `sts`, it uses the first entry.
+If `data.S3` contains several entries, Onyxia uses the first entry with neither `sts` nor `anonymousProfileName` for those form defaults. If every entry creates an STS-backed or anonymous profile, it uses the first entry.
 
 {% code title="apps/onyxia/values.yaml" %}
 ```yaml
@@ -370,6 +454,7 @@ Here, the MinIO entry only supplies defaults for the manual profile form. The Ce
 * The S3 and STS endpoints must be reachable from users' browsers.
 * The S3 provider must allow the Onyxia Web origin through CORS.
 * The STS provider must trust the issuer and client configured in `sts.oidcConfiguration`.
+* Anonymous profiles and public-folder sharing require the S3 provider to permit unsigned list and read requests for the relevant buckets and prefixes.
 * Referenced roles and policies must already exist and grant access consistent with the displayed bookmarks.
 * The OIDC access token is sent to STS as the web identity token. Claim templates, however, are resolved from the corresponding decoded ID token.
 * Profile names must be unique across administrator-defined and user-created profiles. Name collisions are unsupported and can cause the conflicting profiles to be discarded.
