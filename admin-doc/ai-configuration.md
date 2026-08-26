@@ -13,23 +13,23 @@ The feature supports two kinds of providers:
 * **Custom providers** are configured by users. OpenAI, OpenAI-compatible, Mistral, and Anthropic API protocols are supported.
 
 {% hint style="info" %}
-Enabling the feature adds **My account > AI**. It does not add AI support to every service automatically. A Helm chart must use the [`ai` x-onyxia context](#inject-the-provider-into-a-service) to receive the selected provider.
+The AI feature adds **My account > AI**. It does not add AI support to every service automatically. A Helm chart must use the [`ai` x-onyxia context](#inject-the-provider-into-a-service) to receive the selected provider.
 {% endhint %}
 
-## Enable the feature
+## Disable the feature
 
-The feature is disabled by default. Enable it in the Onyxia Web configuration:
+The feature is enabled by default. To disable it, set `DISABLE_AI` in the Onyxia Web configuration:
 
 {% code title="apps/onyxia/values.yaml" %}
 ```yaml
 onyxia:
   web:
     env:
-      ENABLED_AI: "true"
+      DISABLE_AI: "true"
 ```
 {% endcode %}
 
-This is the master switch for both region providers and custom providers. You can enable it without configuring a region provider; users will then only be able to add custom providers.
+This disables both region providers and custom providers. When `DISABLE_AI` is unset or set to `"false"`, authenticated users can access the AI tab. If no region provider is configured, they can still add custom providers.
 
 The AI tab requires an authenticated user. User preferences and custom provider credentials are stored with the other Onyxia user settings:
 
@@ -207,4 +207,4 @@ Define matching defaults in `values.yaml` and only create AI-related environment
 5. Select a default provider and model.
 6. Launch a compatible chart and inspect its generated Helm values to confirm the expected mapping.
 
-If the AI tab is missing, verify `ENABLED_AI`. If token exchange or model loading fails, check the browser network panel, OpenWebUI's trusted client list, the `oauthProvider` identifier, and CORS for the exact Onyxia origin.
+If the AI tab is missing, verify that `DISABLE_AI` is not set to `"true"` and that the user is authenticated. If token exchange or model loading fails, check the browser network panel, OpenWebUI's trusted client list, the `oauthProvider` identifier, and CORS for the exact Onyxia origin.

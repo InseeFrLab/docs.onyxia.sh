@@ -8,7 +8,7 @@ icon: sparkles
 The **My account > AI** tab lets you choose the AI provider and model that compatible Onyxia services use when they start.
 
 {% hint style="info" %}
-The tab is only visible when your platform administrator has enabled AI integration. A service must also explicitly support Onyxia's AI configuration; selecting a provider does not add AI features to every catalog service.
+The tab is visible by default for authenticated users unless your platform administrator has disabled AI integration. A service must also explicitly support Onyxia's AI configuration; selecting a provider does not add AI features to every catalog service.
 {% endhint %}
 
 <figure><img src="https://github.com/user-attachments/assets/7bb15d68-d531-4221-9f89-007d0fbb5920" alt="The AI tab showing a region gateway and a custom provider"><figcaption><p>Manage gateway credentials, providers, and model selections from your account.</p></figcaption></figure>
