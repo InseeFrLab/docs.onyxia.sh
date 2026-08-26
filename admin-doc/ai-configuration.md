@@ -9,7 +9,7 @@ Onyxia can centralize AI provider settings for a user and inject the selected pr
 
 The feature supports two kinds of providers:
 
-* **Region providers** are OpenWebUI gateways configured by the platform administrator. Onyxia exchanges the user's OIDC access token for a short-lived OpenWebUI token.
+* **Managed providers** are OpenWebUI gateways configured by the platform administrator. Onyxia exchanges the user's OIDC access token for a short-lived OpenWebUI token.
 * **Custom providers** are configured by users. OpenAI, OpenAI-compatible, Mistral, and Anthropic API protocols are supported.
 
 {% hint style="info" %}
@@ -29,7 +29,7 @@ onyxia:
 ```
 {% endcode %}
 
-This disables both region providers and custom providers. When `DISABLE_AI` is unset or set to `"false"`, authenticated users can access the AI tab. If no region provider is configured, they can still add custom providers.
+This disables both managed providers and custom providers. When `DISABLE_AI` is unset or set to `"false"`, authenticated users can access the AI tab. If no managed provider is configured, they can still add custom providers.
 
 The AI tab requires an authenticated user. User preferences and custom provider credentials are stored with the other Onyxia user settings:
 
@@ -38,52 +38,49 @@ The AI tab requires an authenticated user. User preferences and custom provider 
 
 ## Configure an OpenWebUI gateway
 
-Add `data.ai` to the existing region configuration as a JSON-style array. In `values.yaml`, the flow syntax used below is valid YAML.
+Set the `AI` environment variable in the Onyxia Web configuration. Its value is a JSON5 object or array of objects. In `values.yaml`, use a YAML literal block (`|`) so that the JSON5 configuration is passed to Onyxia Web as a string.
 
-{% code title="apps/onyxia/values.yaml (region excerpt)" %}
+{% code title="apps/onyxia/values.yaml" %}
 ```yaml
 onyxia:
-  api:
-    regions: [
-      {
-        # Keep the other required region properties and existing data configuration here.
-        data: {
-          ai: [
-            {
-              id: "openwebui",
-              name: "Organization AI gateway",
-              URL: "https://ai.example.com",
-              oauthProvider: "oidc",
+  web:
+    env:
+      AI: |
+        [
+          {
+            id: "openwebui",
+            name: "Organization AI gateway",
+            provider: "openai",
+            URL: "https://ai.example.com",
+            oauthProvider: "oidc",
+            description: {
+              en: "Use the models hosted by our organization.",
+              fr: "Utilisez les modèles hébergés par notre organisation."
+            },
+            accountCreation: {
+              title: {
+                en: "Activate your AI account",
+                fr: "Activez votre compte IA"
+              },
               description: {
-                en: "Use the models hosted by our organization.",
-                fr: "Utilisez les modèles hébergés par notre organisation."
+                en: "Open the gateway and sign in once, then return to Onyxia.",
+                fr: "Ouvrez la passerelle et connectez-vous une première fois, puis revenez dans Onyxia."
               },
-              accountCreation: {
-                title: {
-                  en: "Activate your AI account",
-                  fr: "Activez votre compte IA"
-                },
-                description: {
-                  en: "Open the gateway and sign in once, then return to Onyxia.",
-                  fr: "Ouvrez la passerelle et connectez-vous une première fois, puis revenez dans Onyxia."
-                },
-                buttonLabel: {
-                  en: "Open the gateway",
-                  fr: "Ouvrir la passerelle"
-                },
-                logoURL: "https://ai.example.com/static/logo.png"
-              },
-              oidcConfiguration: {
-                clientID: "onyxia-ai",
-                issuerURI: "https://auth.example.com/realms/example"
+              buttonLabel: {
+                en: "Open the gateway",
+                fr: "Ouvrir la passerelle"
               }
+            },
+            oidcConfiguration: {
+              clientID: "onyxia-ai",
+              issuerURI: "https://auth.example.com/realms/example"
             }
-          ]
-        }
-      }
-    ]
+          }
+        ]
 ```
 {% endcode %}
+
+When `AI` is unset or empty, Onyxia does not expose a managed gateway, but users can still configure custom providers. Although a single object is accepted, using an array makes it possible to add more gateways without changing the value's structure.
 
 Do not add a trailing slash to `URL`. Onyxia derives the API base URL as `<URL>/api`.
 
@@ -97,7 +94,7 @@ Do not add a trailing slash to `URL`. Onyxia derives the API base URL as `<URL>/
 | `name` | No | Label displayed in Onyxia. Defaults to the hostname from `URL`. |
 | `provider` | No | Protocol name injected into charts. Defaults to `openai`, which is appropriate for the OpenWebUI OpenAI-compatible API. |
 | `description` | No | String or localized Markdown displayed below the gateway name. |
-| `accountCreation` | No | Localized title, description, and button label, plus an optional `logoURL`, displayed when OpenWebUI returns `403` because the user has no account yet. The button opens `URL`. |
+| `accountCreation` | No | Localized title, description, and button label displayed when OpenWebUI returns `403` because the user has no account yet. The button opens `URL`. |
 | `oidcConfiguration` | No | OIDC overrides for this gateway: `issuerURI`, `clientID`, `extraQueryParams`, `scope`, or `idleSessionLifetimeInSeconds`. Unspecified values are inherited from the main Onyxia OIDC configuration. |
 
 Use an explicit, stable `id` for every gateway. Changing it makes Onyxia treat the gateway as a new provider and discards the model selection associated with the previous identifier.
@@ -207,4 +204,4 @@ Define matching defaults in `values.yaml` and only create AI-related environment
 5. Select a default provider and model.
 6. Launch a compatible chart and inspect its generated Helm values to confirm the expected mapping.
 
-If the AI tab is missing, verify that `DISABLE_AI` is not set to `"true"` and that the user is authenticated. If token exchange or model loading fails, check the browser network panel, OpenWebUI's trusted client list, the `oauthProvider` identifier, and CORS for the exact Onyxia origin.
+If the AI tab is missing, verify that `DISABLE_AI` is not set to `"true"` and that the user is authenticated. If a managed gateway is missing, validate the JSON5 stored in `AI`, including the required `URL` and `oauthProvider` properties. If token exchange or model loading fails, check the browser network panel, OpenWebUI's trusted client list, the `oauthProvider` identifier, and CORS for the exact Onyxia origin.

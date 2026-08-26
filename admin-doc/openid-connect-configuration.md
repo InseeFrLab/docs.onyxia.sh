@@ -289,13 +289,12 @@ Replace `https://my-app.com/` by `https://datalab.my-domain.net/`.
 Onyxia uses an OIDC client for authentication, but it also connects to other OIDC-enabled services.\
 Each of these services **can** have its own OIDC client instance configuration, allowing Onyxia to authenticate using a separate client identity.
 
-In the **region configuration**, you can specify an optional `oidcConfiguration` object for\
-each service:
+You can specify an optional `oidcConfiguration` object for each service. Its location depends on how the service is configured:
 
 * **S3 (MinIO STS)** → `onyxia.api.regions[].data.S3.sts.oidcConfiguration`
 * **Vault** → `onyxia.api.regions[].vault.oidcConfiguration`
 * **Kubernetes API** → `onyxia.api.regions[].services.k8sPublicEndpoint.oidcConfiguration`
-* **AI gateway** → `onyxia.api.regions[].data.ai[].oidcConfiguration`
+* **AI gateway** → `oidcConfiguration` in each object stored in the `onyxia.web.env.AI` JSON5 value
 
 AI gateways also require a secure OpenWebUI token-exchange configuration. Configure the associated OIDC client so that the identity provider issues standard Bearer access tokens rather than DPoP-bound access tokens because OpenWebUI reuses the token during the exchange. See [AI integration](ai-configuration.md#configure-openwebui).
 
