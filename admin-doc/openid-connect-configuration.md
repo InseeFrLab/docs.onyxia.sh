@@ -289,12 +289,14 @@ Replace `https://my-app.com/` by `https://datalab.my-domain.net/`.
 Onyxia uses an OIDC client for authentication, but it also connects to other OIDC-enabled services.\
 Each of these services **can** have its own OIDC client instance configuration, allowing Onyxia to authenticate using a separate client identity.
 
-In the **region configuration**, you can specify an optional `oidcConfiguration` object for\
-each service:
+You can specify an optional `oidcConfiguration` object for each service. Its location depends on how the service is configured:
 
 * **S3 (MinIO STS)** → `onyxia.api.regions[].data.S3.sts.oidcConfiguration`
 * **Vault** → `onyxia.api.regions[].vault.oidcConfiguration`
 * **Kubernetes API** → `onyxia.api.regions[].services.k8sPublicEndpoint.oidcConfiguration`
+* **AI gateway** → `oidcConfiguration` in each object stored in the `onyxia.web.env.AI` JSON5 value
+
+AI gateways also require a secure OpenWebUI token-exchange configuration. Configure the associated OIDC client so that the identity provider issues standard Bearer access tokens rather than DPoP-bound access tokens because OpenWebUI reuses the token during the exchange. See [AI integration](ai-configuration.md#configure-openwebui).
 
 Each configuration follows this structure:
 
@@ -312,7 +314,7 @@ If no `oidcConfiguration` is provided for a service, Onyxia will reuse the same 
 
 However, defining a separate OIDC client for each service is recommended to improve access control and security.
 
-You might find it strange that Onyxia requires creating multiple OIDC clients to communicate with different resource servers (e.g. `onyxia-api`, `minio`, `vault`, or the Kubernetes API). You’ll typically end up with several clients such as `onyxia`, `onyxia-vault`, `onyxia-minio`, and `onyxia-kube`.\
+You might find it strange that Onyxia requires creating multiple OIDC clients to communicate with different resource servers (e.g. `onyxia-api`, `minio`, `vault`, the Kubernetes API, or an AI gateway). You’ll typically end up with several clients such as `onyxia`, `onyxia-vault`, `onyxia-minio`, `onyxia-kube`, and `onyxia-ai`.\
 At first, this can feel counterintuitive, a _client ID_ seems like it should represent one application, not multiple variants of it.
 
 Conceptually, a single client requesting tokens for multiple resource servers (each with its own audience and claims) would make more sense.\
