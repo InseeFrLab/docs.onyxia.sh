@@ -105,12 +105,6 @@ onyxia:
 
 {% tabs %}
 {% tab title="Keycloak" %}
-**Onyxia Login Theme**
-
-Each version of Onyxia ships with [a custom Keycloak login theme](https://youtu.be/NrVuVXsbloA?si=fDCPpXUIpSlCHsYw\&t=405). You can download it from the [release page](https://github.com/InseeFrLab/onyxia/releases). Specific instructions for loading the theme in your Onyxia instance can be found [in this guide](https://docs.keycloakify.dev/deploying-your-theme).
-
-If you are deploying Keycloak using Helm, as instructed in the installation guide, [here are the relevant lines](https://github.com/InseeFrLab/onyxia-ops/blob/35f86c848a3ddeef6bfe4a9a4f41e5d516eb66db/apps/keycloak/values.yaml#L60-L79) in the Onyxia-ops repository.
-
 **Choosing the Unique User Identifier Claim**
 
 Onyxia requires a unique user identifier. You must specify which claim in the Access Token should be used for this purpose.
@@ -132,12 +126,12 @@ Beyond what's covered in the installation guide, if you need a more general tuto
 
 {% embed url="https://docs.oidc-spa.dev/providers-configuration/keycloak" %}
 For Onyxia, use these substitutions in the guide:\
-&#xNAN;**\<KC\_DOMAIN>**: `auth.lab.my-domain.net`\
-&#xNAN;**\<KC\_RELATIVE\_PATH>**: `/auth`\
-&#xNAN;**\<REALM\_NAME>**: `datalab`\
-&#xNAN;**\<APP\_DOMAIN>**: `datalab.my-domain.net`\
-&#xNAN;**\<BASE\_URL>**: `/`\
-&#xNAN;**\<DEV\_PORT>**: `5173`\
+**\<KC\_DOMAIN>**: `auth.lab.my-domain.net`\
+**\<KC\_RELATIVE\_PATH>**: `/auth`\
+**\<REALM\_NAME>**: `datalab`\
+**\<APP\_DOMAIN>**: `datalab.my-domain.net`\
+**\<BASE\_URL>**: `/`\
+**\<DEV\_PORT>**: `5173`\
 ✅ Note that Onyxia implement an auto logout countdown that will start to display once minute befor auto logout if you configure your client as [a sensible app](https://docs.oidc-spa.dev/providers-configuration/keycloak#security-sensitive-apps-banking-admin-panels-etc)
 {% endembed %}
 
@@ -149,19 +143,33 @@ onyxia:
   api:
     env:
       authentication.mode: "openidconnect"
-      # Example: "https://auth.lab.my-domain.net/auth/realms/datalab"
-      oidc.issuer-uri: "https://<KC_DOMAIN><KC_RELATIVE_PATH>/realms/<REALM_NAME>"
-      # Example: "onyxia"
-      oidc.clientID: "<ONYXIA_CLIENT_ID>"
-      # Examples:
-      # `"preferred_username"` if a regex pattern is enforced for usernames.
-      # `"my-custom-claim"`    if a custom Keycloak mapper is configured.
-      # `"sub"`                always works and is unique.
-      oidc.username-claim: "..."
-      # NOTE: By default, Access Tokens issued by Keycloak have an `aud` claim 
-      # of "account". You can change this value in your protocol mapper and 
-      # update this setting accordingly.  
-      oidc.audience: "account"
+      oidc.issuer-uri: "https://auth.lab.my-domain.net/auth/realms/datalab"
+      # Warning: This is the client ID used by onyxia-web (the fronted)
+      # Onyxia-api does not need any client, just to validate an audience.
+      oidc.clientID: "onyxia_onyxia-api"
+      oidc.audience: "onyxia-api"
+      # The username should be RFC1123 complient
+      oidc.username-claim: "preferred_username"
+    regions: 
+      [
+        {
+          data: {
+            S3: {
+              sts: {
+                oidcConfiguration: { clientID: "onyxia_minio" }
+              }
+            }
+          },
+          vault: {
+            oidcConfiguration: { clientID: "onyxia_vault" }
+          },
+          services: {
+            k8sPublicEndpoint: {
+              oidcConfiguration: { clientID: "onyxia_kub-api-server" }
+            }
+          }
+        }
+      ]
 ```
 {% endcode %}
 {% endtab %}
@@ -169,11 +177,21 @@ onyxia:
 {% tab title="Microsoft Entra ID" %}
 Follow this guide to configure a Microsoft Entra ID application for Onyxia.
 
+Application to declare:
+
+* onyxia-api, exposed api: Application ID URI: api://onyxia-api scope: access\_as\_suer
+* onyxia\_onyxia-api, Platform: Single-Page Application, Redirect URIs: https://datalab.my-domain.net/ https://datalab.my-domain.net/api/swagger-ui/oauth2-redirect.html https://datalab.my-domain.net/api/swagger-ui/oauth2-redirect.html, with api permission on onyxia-api
+* minio, exposed api: Application ID URI: api://minio scope: access\_as\_user
+* onyxia\_onyxia-api, Platform: Single-Page Application, Redirect URIs: https://datalab.my-domain.net/, with api permission on minio
+* TODO: AI please infer<br>
+
+More info on how to navi
+
 {% embed url="https://docs.oidc-spa.dev/providers-configuration/microsoft-entra-id" %}
 For Onyxia, use these substitutions:\
-`My App - API` -> `Onyxia - API`\
+`My App - API` -> `onyxia-api`\
 `api://my-app-api` -> `api://onyxia-api`\
-`My App` -> `Onyxia`\
+`My App` -> `onyxia_onyxia-api`\
 [`https://my-app.com/`](https://my-app.com/) -> `https://datalab.my-domain.net/`
 {% endembed %}
 
@@ -185,13 +203,44 @@ onyxia:
   api:
     env:
       authentication.mode: "openidconnect"
-      oidc.issuer-uri: "https://login.microsoftonline.com/<Directory (tenant) ID (Onyxia)>/v2.0"
-      oidc.clientID: "<Application (client) ID (Onyxia)>"
+      oidc.issuer-uri: "https://login.microsoftonline.com/<Directory (tenant) ID>/v2.0"
+      # Warning: This is the client ID used by onyxia-web (the fronted)
+      # Onyxia-api does not need any client, just to validate an audience.
+      oidc.clientID: "<Application ID: onyxia_onyxia-api>"
       # Do **not** use `"sub"` or `"upn"` as they may contain 
       # non-alphanumeric characters.
       oidc.username-claim: "oid"
       oidc.scope: "profile api://onyxia-api/access_as_user"
-      oidc.audience: "<Application (client) ID (Onyxia - API)>"
+      oidc.audience: "<Application ID: onyxia-api>"
+    regions: 
+      [
+        {
+          data: {
+            S3: {
+              sts: {
+                oidcConfiguration: { 
+                  clientID: "<Application ID: onyxia_minio>",
+                  scope: "profile api://onyxia/access_as_user" 
+                }
+              }
+            }
+          },
+          vault: {
+            oidcConfiguration: { 
+              clientID: "<Application ID: onyxia_vault",
+              scope: "profile api://vault/access_as_user"
+            }
+          },
+          services: {
+            k8sPublicEndpoint: {
+              oidcConfiguration: { 
+                clientID: "<Application ID: onyxia_kub-api-server>" ,
+                scope: "profile api://kub-api-server/access_as_user"
+              }
+            }
+          }
+        }
+      ]
       
 ```
 {% endcode %}
@@ -203,9 +252,9 @@ Follow this guide to configure an Auth0 application for Onyxia.
 {% embed url="https://docs.oidc-spa.dev/providers-configuration/auth0" %}
 For Onyxia, use these substitutions:\
 `"My App"` → `"Onyxia"`\
-&#xNAN;**\<APP\_DOMAIN>** → `datalab.my-domain.net`\
-&#xNAN;**\<BASE\_URL>** → `/`\
-&#xNAN;**\<DEV\_PORT>** → `5173`\
+**\<APP\_DOMAIN>** → `datalab.my-domain.net`\
+\&#xNAN;**\<BASE\_URL>** → `/`\
+\&#xNAN;**\<DEV\_PORT>** → `5173`\
 `"My App - API"` → `"Onyxia - API"`\
 `https://myapp.my-company.com/api` → `https://datalab.my-domain.net/api`\
 `"auth.my-company.com"` → `"auth.my-domain.net"`
@@ -263,24 +312,51 @@ onyxia:
     env:
       authentication.mode: "openidconnect"
       oidc.issuer-uri: "https://auth.my-domain.net"
-      oidc.clientID: "<Onyxia Application Client ID>"  
-      oidc.username-claim: "onyxia-username"
-      oidc.extra-query-params: "audience=https%3A%2F%2Fdatalab.my-domain.net%2Fapi"
+  
+      # onyxia-api specific params (not used by the frontend)
       oidc.audience: "https://datalab.my-domain.net/api"
+      oidc.username-claim: "onyxia-username"
+      
+      # Client sepecifc parameters (not used by the backend)
+      oidc.clientID: "<Application Client ID: onyxia_onyxia-api>"  
+      oidc.extra-query-params: "audience=https%3A%2F%2Fdatalab.my-domain.net%2Fapi"
       # Optional: Auto logout after inactivity.
       oidc.idleSessionLifetimeInSeconds: "300"
+    regions: 
+      [
+        {
+          data: {
+            S3: {
+              sts: {
+                oidcConfiguration: { 
+                  clientID: "<Application Client ID: onyxia_minio>",
+                  extraQueryParams: "audience=https%3A%2F%2Fminio.lab.my-domain.net" 
+                }
+              }
+            }
+          },
+          vault: {
+            oidcConfiguration: { 
+              clientID: "<Application Client ID: onyxia_vault",
+              extraQueryParams: "audience=https%3A%2F%2Fvault.lab.my-domain.net" 
+            }
+          },
+          services: {
+            k8sPublicEndpoint: {
+              oidcConfiguration: { 
+                clientID: "<Applicatioin Client ID: onyxia_kub-api-server>",
+                extraQueryParams: "audience=https%3A%2F%2Fapiserver.kub.sspcloud.fr" 
+              }
+            }
+          }
+        }
+      ]
 ```
 {% endcode %}
 {% endtab %}
 
 {% tab title="Other" %}
-If you're using another OIDC provider and need help configuring Onyxia, reach out [on Slack](https://join.slack.com/t/3innovation/shared_invite/zt-2skhjkavr-xO~uTRLgoNOCm6ubLpKG7Q). We’ll be happy to schedule a call and assist with the integration.
-
-However, here are some generic instructions.&#x20;
-
-{% embed url="https://docs.oidc-spa.dev/providers-configuration/other" %}
-Replace `https://my-app.com/` by `https://datalab.my-domain.net/`.
-{% endembed %}
+Please [contact US](https://join.slack.com/t/3innovation/shared_invite/zt-2skhjkavr-xO~uTRLgoNOCm6ubLpKG7Q) or infer from Auth0 documentations.
 {% endtab %}
 {% endtabs %}
 
@@ -300,11 +376,9 @@ Each configuration follows this structure:
 
 ```ts
 type OidcConfiguration = {
-    issuerURI?: string;
-    clientID?: string;
+    clientID: string;
     extraQueryParams?: string;
     scope?: string;
-    idleSessionLifetimeInSeconds?: number;
 };
 ```
 
@@ -318,71 +392,8 @@ At first, this can feel counterintuitive, a _client ID_ seems like it should rep
 Conceptually, a single client requesting tokens for multiple resource servers (each with its own audience and claims) would make more sense.\
 However, Keycloak doesn’t model things that way. While Onyxia supports any OpenID Connect provider, it’s primarily designed around Keycloak’s behavior and limitations.
 
-In Keycloak’s model, an OIDC _client_ actually represents **an application talking to a specific resource server**, not just an application itself.
+In Keycloak’s traditional model, an OIDC _client_ actually represents **an application talking to a specific resource server**, not just an application itself.
 
-### Example Configuration in `values.yaml`
 
-{% code title="" %}
-```yaml
-onyxia:
-  api:
-    env:
-      authentication.mode: "openidconnect"
-      oidc.issuer-uri: "https://auth.lab.my-domain.net/auth/realms/datalab"
-      oidc.clientID: "onyxia"
-    regions: 
-      [
-        {
-          data: {
-            S3: {
-              sts: {
-                oidcConfiguration: {
-                  clientID: "onyxia-minio",
-                }
-              }
-            }
-          },
-          vault: {
-            oidcConfiguration: {
-              clientID: "onyxia-vault"
-            }
-          },
-          services: {
-            k8sPublicEndpoint: {
-              oidcConfiguration: {
-                clientID: "onyxia-k8s"
-              }
-            }
-          }
-        }
-      ]
-```
-{% endcode %}
 
 ***
-
-### Ensuring Claim Consistency Across Services
-
-When a user logs in, the OIDC provider issues an Access Token for the `onyxia` client.\
-This token includes claims such as:
-
-```json
-{
-  "sub": "abcd1234",
-  "preferred_username": "jhondoe",
-  "groups": [ "funathon", "spark-lab" ],
-  "roles": [ "vip", "admin-keycloak" ]
-}
-```
-
-If `oidc.username-claim: "preferred_username"` is configured in Onyxia’s main configuration,\
-then all services it connects to—such as `onyxia-minio`, `onyxia-vault`, and `onyxia-k8s`—\
-**must also receive Access Tokens where the `preferred_username` claim exists and holds the same value**.
-
-To prevent issues, **all OIDC clients** (`onyxia`, `onyxia-minio`, `onyxia-vault`, `onyxia-k8s`)\
-should be configured within **the same SSO realm** in your OIDC provider.\
-This ensures that every issued Access Token follows the same claim structure and contains\
-consistent values for the same user.
-
-If you're unsure whether your setup meets this requirement, **check the JWT of each Access Token**\
-issued for different clients and confirm that the claims are aligned.
