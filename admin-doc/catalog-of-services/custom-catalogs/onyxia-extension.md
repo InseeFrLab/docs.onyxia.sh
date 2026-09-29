@@ -279,6 +279,13 @@ export type XOnyxiaContext = {
         useCertManager: boolean;
         certManagerClusterIssuer: string | undefined;
     };
+    ai: {
+        enabled: boolean;
+        models: string[]; // <providerName>/<modelId>[]
+        defaultModel: string | undefined; // <providerName>/<modelId>
+        /** All usable providers, including the provider of the default model. */
+        providers: AiProvider[];
+    };
     proxyInjection:
         | {
               enabled: boolean | undefined;
@@ -305,7 +312,17 @@ export type XOnyxiaContext = {
 
 assert<Equals<XOnyxiaContext["user"]["lang"], Language>>();
 
+type AiProvider = {
+    name: string;
+    apiBase: string;
+    apiKey: string | undefined;
+    models: string[]; // Selected model IDs, without the provider name prefix
+    type: "openai-compatible" | "openai" | "anthropic" | "mistral" | "deepseek";
+};
+
 ```
+
+The `ai` context is populated from the providers and models selected under **My account > AI**. It contains credentials and must be handled as sensitive data. See [AI integration](../../ai-configuration.md#inject-the-provider-into-a-service) for a complete chart example.
 
 You can also concatenate string values using by wrapping the XOnyxia targeted values in `{{}}`.
 

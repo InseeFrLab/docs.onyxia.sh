@@ -18,6 +18,7 @@
     * [JSON Schema Support](admin-doc/catalog-of-services/custom-catalogs/json-schema-support.md)
 * [OpenID Connect Configuration](admin-doc/openid-connect-configuration.md)
 * [S3 Configuration](admin-doc/s3-configuration.md)
+* [AI integration](admin-doc/ai-configuration.md)
 * [Setting up group projects](admin-doc/setting-up-group-projects.md)
 * [Security considerations](admin-doc/security-consideration.md)
 * [Offline / airgap considerations](admin-doc/offline-airgap-considerations.md)
@@ -47,6 +48,7 @@
 ## user doc
 
 * [Getting started with Onyxia](user-doc/user-guide.md)
+* [Configure AI providers](user-doc/ai-providers.md)
 * [Datascience Trainings and Tutorials](user-doc/datascience-trainings-and-tutorials.md)
 * [Setting up your dev environment in Onyxia](user-doc/setting-up-your-dev-environment-in-onyxia.md)
 * [Community resources](user-doc/community-resources.md)
