@@ -281,8 +281,9 @@ export type XOnyxiaContext = {
     };
     ai: {
         enabled: boolean;
-        activeProvider: AiProvider | undefined;
-        /** Other usable providers; the active provider is not repeated here. */
+        models: string[]; // <providerName>/<modelId>[]
+        defaultModel: string | undefined; // <providerName>/<modelId>
+        /** All usable providers, including the provider of the default model. */
         providers: AiProvider[];
     };
     proxyInjection:
@@ -312,20 +313,16 @@ export type XOnyxiaContext = {
 assert<Equals<XOnyxiaContext["user"]["lang"], Language>>();
 
 type AiProvider = {
-    id: string;
-    isDefault: boolean;
     name: string;
-    // openai / openai-compatible / mistral / anthropic / ...
-    provider: string;
     apiBase: string;
-    apiKey: string;
-    selectedModel: string | undefined;
-    models: string[] | undefined;
+    apiKey: string | undefined;
+    models: string[]; // Selected model IDs, without the provider name prefix
+    type: "openai-compatible" | "openai" | "anthropic" | "mistral" | "deepseek";
 };
 
 ```
 
-The `ai` context is populated from the provider and model selected under **My account > AI**. It contains credentials and must be handled as sensitive data. See [AI integration](../../ai-configuration.md#inject-the-provider-into-a-service) for a complete chart example.
+The `ai` context is populated from the providers and models selected under **My account > AI**. It contains credentials and must be handled as sensitive data. See [AI integration](../../ai-configuration.md#inject-the-provider-into-a-service) for a complete chart example.
 
 You can also concatenate string values using by wrapping the XOnyxia targeted values in `{{}}`.
 

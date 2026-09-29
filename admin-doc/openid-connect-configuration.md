@@ -294,9 +294,9 @@ You can specify an optional `oidcConfiguration` object for each service. Its loc
 * **S3 (MinIO STS)** → `onyxia.api.regions[].data.S3.sts.oidcConfiguration`
 * **Vault** → `onyxia.api.regions[].vault.oidcConfiguration`
 * **Kubernetes API** → `onyxia.api.regions[].services.k8sPublicEndpoint.oidcConfiguration`
-* **AI gateway** → `oidcConfiguration` in each object stored in the `onyxia.web.env.AI` JSON5 value
+* **AI gateway** → `providers[].authentification.oidcConfiguration` in the `onyxia.web.env.AI` JSON5 object, when using `open-webui-oidc-token-exchange`
 
-AI gateways also require a secure OpenWebUI token-exchange configuration. Configure the associated OIDC client so that the identity provider issues standard Bearer access tokens rather than DPoP-bound access tokens because OpenWebUI reuses the token during the exchange. See [AI integration](ai-configuration.md#configure-openwebui).
+AI gateways also require a secure OpenWebUI token-exchange configuration. Onyxia disables DPoP for this exchange; configure the associated OIDC client to allow standard Bearer access tokens because OpenWebUI reuses the token during the exchange. See [AI integration](ai-configuration.md#configure-openwebui).
 
 Each configuration follows this structure:
 

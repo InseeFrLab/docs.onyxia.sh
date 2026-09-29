@@ -1,116 +1,134 @@
 ---
-description: Enable AI providers, connect an OpenWebUI gateway, and expose AI credentials to service charts.
+description: Configure AI providers, authentication, model selection, and AI settings for service charts.
 icon: robot
 ---
 
 # AI integration
 
-Onyxia can centralize AI provider settings for a user and inject the selected provider into compatible services at launch time.
+Onyxia centralizes AI provider settings for each user and passes their selected models and providers to compatible services at launch time.
 
-The feature supports two kinds of providers:
-
-- **Managed providers** are OpenWebUI gateways configured by the platform administrator. Onyxia exchanges the user's OIDC access token for a short-lived OpenWebUI token.
-- **Custom providers** are configured by users. OpenAI, OpenAI-compatible, Mistral, and Anthropic API protocols are supported.
+Administrators can configure providers with no authentication, a user-supplied API key, or an OpenWebUI OIDC token exchange. Users can also add their own providers unless the administrator disables this option. Supported provider types are OpenAI-compatible, OpenAI, Anthropic, Mistral, and DeepSeek.
 
 {% hint style="info" %}
-The AI feature adds **My account > AI**. It does not add AI support to every service automatically. A Helm chart must use the [`ai` x-onyxia context](#inject-the-provider-into-a-service) to receive the selected provider.
+The feature adds **My account > AI**. A Helm chart must use the [`ai` x-onyxia context](#inject-the-provider-into-a-service) to configure AI in a service. It does not add AI capabilities to every service automatically.
 {% endhint %}
 
-## Disable the feature
+## Enable or disable AI
 
-The feature is enabled by default. To disable it, set `DISABLE_AI` in the Onyxia Web configuration:
+AI is enabled by default for authenticated users. Configure it through the `AI` environment variable in Onyxia Web. The value is a JSON5 **object**, containing a `providers` property. In Helm values, use a YAML literal block (`|`) to pass it as a string.
 
-{% code title="apps/onyxia/values.yaml" %}
-
-```yaml
-onyxia:
-  web:
-    env:
-      DISABLE_AI: "true"
-```
-
-{% endcode %}
-
-This disables both managed providers and custom providers. When `DISABLE_AI` is unset or set to `"false"`, authenticated users can access the AI tab. If no managed provider is configured, they can still add custom providers.
-
-The AI tab requires an authenticated user. User preferences and custom provider credentials are stored with the other Onyxia user settings:
-
-- in the user's Vault-backed configuration when the region has Vault;
-- in browser local storage when the region has no Vault.
-
-## Configure an OpenWebUI gateway
-
-Set the `AI` environment variable in the Onyxia Web configuration. Its value is a JSON5 object or array of objects. In `values.yaml`, use a YAML literal block (`|`) so that the JSON5 configuration is passed to Onyxia Web as a string.
+An unset or empty `AI` value enables the feature with no administrator-configured providers; users can add their own. To disable the AI tab and its launch context:
 
 {% code title="apps/onyxia/values.yaml" %}
-
 ```yaml
 onyxia:
   web:
     env:
       AI: |
-        [
-          {
-            id: "openwebui",
-            name: "Organization AI gateway",
-            provider: "openai",
-            URL: "https://ai.example.com",
-            oauthProvider: "oidc",
-            description: {
-              en: "Use the models hosted by our organization.",
-              fr: "Utilisez les modèles hébergés par notre organisation."
-            },
-            accountCreation: {
-              title: {
-                en: "Activate your AI account",
-                fr: "Activez votre compte IA"
-              },
-              description: {
-                en: "Open the gateway and sign in once, then return to Onyxia.",
-                fr: "Ouvrez la passerelle et connectez-vous une première fois, puis revenez dans Onyxia."
-              },
-              buttonLabel: {
-                en: "Open the gateway",
-                fr: "Ouvrir la passerelle"
-              }
-            },
-            oidcConfiguration: {
-              clientID: "onyxia-ai",
-              issuerURI: "https://auth.example.com/realms/example"
-            }
-          }
-        ]
+        { disable: true, providers: [] }
 ```
-
 {% endcode %}
 
-When `AI` is unset or empty, Onyxia does not expose a managed gateway, but users can still configure custom providers. Although a single object is accepted, using an array makes it possible to add more gateways without changing the value's structure.
+| Property | Default | Description |
+| --- | --- | --- |
+| `disable` | `false` | Disable AI integration. |
+| `disallowUserToAddProviders` | `false` | Hide the option to add custom providers. This does not remove previously saved custom providers. |
+| `description` | Unset | Introductory Markdown below the AI Providers heading; a string or a localized object such as `{ en: "...", fr: "..." }`. |
+| `providers` | Required for a nonempty configuration | An array of provider objects, or a single provider object. Use `[]` for none. |
 
-Do not add a trailing slash to `URL`. Onyxia derives the API base URL as `<URL>/api`.
+{% hint style="warning" %}
+The `AI` configuration is exposed to the browser. Do not put API keys, client secrets, or other secrets in it. User-supplied API keys are entered through **My account > AI**.
+{% endhint %}
 
-### Gateway properties
+## Configure providers
 
-| Property            | Required    | Description                                                                                                                                                                                         |
-| ------------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `URL`               | Yes         | Public base URL of the OpenWebUI instance. The user's browser must be able to reach it.                                                                                                             |
-| `oauthProvider`     | Yes         | OpenWebUI OAuth provider identifier used in `/api/v1/auths/oauth/<provider>/token/exchange`; commonly `oidc`.                                                                                       |
-| `id`                | Recommended | Stable, unique identifier used to persist the user's model and default-provider selections. If omitted, it is derived from the gateway's position in the list.                                      |
-| `name`              | No          | Label displayed in Onyxia. Defaults to the hostname from `URL`.                                                                                                                                     |
-| `provider`          | No          | Protocol name injected into charts. Defaults to `openai`, which is appropriate for the OpenWebUI OpenAI-compatible API.                                                                             |
-| `description`       | No          | String or localized Markdown displayed below the gateway name.                                                                                                                                      |
-| `accountCreation`   | No          | Localized title, description, and button label displayed when OpenWebUI returns `403` because the user has no account yet. The button opens `URL`.                                                  |
-| `oidcConfiguration` | No          | OIDC overrides for this gateway: `issuerURI`, `clientID`, `extraQueryParams`, `scope`, or `idleSessionLifetimeInSeconds`. Unspecified values are inherited from the main Onyxia OIDC configuration. |
+This example offers an OpenWebUI gateway and a provider for which each user supplies their own API key:
 
-Use an explicit, stable `id` for every gateway. Changing it makes Onyxia treat the gateway as a new provider and discards the model selection associated with the previous identifier.
+{% code title="apps/onyxia/values.yaml" %}
+```yaml
+onyxia:
+  web:
+    env:
+      AI: |
+        {
+          description: {
+            en: "Choose the models available in your services.",
+            fr: "Choisissez les modèles disponibles dans vos services."
+          },
+          providers: [
+            {
+              name: "Organization AI",
+              providerType: "openai-compatible",
+              apiBase: "https://ai.example.com/api",
+              authentification: {
+                type: "api-key",
+                obtentionMethod: "open-webui-oidc-token-exchange",
+                oidcConfiguration: {
+                  clientID: "onyxia-ai",
+                  issuerURI: "https://auth.example.com/realms/example"
+                }
+              },
+              documentation: {
+                mainText: "Sign in to the gateway once before using it from Onyxia.",
+                links: [
+                  { label: "Open the gateway", url: "https://ai.example.com" }
+                ]
+              }
+            },
+            {
+              name: "Personal OpenAI key",
+              providerType: "openai",
+              apiBase: "https://api.openai.com/v1",
+              authentification: {
+                type: "api-key",
+                obtentionMethod: "user-provided"
+              }
+            }
+          ]
+        }
+```
+{% endcode %}
 
-### Configure OpenWebUI
+### Provider properties
 
-Onyxia uses the following OpenWebUI endpoints directly from the user's browser:
+| Property | Required | Description |
+| --- | --- | --- |
+| `name` | Yes | Unique provider name, without `/`. Also serves as its identifier in saved preferences and the launch context. Keep it stable. |
+| `providerType` | Yes | `openai-compatible`, `openai`, `anthropic`, `mistral`, or `deepseek`. |
+| `apiBase` | Yes | Full API base URL, including `/api` or `/v1` where appropriate. Onyxia removes trailing slashes. |
+| `authentification` | Yes | One of the authentication objects below. Use this exact spelling. |
+| `models` | No | Explicit array of model IDs. When omitted, models come from the provider's `/models` endpoint. |
+| `documentation` | No | Help displayed when managing the provider: `mainText` (Markdown) and optional `links`, each with `label` and `url`. Text and labels accept strings or localized objects. |
+| `logoUrl` | No | Image URL, or `{ light: "https://...", dark: "https://..." }`. |
 
-- `POST <URL>/api/v1/auths/oauth/<oauthProvider>/token/exchange` with `{ "token": "<OIDC access token>" }`;
-- `GET <URL>/api/models` with the returned token as a Bearer credential.
+Renaming an administrator-configured provider changes its identity: keys and model preferences saved under its previous name are not transferred. If its name conflicts with an existing custom provider, the custom provider remains visible but is excluded from the launch context until renamed or deleted.
 
-Configure OpenWebUI to enable token exchange, trust the OIDC client used by Onyxia, and allow the Onyxia origin through CORS:
+### Authentication methods
+
+| `authentification` value | Behavior |
+| --- | --- |
+| `{ type: "none" }` | No credential is required or injected. |
+| `{ type: "api-key", obtentionMethod: "user-provided" }` | Each user supplies their own key in the provider's **Manage** panel. |
+| `{ type: "api-key", obtentionMethod: "open-webui-oidc-token-exchange" }` | Onyxia exchanges an OIDC access token for an OpenWebUI token. Optional OIDC overrides belong inside this object. |
+
+### Model discovery and selection
+
+Onyxia requests `GET <apiBase>/models` from the user's browser. Providers must therefore be reachable from the browser and permit the Onyxia origin through CORS. Requests use Bearer authentication for OpenAI-compatible protocols, or Anthropic's native headers for `anthropic`.
+
+An explicit `models` list supplies the available model IDs even when discovery fails. Onyxia still attempts discovery to display the connection status, so a card can show a connection error while its configured models remain selectable. Services must be able to reach the provider, and authentication must still be available.
+
+Users can select several models per provider. All models are initially selected; newly discovered models are selected unless previously excluded. A provider with no selected model is not injected into services. The global default is a **model**, identified by both provider name and model ID.
+
+## Configure OpenWebUI
+
+For `open-webui-oidc-token-exchange`, set `apiBase` to the OpenWebUI API URL, for example `https://ai.example.com/api`. Onyxia calls:
+
+- `POST <apiBase>/v1/auths/oauth/oidc/token/exchange` with `{ "token": "<OIDC access token>" }`;
+- `GET <apiBase>/models` with the returned token as a Bearer credential.
+
+The OAuth provider identifier in this exchange path is fixed to `oidc`.
+
+Enable token exchange in OpenWebUI and restrict trusted clients to the OIDC client used by Onyxia. Allow the Onyxia origin through CORS:
 
 ```dotenv
 ENABLE_OAUTH_TOKEN_EXCHANGE=true
@@ -118,30 +136,32 @@ OAUTH_TOKEN_EXCHANGE_TRUSTED_CLIENT_IDS=onyxia-ai
 CORS_ALLOW_ORIGIN=https://onyxia.example.com
 ```
 
-Create `onyxia-ai` as a public OIDC client using Authorization Code Flow with PKCE. Configure the Onyxia URL as an allowed redirect URI. A dedicated client is recommended; if `oidcConfiguration` is omitted, add Onyxia's main client ID to `OAUTH_TOKEN_EXCHANGE_TRUSTED_CLIENT_IDS` instead.
+Check the prerequisites for your OpenWebUI version in its [SSO documentation](https://docs.openwebui.com/features/authentication-access/auth/sso/), including token introspection for trusted-client validation.
 
-{% hint style="warning" %}
-Configure the OIDC client used for the AI gateway so that the identity provider issues standard Bearer access tokens; do not require DPoP-bound access tokens for this client. Onyxia hands the access token to OpenWebUI's token-exchange endpoint, which reuses it without access to the private key held by the browser and therefore cannot present the associated DPoP proof. This restriction only applies to the AI client; other Onyxia OIDC clients can still use DPoP.
-{% endhint %}
+Create `onyxia-ai` as a public OIDC client using Authorization Code Flow with PKCE, with the Onyxia URL as an allowed redirect URI. The optional `authentification.oidcConfiguration` supports `issuerURI`, `clientID`, `extraQueryParams`, `scope`, and `idleSessionLifetimeInSeconds`. Unspecified values inherit the main Onyxia OIDC configuration. If no dedicated client is configured, trust Onyxia's main client ID in OpenWebUI instead.
 
-The first exchange can return `403` if the user does not yet exist in OpenWebUI. In that case, Onyxia displays the account-creation content. The user must open the gateway, sign in once, return to Onyxia.
+Onyxia disables DPoP for this token-exchange flow. Configure the associated OIDC client to allow standard Bearer access tokens. Other Onyxia OIDC clients can still use DPoP.
+
+A user may need to sign in to OpenWebUI once before exchanging tokens. Use `documentation.mainText` and `documentation.links` to explain this prerequisite and link to your gateway. Exchange failures appear as connection errors; there is no separate account-creation screen.
+
+Exchanged tokens are kept in runtime state, not persisted as user-supplied keys. Onyxia obtains fresh tokens when preparing the launch context. It does not update credentials already injected into running services.
 
 ## Inject the provider into a service
 
-The launcher exposes the user's AI configuration through the [`x-onyxia`](catalog-of-services/custom-catalogs/onyxia-extension.md) context:
+The launcher exposes the following [`x-onyxia`](catalog-of-services/custom-catalogs/onyxia-extension.md) context:
 
-| Context path        | Value                                                                     |
-| ------------------- | ------------------------------------------------------------------------- |
-| `ai.enabled`        | `true` when at least one usable provider is available.                    |
-| `ai.activeProvider` | The provider selected as default, or `undefined`.                         |
-| `ai.providers`      | Other usable providers; the active provider is not repeated in this list. |
+| Context path | Value |
+| --- | --- |
+| `ai.enabled` | `true` when at least one model from a usable provider can be injected. |
+| `ai.models` | Selected models from usable providers, as `<providerName>/<modelId>` strings. |
+| `ai.defaultModel` | Default model in the same format, or `undefined`. Falls back to the first injectable model if the chosen default is unavailable. |
+| `ai.providers` | All usable providers, including the provider of the default model. |
 
-Each provider contains `id`, `isDefault`, `name`, `provider`, `apiBase`, `apiKey`, `selectedModel`, and, when model discovery succeeded, `models`.
+Each provider contains `name`, `apiBase`, `apiKey` (possibly `undefined`), `models` (selected model IDs without the provider prefix), and `type` (the configured `providerType`). Providers requiring authentication are included only when a credential is available. Name conflicts and empty model selections exclude a provider.
 
-The chart decides how these values map to its own `values.yaml`. The following JSON Schema fragment injects the default provider into an `ai` values object:
+This JSON Schema fragment belongs under the root `properties` of a chart's `values.schema.json`:
 
-{% code title="values.schema.json" %}
-
+{% code title="values.schema.json (fragment)" %}
 ```json
 {
   "ai": {
@@ -150,41 +170,54 @@ The chart decides how these values map to its own `values.yaml`. The following J
       "enabled": {
         "type": "boolean",
         "default": false,
-        "x-onyxia": {
-          "overwriteDefaultWith": "{{ai.enabled}}",
-          "hidden": true
-        }
+        "x-onyxia": { "overwriteDefaultWith": "{{ai.enabled}}" }
       },
-      "provider": {
+      "selectedModel": {
         "type": "string",
         "default": "",
+        "listEnum": [],
         "x-onyxia": {
-          "overwriteDefaultWith": "{{ai.activeProvider.provider}}",
-          "hidden": true
+          "overwriteDefaultWith": "{{ai.defaultModel}}",
+          "overwriteListEnumWith": "{{ai.models}}"
         }
       },
-      "apiBase": {
-        "type": "string",
-        "default": "",
+      "providers": {
+        "type": "array",
+        "default": [],
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "default": "",
+              "x-onyxia": { "overwriteDefaultWith": "{{name}}" }
+            },
+            "apiBase": {
+              "type": "string",
+              "default": "",
+              "x-onyxia": { "overwriteDefaultWith": "{{apiBase}}" }
+            },
+            "apiKey": {
+              "type": "string",
+              "default": "",
+              "render": "password",
+              "x-onyxia": { "overwriteDefaultWith": "{{apiKey}}" }
+            },
+            "models": {
+              "type": "array",
+              "default": [],
+              "items": { "type": "string" },
+              "x-onyxia": { "overwriteDefaultWith": "{{models}}" }
+            },
+            "type": {
+              "type": "string",
+              "default": "",
+              "x-onyxia": { "overwriteDefaultWith": "{{type}}" }
+            }
+          }
+        },
         "x-onyxia": {
-          "overwriteDefaultWith": "{{ai.activeProvider.apiBase}}",
-          "hidden": true
-        }
-      },
-      "apiKey": {
-        "type": "string",
-        "default": "",
-        "render": "password",
-        "x-onyxia": {
-          "overwriteDefaultWith": "{{ai.activeProvider.apiKey}}",
-          "hidden": true
-        }
-      },
-      "model": {
-        "type": "string",
-        "default": "",
-        "x-onyxia": {
-          "overwriteDefaultWith": "{{ai.activeProvider.selectedModel}}",
+          "overwriteDefaultWith": "{{ai.providers}}",
           "hidden": true
         }
       }
@@ -192,11 +225,22 @@ The chart decides how these values map to its own `values.yaml`. The following J
   }
 }
 ```
-
 {% endcode %}
 
-Define matching defaults in `values.yaml` and only create AI-related environment variables or Secrets when `ai.enabled` is `true`.
+Define matching defaults in `values.yaml`. The chart must resolve `selectedModel` by splitting at the **first** `/`: the first part is the provider name and the remainder is the model ID, which can itself contain slashes. Find the matching entry in `providers` to configure the client with its API base, optional key, and type. Only generate AI-related configuration when `ai.enabled` is `true`.
 
 {% hint style="warning" %}
-`apiKey` is sensitive. Once injected, it becomes part of the Helm values used to launch the service.
+Injected credentials become part of the Helm values used to launch the service. Treat them as sensitive, including when inspecting or sharing generated values.
 {% endhint %}
+
+## Update an earlier AI configuration
+
+Earlier development versions used a different configuration and launch context:
+
+- Replace `DISABLE_AI` with `disable` inside `AI`, retaining `providers: []` if no providers are configured.
+- Replace the top-level gateway object or array with `{ providers: [...] }`.
+- Replace `URL` with the full `apiBase`, `provider` with `providerType`, and gateway authentication options with `authentification`. Provider identity now uses `name`, not `id`.
+- Replace `accountCreation` help with `documentation` and its links.
+- Update charts using `ai.activeProvider` to consume `ai.defaultModel`, `ai.models`, and `ai.providers`. There is no separate active-provider object.
+
+If previously saved user settings cannot be read, the AI tab offers a reset. Resetting deletes saved custom providers, user-supplied API keys, and model selections; users must configure them again.

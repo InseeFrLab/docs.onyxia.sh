@@ -1,82 +1,96 @@
 ---
-description: Select an AI gateway or connect your own AI provider for compatible Onyxia services.
+description: Configure AI providers, select available models, and choose a default for compatible Onyxia services.
 icon: sparkles
 ---
 
 # Configure AI providers
 
-The **My account > AI** tab lets you choose the AI provider and model that compatible Onyxia services use when they start.
+The **My account > AI** tab lets you manage the providers and models that compatible Onyxia services receive when they start.
 
 {% hint style="info" %}
-The tab is visible by default for authenticated users unless your platform administrator has disabled AI integration. A service must also explicitly support Onyxia's AI configuration; selecting a provider does not add AI features to every catalog service.
+The tab is visible to signed-in users unless your administrator disables AI integration. A service must explicitly support Onyxia's AI configuration; selecting models does not add AI features to every catalog service.
 {% endhint %}
 
-<figure><img src="https://github.com/user-attachments/assets/7bb15d68-d531-4221-9f89-007d0fbb5920" alt="The AI tab showing a managed gateway and a custom provider"><figcaption><p>Manage gateway credentials, providers, and model selections from your account.</p></figcaption></figure>
+## Use a provider supplied by your organization
 
-## Use your platform's AI gateway
+Providers configured by your administrator are labeled **Provided by your organization**.
 
-When your administrator provides an AI gateway, Onyxia uses your login session to request a gateway token automatically.
+1. Open **My account > AI** and select **Manage** on a provider.
+2. Read any documentation supplied by your organization.
+3. If the provider requests an API key, enter your own key and save the changes. Other providers use your login session to obtain credentials automatically, or need no authentication.
+4. Use **Test connection** to check access and load the model list. For providers using your login session, **Refresh credentials** obtains a new token.
+5. Choose the models you want available in your services using **Selected models**.
 
-1. Open **My account > AI**.
-2. If Onyxia says that you do not have an account, open the gateway and sign in once. Return to Onyxia and select **Refresh credentials**.
-3. Select a model from the gateway's model list.
-4. If several providers are available, select **Set default provider** on the one your services should use.
+For an OpenWebUI gateway, you may need to open the gateway and sign in once before returning to Onyxia and refreshing credentials. Follow your organization's instructions.
 
-You can copy the API base URL and token to configure a compatible client manually. Treat the token like a password. It can expire; use **Refresh credentials** to obtain a new one.
-
-Onyxia remembers the selected model and default provider. The gateway token itself is obtained again from your OIDC session rather than stored as a long-lived credential.
+The management panel lets you copy the API base URL and any available credential to configure another compatible client. Treat credentials like passwords. Tokens obtained from your login session can expire.
 
 ## Add a custom provider
 
-You can connect a provider for which you already have an API key:
+If your administrator allows it:
 
-1. Under **Custom AI providers**, select **Add a Custom AI Provider**.
-2. Enter a name and choose the API protocol.
-3. Check the API base URL and enter your API key.
-4. Select **Test connection**. Onyxia calls the provider's `/models` endpoint and loads the models available to your key.
-5. Select a model, optionally make the provider the default, and save it.
+1. Select **Add a new custom AI provider**.
+2. Enter a unique name without `/` and choose the **Provider API**.
+3. Check the **API Base URL** and enter your API key. Leave the key empty only if the provider requires no authentication.
+4. Select **Test connection** to discover the available models, then select the models you want to use.
+5. Save the provider, then choose your default model at the top of the AI tab.
 
-The supported protocols and default API base URLs are:
+The supported provider types and suggested base URLs are:
 
-| Protocol | Default API base URL |
+| Provider API | Suggested API base URL |
 | --- | --- |
 | OpenAI (native) | `https://api.openai.com/v1` |
-| OpenAI-compatible | You must provide the URL. |
+| OpenAI-compatible | Enter your provider's URL. |
 | Mistral (native) | `https://api.mistral.ai/v1` |
 | Anthropic (native) | `https://api.anthropic.com/v1` |
+| DeepSeek | `https://api.deepseek.com` |
 
-Enter the base URL, not the full models or chat-completions endpoint. For example, use `https://api.openai.com/v1`, not `https://api.openai.com/v1/models`. Avoid a trailing slash because Onyxia appends `/models` when testing the connection.
+Enter the API base, including `/v1` or `/api` if required by your provider. Do not include the final `/models` or chat-completions path. Onyxia removes trailing slashes.
 
-{% hint style="warning" %}
-Onyxia contacts custom providers directly from your browser. The provider must allow cross-origin requests from your Onyxia URL. A connection test can fail even with a valid key if the endpoint's CORS configuration blocks the request.
+You can save a provider without a successful connection test and finish setup later. However, custom providers need a discovered model list and at least one selected model before they can be passed to a service.
+
+{% hint style="info" %}
+Onyxia tests providers directly from your browser. A valid API key is not enough if the endpoint is unreachable or its CORS policy blocks your Onyxia URL.
 {% endhint %}
 
-You can later change the model, edit the provider, make it the default, or delete it. Changing the API base URL or API key requires a new successful connection test before the provider can be saved.
+Use **Manage** to edit a custom provider, change its key, test the connection, or delete it. Organization-supplied names, API types, and base URLs are controlled by your administrator.
 
-## Where custom credentials are stored
+## Select models and choose a default
 
-Custom provider settings include the API key:
+Each provider's **Selected models** control accepts multiple models. All available models are initially selected, including newly discovered models you have not previously excluded. Deselect all models to stop that provider from being passed to new services.
 
-* If your Onyxia region provides Vault, they are saved with your Vault-backed Onyxia user configuration.
-* Without Vault, they are saved in the browser's local storage and are only available in that browser profile.
+Use **Choose a default model** at the top of the tab to select a model across all providers. The selected value includes its provider name, for example `Organization AI/model-id`. If that model cannot be supplied at launch time, Onyxia uses the first available selected model.
 
-Deleting a custom provider removes it from this saved configuration. On a shared computer, sign out and follow your organization's browser-data policy.
+Selections made from the main AI tab are saved automatically. If saving fails, your changes remain on the page and **Retry** lets you try again. Changes to provider details must be saved in the management panel.
 
-## Use the provider in a service
+## Where credentials are stored
 
-After choosing a default provider and model, launch an AI-compatible service from the catalog. Onyxia injects the provider protocol, API base URL, credential, and selected model into the chart when it builds the Helm values.
+Your custom providers, user-supplied API keys, model selections, and default model are stored with your Onyxia account settings:
 
-The exact behavior inside the service depends on its chart. Consult the service's README to find the relevant environment variables, client configuration, and supported capabilities.
+- With Vault, they are saved in your Vault-backed user configuration.
+- Without Vault, they are saved in the browser's local storage and are available only in that browser profile.
+
+Tokens obtained automatically from an OpenWebUI login exchange are kept in the current session rather than saved as permanent API keys. Deleting a custom provider removes its saved configuration and key from Onyxia; it does not revoke the key at the provider.
+
+## Use AI in a service
+
+Launch a compatible service after configuring your providers and selecting models. Its chart receives the selected models, a default model, and the usable providers with their API settings. Some charts let you choose another selected model in the launch form.
+
+The service's chart determines which AI features and clients are configured. Check its README for details. Changes in **My account > AI**, including refreshed credentials, apply to subsequent launches; they do not update an already running service.
 
 ## Troubleshooting
 
 | Problem | What to check |
 | --- | --- |
-| The AI tab is missing | Your administrator must enable the feature, and you must be signed in. |
-| The gateway says that you have no account | Open the gateway, sign in once, return to Onyxia, and refresh the credentials. |
-| Gateway models do not load | Refresh the credentials. If the error continues, contact the platform administrator. |
-| A custom provider test fails | Verify the protocol, base URL, API key, `/models` support, and browser CORS policy. |
-| The wrong provider is used by a service | Make the intended provider the default before launching the service. |
-| A service receives no AI configuration | The chart must explicitly support Onyxia AI integration; check its README or contact its maintainer. |
+| The AI tab is missing | Sign in and check whether your administrator has disabled the feature. |
+| The option to add a custom provider is missing | Your administrator may have disabled adding providers. |
+| A provider shows **Setup required** | Open **Manage**, supply any required key, and test the connection. |
+| An OpenWebUI exchange fails | Follow the gateway's documentation, sign in there if needed, and refresh credentials. Contact your administrator if the error persists. |
+| The connection test fails | Check the API type, base URL, key, `/models` endpoint, and browser CORS policy. |
+| Models remain selectable despite a connection error | Your administrator may have supplied a fixed list. The service still needs network access and any required credentials. |
+| A provider is missing from a service | Select at least one model and check credentials. If a custom provider shares its name with an organization provider, rename it. The service's chart must support AI integration. |
+| The wrong model is used | Check **Choose a default model** and any model selection in the launch form. An unavailable default falls back to the first usable selected model. |
+| Changes cannot be saved | Keep the page open and use **Retry** once the connection is restored. |
+| Saved AI configuration cannot be read | **Reset my AI configuration** clears custom providers, saved keys, and model selections. Use it only if you are ready to configure them again. |
 
-Platform administrators and chart maintainers can find the complete setup in [AI integration](../admin-doc/ai-configuration.md).
+Administrators and chart maintainers can find the setup details in [AI integration](../admin-doc/ai-configuration.md).
