@@ -1,0 +1,83 @@
+$schema: https://api.gitbook.com/gitbook-docs.yaml
+site:
+  title: docs.onyxia.sh
+  structure:
+    - type: section
+      key: section-1
+      title: Documentation
+      path: docs.onyxia.sh
+      default: true
+      children:
+        - type: space
+          key: space-10
+          title: v11
+          path: v11
+          default: true
+          content:
+            directory: ./docs.onyxia.sh/v11
+        - type: space
+          key: space-7
+          title: v10
+          path: v10
+          content:
+            directory: ./docs.onyxia.sh/v10
+        - type: space
+          key: space-6
+          title: v9
+          path: v9
+          content:
+            directory: ./docs.onyxia.sh/v9
+        - type: space
+          key: space-3
+          title: v8
+          path: v8
+          content:
+            directory: ./docs.onyxia.sh/v8
+        - type: space
+          key: space-4
+          title: v7
+          path: v7
+          content:
+            directory: ./docs.onyxia.sh/v7
+        - type: space
+          key: space-5
+          title: v6
+          path: v6
+          content:
+            directory: ./docs.onyxia.sh/v6
+        - type: space
+          key: space-2
+          title: v5
+          path: v5
+          content:
+            directory: ./docs.onyxia.sh/v5
+        - type: space
+          key: space-1
+          title: v4
+          path: v4
+          content:
+            directory: ./docs.onyxia.sh/v4
+    - type: section
+      key: section-2
+      title: Release Notes & Upgrade Instructions
+      path: release-notes
+      children:
+        - type: space
+          key: space-8
+          title: Release Notes & Upgrade Instructions
+          path: migration-guides
+          default: true
+          content:
+            directory: ./release-notes/migration-guides
+    - type: section
+      key: section-3
+      title: Vulnerability Disclosure
+      path: vulnerability-disclosure
+      children:
+        - type: space
+          key: space-9
+          title: Vulnerability Disclosure
+          path: vulnerability-disclosure
+          default: true
+          content:
+            directory: ./vulnerability-disclosure
