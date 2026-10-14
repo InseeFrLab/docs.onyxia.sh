@@ -1,17 +1,12 @@
 ---
-description: Using Keycloak to enable user authentication
 icon: key
 ---
 
 # User authentication
 
-Let's setup Keycloak to enable users to create account and login to our Onyxia instance.
+Onyxia itself does not implement authentication/authorization internally, you need an auth server. &#x20;
 
-Note that in this installation guide we make you use Keycloak but you can use any OIDC compliant provider like Entra ID or Auth0. See the following gide for specific instructions for different provider and detailed authentication related configuration options.
-
-{% content-ref url="../openid-connect-configuration.md" %}
-[openid-connect-configuration.md](../openid-connect-configuration.md)
-{% endcontent-ref %}
+In this guide, we're going to use Keycloak. But any OpenID Connect compliant IAM that you have in place in your organization should work. Please [contact us](https://join.slack.com/t/3innovation/shared_invite/zt-2skhjkavr-xO~uTRLgoNOCm6ubLpKG7Q) for specific configuration instruction for providers like Microsof EntraID or Auth0.
 
 ### Deploying Keycloak
 
