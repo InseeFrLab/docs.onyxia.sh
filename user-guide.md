@@ -2,7 +2,7 @@
 description: Using Onyxia (as a data scientist)
 ---
 
-# 🕹 User guide
+# 🕹️ User guide
 
 {% hint style="success" %}
 See also [https://docs.sspcloud.fr](https://docs.sspcloud.fr/)

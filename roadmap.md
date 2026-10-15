@@ -2,7 +2,7 @@
 description: Onyxia Project Core Team Future Developments Roadmap
 ---
 
-# 🛣 Roadmap
+# 🛣️ Roadmap
 
 ### Data Explorer Evolution
 
