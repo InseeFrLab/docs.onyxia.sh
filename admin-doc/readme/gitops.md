@@ -92,8 +92,7 @@ To put that to the test try to modify your Onyxia configuration by setting up a 
 ```
 {% endcode %}
 
-After a few seconds, if you reload **https://datalab.my-domain.net** you should see the message!\
-
+After a few seconds, if you reload **https://datalab.my-domain.net** you should see the message!<br>
 
 <figure><img src="../../.gitbook/assets/image (2).png" alt="" width="354"><figcaption></figcaption></figure>
 

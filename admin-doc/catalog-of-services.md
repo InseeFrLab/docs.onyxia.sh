@@ -22,8 +22,7 @@ This collection of charts helps users to start automation tools for their datasc
 
 This collection of charts helps users to launch tools to visualize and share data insights.
 
-You can always find the source of the catalog by clicking on the "contribute to the... " link.\
-
+You can always find the source of the catalog by clicking on the "contribute to the... " link.<br>
 
 <figure><img src="../.gitbook/assets/330910409-0e8ff947-644f-4de6-88ae-9e2b6c2a8cd2.png" alt=""><figcaption><p><a href="https://datalab.sspcloud.fr/catalog">https://datalab.sspcloud.fr/catalog</a></p></figcaption></figure>
 
