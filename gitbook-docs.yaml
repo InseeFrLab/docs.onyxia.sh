@@ -14,7 +14,7 @@ site:
           path: v11
           default: true
           content:
-            directory: ./docs.onyxia.sh/v11
+            directory: null
         - type: space
           key: space-7
           title: v10
