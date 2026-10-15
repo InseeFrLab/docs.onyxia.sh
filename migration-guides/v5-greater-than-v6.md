@@ -1,4 +1,4 @@
-# ⬆ v5 -> v6
+# ⬆️ v5 -> v6
 
 The only breaking change in this release is the split of Onyxia service account into two separate service accounts : one for the API (which usually requires high permission to deploy services) and one for the WEB pod (qui usually should not have any permissions tied to it).\
 Due to this change, the global `serviceAccount` values key was duplicated in both `web.serviceAccount` and `api.serviceAccount`.\
