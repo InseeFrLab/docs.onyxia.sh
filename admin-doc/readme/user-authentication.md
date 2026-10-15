@@ -5,131 +5,140 @@ icon: key
 
 # User authentication
 
-Let's setup Keycloak to enable users to create account and login to our Onyxia instance.
+Enable authentication so users can sign in to Onyxia and launch services in their own Kubernetes namespaces. This installation guide uses Keycloak and the realm `datalab`.
 
-Note that in this installation guide we make you use Keycloak but you can use any OIDC compliant provider like Entra ID or Auth0. See the following gide for specific instructions for different provider and detailed authentication related configuration options.
+## Deploying Keycloak
 
-{% content-ref url="../openid-connect-configuration.md" %}
-[openid-connect-configuration.md](../openid-connect-configuration.md)
-{% endcontent-ref %}
+Deploy Keycloak through ArgoCD, as you deployed Onyxia in the previous step.
 
-### Deploying Keycloak
-
-We're going to install Keycloak just like we installed Onyxia.
-
-Before anything open [`apps/keycloak/values.yaml`](https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/keycloak/values.yaml) in your onyxia-ops repo and [change the passwords](#user-content-fn-1)[^1]. Also write down the [`keycloak.auth.adminPassword`](https://github.com/InseeFrLab/onyxia-ops/blob/bad75636d72c20c48f1b34ec08593df83ee6c9a6/apps/keycloak/values.yaml#L11), you'll need it to connect to the Keycloak console.
+Before deploying, open [apps/keycloak/values.yaml](https://github.com/garronej/onyxia-ops/blob/main/apps/keycloak/values.yaml) in your GitOps repository and replace the `CHANGEME` password placeholders. Keep the `keycloak.auth.adminPassword` value: you will use it to access the admin console.
 
 {% embed url="https://app.tango.us/app/embed/dbb21e90-db2c-41f4-b2ab-5f8b9f4d33c0" %}
 
 {% hint style="info" %}
-Try to remember, when you [update Onyxia in `apps/onyxia/Chart.yaml`](https://github.com/InseeFrLab/onyxia-ops/blob/bad75636d72c20c48f1b34ec08593df83ee6c9a6/apps/onyxia/Chart.yaml#L6) to also update [the Onyxia theme in `apps/keycloak/values.yaml`](https://github.com/InseeFrLab/onyxia-ops/blob/bad75636d72c20c48f1b34ec08593df83ee6c9a6/apps/keycloak/values.yaml#L69).
+When updating [the Onyxia chart](https://github.com/garronej/onyxia-ops/blob/main/apps/onyxia/Chart.yaml), also keep the Onyxia Keycloak theme download in [apps/keycloak/values.yaml](https://github.com/garronej/onyxia-ops/blob/main/apps/keycloak/values.yaml) up to date.
 {% endhint %}
 
-### Configuring Keycloak
+## Configuring Keycloak
 
-You can now login to the **administration console** of **https://auth.lab.my-domain.net/auth/** and login using username: keycloak and password: \<the one you've wrote down earlier>.
+Open the admin console at `https://auth.lab.my-domain.net` and sign in with username `keycloak` and the admin password configured above.
 
-1. Create a realm called "datalab" (or something else), go to **Realm settings**
-   1. On the tab General
-      1. _User Profile Enabled_: **On**
-   2. On the tab **login**
-      1. _User registration_: **On**
-      2. _Forgot password_: **On**
-      3. _Remember me_: **On**
-   3. On the tab **email,** we give an example with [AWS SES](https://aws.amazon.com/ses/), if you don't have a SMTP server at hand you can skip this by going to **Authentication** (on the left panel) -> Tab **Required Actions** -> Uncheck "set as default action" **Verify Email**. Be aware that with email verification disable, anyone will be able to sign up to your service.
-      1. _From_: **noreply@lab.my-domain.net**
-      2. _Host_: **email-smtp.us-east-2.amazonaws.com**
-      3. _Port_: **465**
-      4. _Authentication_: **enabled**
-      5. _Username_: **\*\*\*\*\*\*\*\*\*\*\*\*\*\***
-      6. _Password_: **\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\***
-      7. When clicking "save" you'll be asked for a test email, you have to provide one that correspond **to a pre-existing user** or you will get a silent error and the credentials won't be saved.
-   4. On the tab **Themes**
-      1. _Login theme_: **onyxia-web** (you can also select the login theme on a per client basis)
-      2. _Email theme_: **onyxia-web**
-   5. On the tab **Localization**
-      1. _Internationalization_: **Enabled**
-      2. _Supported locales_: \<Select the languages you wish to support>
-   6. On the tab **Session**.
-      * Users **without** "Remember Me" will need to log in **every 2 weeks**:
-        * Set **Session idle timeout**: `14 days`.
-        * Set **Session max idle timeout**: `14 days`.
-      * Users **who checked "Remember Me"** should stay logged in for **1 year**:
-        * Set **Session idle timeout (Remember Me)**: `365 days`.
-        * Set **Session max idle timeout (Remember Me)**: `365 days`.
-2. Create a client with client ID "onyxia"
-   1. _Root URL_: **https://datalab.my-domain.net/**
-   2. _Valid redirect URIs_: **https://datalab.my-domain.net/**
-   3. Login theme: **onyxia-web**
-3. In **Authentication** (on the left panel) -> Tab **Required Actions** enable and set as default action **Therms and Conditions.**
+### One login, several services
 
-Now you want to ensure that the username chosen by your users complies with Onyxia requirement (only alphanumerical characters) and define a list of email domain allowed to register to your service.
+Onyxia is a SPA: the browser authenticates directly with Keycloak using Authorization Code with PKCE. Keycloak issues an access token to the **public client `onyxia`**, and Onyxia uses it with the configured resource servers:
 
-Go to **Realm Settings** (on the left panel) -> Tab **User Profile** -> **JSON Editor**.
-
-Now you can edit the file as suggested in the following DIFF snippet. Be mindful that in this example we only allow emails @gmail.com and @hotmail.com to register you want to edit that.
-
-```diff
-{
-  "attributes": [
-    {
-      "name": "username",
-      "displayName": "${username}",
-      "validations": {
-        "length": {
-          "min": 3,
-          "max": 255
-        },
-+       "pattern": {
-+         "error-message": "${lowerCaseAlphanumericalCharsOnly}",
-+         "pattern": "^[a-z0-9]*$"
-+       },
-        "username-prohibited-characters": {}
-      }
-    },
-    {
-      "name": "email",
-      "displayName": "${email}",
-      "validations": {
-        "email": {},
-+       "pattern": {
-+         "pattern": "^[^@]+@([^.]+\\.)*((gmail\\.com)|(hotmail\\.com))$"
-+       },
-        "length": {
-          "max": 255
-        }
-      }
-    },
-...
+```mermaid
+flowchart TD
+    browser["Browser: Onyxia SPA"] <-->|"OIDC login and token issuance"| keycloak["Keycloak"]
+    browser -->|"Access token"| api["Onyxia API: Kubernetes operations"]
+    browser -->|"Access token → S3 credentials"| minio["MinIO STS"]
+    browser -->|"Access token → Vault token"| vault["Vault JWT auth"]
+    browser -->|"Access token → API key"| openwebui["Open WebUI token exchange"]
 ```
 
-Now our Keycloak server is fully configured we just need to update our Onyxia deployment to let it know about it.
+S3, Vault, and Open WebUI are optional and configured later; we prepare their authentication settings now. Each service validates the token's issuer and audience, then applies its own authorization policies.
 
-### Updating the Onyxia configuration
+**This guide is specific to Keycloak**, whose authorization server can issue one token for several resource servers. Onyxia also supports [a token per resource server with other IAM systems](#other-iam-systems).
 
-In your GitOps repo you now want to update your onyxia configuration.
+### Use the reference realm
+
+Open **[apps/keycloak/realm-export.json](https://github.com/garronej/onyxia-ops/blob/main/apps/keycloak/realm-export.json)**, replace **every occurrence of `my-domain.net` with your domain**, and import it as a new realm through the admin console. For an existing realm, apply the client and mapper configuration below.
+
+The reference assumes the **Onyxia theme and RFC1123 username mapper are loaded**; the deployment above supplies both. The theme is optional and explains registration constraints; the mapper is optional but strongly recommended.
+
+Adapt these account settings:
+
+- **Registration:** update the email validation pattern in the realm's **User Profile** to allow your chosen domains or addresses. The demo allows `insee.fr`, `gouv.fr`, and their subdomains.
+- **Email verification:** for local registration, configure SMTP and enable email verification, which is disabled in the demo. If an external provider such as Google or GitHub supplies verified email addresses that Keycloak trusts, [Keycloak need not send its own verification email](https://www.keycloak.org/docs/latest/server_admin/index.html#_identity_broker).
+
+Replace masked SMTP and confidential-client secrets with actual credentials when configuring them. Registration, session duration, language, and other account policies are your choice.
+
+### The `onyxia` client and its token
+
+The `onyxia` client is public: **Client authentication Off**. Set redirect URIs and web origins for your Onyxia URL.
+
+The other clients represent the services. MinIO Console and Open WebUI also use confidential clients for their own login flows; Onyxia API and Vault validate the SPA's token offline so they don't strictly need a client in Keycloak but it's a good practice to declare them regardless since
+service specific role are beter defined in a specifc client rather than at the real level.  
+
+Here is an access-token excerpt for a user with the example roles and group:
+
+```jsonc
+{
+  "iss": "https://auth.lab.my-domain.net/realms/datalab",
+  "aud": ["openwebui", "vault", "onyxia-api", "minio"],
+  "azp": "onyxia",
+  // For example, here we have a "vip" role for Onyxia API that can be configured
+  // to allow the allocation of expensive GPU like H100.  
+  "onyxia-roles": ["vip"],
+  "openwebui-roles": ["admin"],
+  "onyxia-username": "garronej",
+  "name": "Joseph Garrone",
+  // This is what defines what group projects the user have access to beyound
+  // their personal one. (Shared Kubernetes namespace and S3 storage among a group of user)
+  "groups": ["onyxia-admin"],
+  "email": "joseph.garrone@insee.fr",
+  "minio-policy": "stsonly"
+}
+```
+
+The reference configures these mappers on **`onyxia`**, through its dedicated scope, **`onyxia-dedicated`**:
+
+| Claim | Mapper and configuration |
+| --- | --- |
+| `aud` | Four Audience mappers: Included Client Audience `minio`, `vault`, `openwebui` and `onyxia-api`. These audiences apply to all users, independently of roles. |
+| `onyxia-username` | RFC1123 Username mapper, with Token Claim Name `onyxia-username`. |
+| `minio-policy` | Hardcoded claim: String value `stsonly`. |
+| `groups` (optional) | Group Membership mapper, Full group path Off. Enables shared Kubernetes namespaces and S3 storage. |
+| `onyxia-roles` (optional) | User Client Role mapper for `onyxia-api`, Multivalued On, JSON type String. The `vip` role selects role-specific configuration; see [values-kitchen-sink.yaml](https://github.com/garronej/onyxia-ops/blob/main/apps/onyxia/values-kitchen-sink.yaml). |
+| `openwebui-roles` (optional) | User Client Role mapper for `openwebui`, Multivalued On, JSON type String. The `admin` role grants privileges with the matching [Open WebUI settings](https://github.com/garronej/onyxia-ops/blob/main/apps/ollama/values.yaml). |
+
+#### The username and storage claims
+
+`onyxia-username` must be **unique, stable, and RFC1123 compatible** because it identifies personal namespaces and storage paths. The [custom mapper](https://github.com/onyxia-datalab/keycloak-rfc1123-username) persists a compatible identifier and handles collisions without changing the user's login name. A registration regexp can constrain new usernames, but cannot repair an existing user base. Preserve existing resource identifiers when adopting the mapper. Group names used in resource names must also be compatible.
+
+[The MinIO configuration](https://github.com/garronej/onyxia-ops/blob/main/apps/minio/values.yaml) expects **`"minio-policy": "stsonly"`**. That policy uses `${jwt:onyxia-username}` to restrict access to the user's personal bucket. For direct MinIO Console login, also add the username mapper to `minio`; the reference currently includes it only on `onyxia`.
+
+## Updating the Onyxia configuration
+
+In your GitOps checkout, apply [values-keycloak-enabled.yaml](https://github.com/garronej/onyxia-ops/blob/main/apps/onyxia/values-keycloak-enabled.yaml) to [apps/onyxia/values.yaml](https://github.com/garronej/onyxia-ops/blob/main/apps/onyxia/values.yaml), merging it with your existing ingress and region settings. Replace `$DOMAIN` in the example file with your domain. The authentication settings are:
+
+{% code title="apps/onyxia/values.yaml" %}
+```yaml
+onyxia:
+  api:
+    env:
+      authentication.mode: "openidconnect"
+      oidc.issuer-uri: "https://auth.lab.my-domain.net/realms/datalab"
+      oidc.clientID: "onyxia"
+      oidc.audience: "onyxia-api"
+      oidc.username-claim: "onyxia-username"
+      oidc.roles-claim: "onyxia-roles"
+      oidc.groups-claim: "groups"
+```
+{% endcode %}
+
+Replace `my-domain.net` in the snippet with your domain, then commit and push from the repository root:
 
 ```bash
-git clone https://github.com/<your-github-org>/onyxia-ops
-cd onyxia-ops
-cd apps/onyxia
-mv values-keycloak-enabled.yaml values.yaml
-git commit -am "Enable keycloak"
+git add apps/onyxia/values.yaml
+git commit -m "Enable Keycloak authentication"
 git push
 ```
 
-Here is the DIFF of the onyxia configuration:
+After ArgoCD synchronizes the application, sign in to Onyxia and check a fresh access token against the claims above.
 
-{% embed url="https://github.com/InseeFrLab/onyxia-ops/commit/37faa6390c9bc8c1efddfd3488dc06b38427b424" %}
+<figure><img src="../../.gitbook/assets/image (52).png" alt="Onyxia sign-in page"><figcaption><p>The Onyxia sign-in page</p></figcaption></figure>
 
-Now your users should be able to create account, log-in, and start services on their own Kubernetes namespace.
+## Other IAM systems
 
-<figure><img src="../../.gitbook/assets/image (52).png" alt=""><figcaption><p>The screen you shoud see when clicking on "login" in your Onyxia deployment</p></figcaption></figure>
+This single-token setup does not apply directly to systems such as [Microsoft Entra ID](https://learn.microsoft.com/en-us/entra/msal/javascript/browser/resources-and-scopes) or [Auth0](https://auth0.com/docs/secure/tokens/access-tokens/get-access-tokens), which issue separate tokens for distinct resources.
 
-Next step in the installation proccess it to enable all the S3 related features of Onyxia:
+**Onyxia supports a token per resource server through scope or audience configuration.** That setup is outside this Keycloak guide. **Contact the Onyxia team to integrate any other IAM system; we will help you configure it**, including hands-on support.
+
+See [OpenID Connect Configuration](../openid-connect-configuration.md) for the configuration reference.
+
+Next, enable S3 storage:
 
 {% content-ref url="data-s3.md" %}
-[data-s3.md](data-s3.md)
+[Data (S3)](data-s3.md)
 {% endcontent-ref %}
-
-[^1]: Search/replace CHANGEME

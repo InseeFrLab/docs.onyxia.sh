@@ -42,25 +42,9 @@ EOF
 helm install vault hashicorp/vault -f vault-values.yaml
 ```
 
-#### Setting up JWT authentification for Vault
+#### Setting up JWT authentication for Vault
 
-From Keycloak, create a client called "vault" (realm "datalab" as usually in this documentation)
-
-1. _Root URL_: **https://vault.lab.my-domain.net/**
-2. _Valid redirect URIs_: **https://vault.lab.my-domain.net/\*** and **https://datalab.my-domain.net/\***
-3. _Web origins_: **\***
-
-The expected value for the audience (aud) field of the JWT token by Vault is `vault`. You need to configure this in Keycloak.
-
-1. Create a new Client scope: `vault`
-2. Add Mapper by configuration
-3. Choose Audience
-   * Name: Audience for Vault
-   * Included Client Audience: `vault`
-   * Save
-
-* Choose Clients: `vault`
-  * Add Client Scope: `vault`
+The [authentication step](user-authentication.md) already configured the `vault` audience on tokens issued to `onyxia`. Vault will validate those tokens and use `onyxia-username` as the user's identifier. No additional Keycloak client, login flow, or client secret is needed for this JWT integration.
 
 We will now configure Vault to enable `JWT` support, set policies for users permissions and initialize the secret engine.
 
@@ -74,11 +58,11 @@ vault auth enable jwt
 
 ```
 vault write auth/jwt/config \
-    oidc_discovery_url="https://auth.lab.my-domain.net/auth/realms/datalab" \
+    oidc_discovery_url="https://auth.lab.my-domain.net/realms/datalab" \
     default_role="onyxia-user"
 ```
 
-Onyxia uses only one single role for every user in Vault. This is in this tutorial `onyxia-user`\`. **To provide an authorization mechanism a policy is used that will depend on claims inside the JWT token.**
+All users authenticate with the `onyxia-user` Vault role; claims and policies determine their access.
 
 First you need to get the identifier (mount accessor) for the JWT authentification just created. You can use :
 
@@ -92,7 +76,7 @@ which should provide you something like `auth_jwt_xyz`. You will need it to **wr
 
 Create locally a file named `onyxia-policy.hcl`.
 
-You can notice that this policy is written for a KV version 2 secret engine mounted to the `onyxia-kv` path. The following policy is only working for personnal access because the entity name will be the preferred username in the JWT token.
+You can notice that this policy is written for a KV version 2 secret engine mounted to the `onyxia-kv` path. The following policy is only working for personnal access because the entity alias name will be the `onyxia-username` claim in the JWT token.
 
 {% code title="onyxia-policy.hcl" %}
 ```hcl
@@ -114,7 +98,7 @@ path "onyxia-kv/metadata/user-{{identity.entity.aliases.auth_jwt_xyz.name}}/*" {
 You can include access to any secret engine in the policy, which will be accessible within the services, though the Onyxia interface won’t utilize these permissions. If you have a use case where it would be beneficial for the Onyxia interface to access other secret engines, please let us know on Slack.
 {% endhint %}
 
-Allowing personal Vault tokens to access group storage in Vault is a bit more complex. We will map the group from the token into the entity’s metadata. The following policy maps the first 10 groups statically.
+The following optional group-policy example expects `group0` through `group9` in the entity alias metadata. To use it, configure matching `claim_mappings` on the Vault role, such as `/groups/0=group0`. Only map indices present in every token accepted by that role: [Vault rejects logins when a mapped claim is missing](https://developer.hashicorp.com/vault/docs/auth/jwt#claims-as-metadata). The personal role below omits these mappings so group membership remains optional.
 
 {% hint style="success" %}
 If you have suggestions for a better authorization mechanism within Vault, please share them with us on Slack, as the current approach is not ideal.
@@ -263,14 +247,13 @@ Once the policy file is created, we can proceed with creating the policy.
 vault policy write onyxia-policy onyxia-policy.hcl
 ```
 
-We can go on with the role `onyxia-user`.
+Create the `onyxia-user` role for personal storage:
 
 ```bash
 vault write auth/jwt/role/onyxia-user \
     role_type="jwt" \
     bound_audiences="vault" \
-    user_claim="preferred_username" \
-    claim_mappings="/groups/0=group0,/groups/1=group1,/groups/2=group2,/groups/3=group3,/groups/4=group4,/groups/5=group5,/groups/6=group6,/groups/7=group7,/groups/8=group8,/groups/9=group9" \
+    user_claim="onyxia-username" \
     token_policies="onyxia-policy"
 ```
 
@@ -286,36 +269,20 @@ Then, you need to allow the URL https://datalab.my-domain.net in Vault's CORS se
 vault write sys/config/cors allowed_origins="https://datalab.my-domain.net" enabled=true
 ```
 
-You can finally modify your onyxia config file (in the helm values) :tada:
+Add the Vault settings to your existing region in [apps/onyxia/values.yaml](https://github.com/garronej/onyxia-ops/blob/main/apps/onyxia/values.yaml), preserving its service and S3 configuration:
 
-{% code title="onyxia/values.yaml" %}
+{% code title="apps/onyxia/values.yaml" %}
 ```yaml
 onyxia:
-  web:
-    # ...
   api:
-    # ...
     regions:
-      [
-        {
-          "id": "paris",
-          ...
-          "services": {...},
-          "data": {...},
-          "vault": {
-              "URL": "https://vault.lab.my-domain.net",
-              "kvEngine": "onyxia-kv",
-              "role": "onyxia-user",
-              "authPath": "jwt",
-              "prefix": "user-",
-              "groupPrefix" : "",
-              "oidcConfiguration":
-                {
-                  "issuerURI": "https://auth.lab.my-domain.net/auth/realms/datalab",
-                  "clientID": "vault",
-                }
-          }
-
-    ]
+      - id: my-region
+        vault:
+          URL: "https://vault.lab.my-domain.net"
+          kvEngine: "onyxia-kv"
+          role: "onyxia-user"
+          authPath: "jwt"
+          prefix: "user-"
+          groupPrefix: "projet-"
 ```
 {% endcode %}
