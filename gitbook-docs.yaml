@@ -38,7 +38,7 @@ site:
           title: v7
           path: v7
           content:
-            directory: ./docs.onyxia.sh/v7
+            directory: null
         - type: space
           key: space-5
           title: v6
