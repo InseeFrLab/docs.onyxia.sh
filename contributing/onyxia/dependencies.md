@@ -2,7 +2,7 @@
 description: Technologies at play in Onyxia-web
 ---
 
-# ⚙ Technical stack
+# ⚙️ Technical stack
 
 To find your way in Onyxia, the best approach is to start by getting a surface-level understanding of the libraries that are leveraged in the project.
 
@@ -50,9 +50,9 @@ Onyxia-UI offers [a library of reusable components](https://inseefrlab.github.io
 
 We currently offers builtin support for [four color palettes](https://github.com/InseeFrLab/onyxia/blob/9ced438bf6bad76a85049d52220617070f6daa79/web/src/ui/theme.tsx#L76-L88):
 
-* France: [datalab.sspcloud.fr?**THEME\_ID=france**](https://datalab.sspcloud.fr/?THEME\_ID=france)
-* Ultraviolet: [datalab.sspcloud.fr?**THEME\_ID=ultraviolet**](https://datalab.sspcloud.fr/?THEME\_ID=ultraviolet)
-* Verdant: [datalab.sspcloud?**THEME\_ID=verdant**](https://datalab.sspcloud.fr/?THEME\_ID=verdant)
+* France: [datalab.sspcloud.fr?**THEME\_ID=france**](https://datalab.sspcloud.fr/?THEME_ID=france)
+* Ultraviolet: [datalab.sspcloud.fr?**THEME\_ID=ultraviolet**](https://datalab.sspcloud.fr/?THEME_ID=ultraviolet)
+* Verdant: [datalab.sspcloud?**THEME\_ID=verdant**](https://datalab.sspcloud.fr/?THEME_ID=verdant)
 * Onyxia (default): [datalab.sspcloud.fr?**THEME\_ID=onyxia**](https://datalab.sspcloud.fr)
 
 You can also [provide your own palette](https://github.com/InseeFrLab/onyxia/blob/9ced438bf6bad76a85049d52220617070f6daa79/web/.env#L50-L71).
@@ -161,7 +161,7 @@ Checkout [the helm chart](https://github.com/InseeFrLab/paris-sspcloud/blob/812b
 * Then, in the code the variable can be accessed [like this](https://github.com/InseeFrLab/onyxia-web/blob/f6e2907e43eea825d39f350207705d564360eb23/src/app/libApi/LibProvider.tsx#L32).
 
 {% hint style="warning" %}
-Please try not to access the environment variable to liberally through out the code. In principle they should only be accessed [here](https://github.com/InseeFrLab/onyxia-web/blob/main/src/app/libApi/LibProvider.tsx). We try to keep things [pure](https://en.wikipedia.org/wiki/Pure\_function) as much as possible.
+Please try not to access the environment variable to liberally through out the code. In principle they should only be accessed [here](https://github.com/InseeFrLab/onyxia-web/blob/main/src/app/libApi/LibProvider.tsx). We try to keep things [pure](https://en.wikipedia.org/wiki/Pure_function) as much as possible.
 {% endhint %}
 
 {% embed url="https://youtu.be/JaX14cborxE" %}
