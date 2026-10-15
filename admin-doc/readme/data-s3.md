@@ -5,59 +5,46 @@ icon: folder
 
 # Data (S3)
 
-Onyxia uses [AWS Security Token Service API](https://docs.aws.amazon.com/STS/latest/APIReference/welcome.html) to obtain S3 tokens on behalf of your users. We support any S3 storage compatible with this API. In this context, we are using [MinIO](https://min.io/), which is compatible with the Amazon S3 storage service and we demonstrate how to integrate it with Keycloak.
+Onyxia exchanges the user's OIDC access token for temporary S3 credentials through [AssumeRoleWithWebIdentity](https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoleWithWebIdentity.html). This guide uses MinIO; other S3 systems compatible with this STS API are also supported.
 
-### Creating the 'minio' Keycloak client
+We assume the [previous authentication step](user-authentication.md) configured the `minio` client and the `onyxia` token's `minio` audience, `onyxia-username`, and `minio-policy: stsonly` claims. **Onyxia reuses the token from its central `onyxia` client for MinIO STS.**
 
-Before configuring MinIO, let's create a new Keycloak client (from the previous existing "datalab" realm).
+## Deploying MinIO
 
-{% embed url="https://app.tango.us/app/embed/1c5c0975-93f0-48c6-b8d9-edceb397e34c" %}
+In Keycloak, obtain or regenerate the secret for the existing confidential `minio` client. Set it as `$KEYCLOAK_MINIO_CLIENT_SECRET` in [apps/minio/values.yaml](https://github.com/garronej/onyxia-ops/blob/main/apps/minio/values.yaml), and replace `$DOMAIN` with your domain. This secret is used by the MinIO Console; the Onyxia SPA has no client secret.
 
-### Deploying MinIO
-
-Before deploying MinIO on the cluster let's set, in the MinIO configuration file, the OIDC client secret we have copied in the previous step.
+From your GitOps checkout, commit and push the configuration:
 
 ```bash
-git clone https://github.com/<your-github-org>/onyxia-ops
-cd onyxia-ops
-cd apps/minio
-# In the values.yaml file replace `$KEYCLOAK_MINIO_CLIENT_SECRET` by the value
-# you have copied in the previous step.
-git commit -am "Set minio OIDC client secret"
+git add apps/minio/values.yaml
+git commit -m "Configure MinIO authentication"
 git push
 ```
 
-Once you've done that you can deploy MinIO!
+Deploy MinIO through ArgoCD:
 
 {% embed url="https://app.tango.us/app/embed/75b62573-7adc-4a38-b1f9-b96bb0ea50fd" %}
 
-### Creating the 'onyxia-minio' Keycloak client
+The supplied `stsonly` policy grants access to `user-<onyxia-username>` and its objects. The `minio-policy` claim selects this policy. For direct MinIO Console login, include `onyxia-username` on the `minio` client as described in the authentication step.
 
-Before configuring the onyxia region to create tokens we should go back to Keycloak and create a new client to enable onyxia-web to request token for MinIO. This client is a little bit more complex than other if you want to manage durations (here 7 days) and this client should have a claim name policy and with a value of stsonly according to our last deployment of MinIO.
+## Updating the Onyxia configuration
 
-{% embed url="https://app.tango.us/app/embed/2e382be2-5d73-4cc8-8682-1b86b0e1de58" %}
+Merge the S3 region settings from [values-minio-enabled.yaml](https://github.com/garronej/onyxia-ops/blob/main/apps/onyxia/values-minio-enabled.yaml) into [apps/onyxia/values.yaml](https://github.com/garronej/onyxia-ops/blob/main/apps/onyxia/values.yaml), preserving your existing authentication and region settings. Replace `$DOMAIN` with your domain.
 
-### Updating the Onyxia configuration
-
-Now let's update our Onyxia configuration to let it know that there is now a S3 server available on the cluster.
+The personal bookmark must resolve to `s3://user-$1/` using the `onyxia-username` claim, matching MinIO's policy. Leave `data.S3.sts.oidcConfiguration` unset so Onyxia reuses its main access token.
 
 ```bash
-git clone https://github.com/<your-github-org>/onyxia-ops
-cd onyxia-ops
-cd apps/onyxia
-mv values-minio-enabled.yaml.yaml values.yaml
-# OR: For deploying Onyxia in s3 Explorer standalone mode:
-# mv values-s3-explorer-only.yaml values.yaml
-git commit -am "Enable MinIO"
+git add apps/onyxia/values.yaml
+git commit -m "Enable MinIO"
 git push
 ```
 
-Diff of the changes applied to the Onyxia configuration:
+For an S3 Explorer without the Onyxia API, use [values-s3-explorer-only.yaml](https://github.com/garronej/onyxia-ops/blob/main/apps/onyxia/values-s3-explorer-only.yaml) and the [standalone deployment guide](s3-explorer-standalone-deployment.md). It also uses the public `onyxia` client.
 
-<figure><img src="../../.gitbook/assets/image (48).png" alt=""><figcaption></figcaption></figure>
+Sign in and check that you can create or access your personal bucket. Shared group buckets require additional storage policies; see [Setting up group projects](../setting-up-group-projects.md).
 
-Next step in the installation process is to setup Vault to provide a way to your user so store secret and also to provide something that Onyxia can use as a persistance layer for user configurations.
+Next, configure Vault for secrets and saved user settings:
 
 {% content-ref url="vault.md" %}
-[vault.md](vault.md)
+[Vault](vault.md)
 {% endcontent-ref %}
