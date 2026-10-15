@@ -50,7 +50,7 @@ site:
           title: v5
           path: v5
           content:
-            directory: ./docs.onyxia.sh/v5
+            directory: null
         - type: space
           key: space-1
           title: v4
