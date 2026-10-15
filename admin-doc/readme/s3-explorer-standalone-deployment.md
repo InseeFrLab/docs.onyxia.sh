@@ -28,7 +28,7 @@ This page presents two deployment paths:
 If you only want to see the product running, start with the quick evaluation. If you are evaluating its production architecture, skip directly to [Production Deployment: OIDC and STS](s3-explorer-standalone-deployment.md#production-deployment-oidc-and-sts).
 
 {% hint style="warning" %}
-The explorer runs entirely in the browser: Onyxia does not proxy S3 requests. The bucket you want to browse must therefore allow the origin of the Onyxia application, for example `https://onyxia.my-domain.net`, in its CORS configuration.
+The explorer runs entirely in the browser: Onyxia does not proxy S3 requests. The bucket you want to browse must therefore allow the origin of the Onyxia application, for example `https://onyxia.example.com`, in its CORS configuration.
 {% endhint %}
 
 ## Quick Evaluation: Deploy Without OIDC
@@ -42,7 +42,7 @@ Add the Onyxia Helm repository and create a values file:
 ingress:
   enabled: true
   hosts:
-    - host: onyxia.my-domain.net
+    - host: onyxia.example.com
 
 web:
   env:
@@ -65,7 +65,7 @@ helm upgrade --install onyxia onyxia/onyxia \
   --values onyxia-values.yaml
 ```
 
-Open `https://onyxia.my-domain.net`. Onyxia prompts you to create an S3 profile. Credentials are optional for buckets that allow anonymous access.
+Open `https://onyxia.example.com`. Onyxia prompts you to create an S3 profile. Credentials are optional for buckets that allow anonymous access.
 
 ### Try It With a Public Bucket
 
@@ -98,16 +98,16 @@ For a complete walkthrough that deploys Kubernetes, Keycloak, MinIO, and Onyxia 
 
 ### Example: MinIO and Keycloak
 
-This example follows the [MinIO configuration from `onyxia-ops`](https://github.com/garronej/onyxia-ops/blob/main/apps/minio/values.yaml). It gives each user read/write access to a bucket derived from their username.
+This example follows the [MinIO configuration from `onyxia-ops`](https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/minio/values.yaml). It gives each user read/write access to a bucket derived from their username.
 
 #### 1. Configure the OIDC Client and Token Claims
 
-Use the **public `onyxia` client** and token mappers from [the Keycloak authentication step](user-authentication.md). Set its redirect URI and web origin for your standalone URL. The client uses Authorization Code with PKCE and has no client secret.
+Create a **public OIDC client** named `onyxia-minio` in Keycloak or your OIDC provider. It must use the Authorization Code flow with PKCE and must not have a client secret.
 
 For a user named `johnd`, tokens issued to this client must contain:
 
-* an ID token with `onyxia-username: "johnd"`; and
-* a JWT access token with `onyxia-username: "johnd"` and a hard-coded `minio-policy: "stsonly"` claim.
+* an ID token with `preferred_username: "johnd"`; and
+* a JWT access token with `preferred_username: "johnd"` and a hard-coded `policy: "stsonly"` claim.
 
 In abbreviated form:
 
@@ -117,8 +117,8 @@ Payload of the ID Token. Used to construct the bookmarks.
 
 ```json
 {
-  "aud": "onyxia",
-  "onyxia-username": "johnd"
+  "aud": "onyxia-minio",
+  "preferred_username": "johnd"
 }
 ```
 {% endtab %}
@@ -128,16 +128,16 @@ Payload of the AccessToken sent to MinIO
 
 ```json
 {
-  "azp": "onyxia",
-  "aud": ["minio", "vault", "onyxia-api", "openwebui"],
-  "onyxia-username": "johnd",
-  "minio-policy": "stsonly"
+  "azp": "onyxia-minio", // Client the token was issued to.
+  "aud": "minio", // Client the token is intended for.
+  "preferred_username": "johnd", // Username used to template the access rules.
+  "policy": "stsonly" // Required claim for the rules to apply.
 }
 ```
 {% endtab %}
 {% endtabs %}
 
-Onyxia reads `onyxia-username` from the **ID token** to build the bookmark. MinIO reads `minio-policy` and `onyxia-username` from the **access token** to authorize the STS request. The username must therefore have the same value in both tokens.
+Onyxia reads `preferred_username` from the **ID token** to build the bookmark. MinIO reads `policy` and `preferred_username` from the **access token** to authorize the STS request. The username must therefore have the same value in both tokens.
 
 #### 2. Configure MinIO's OIDC Trust and Policy
 
@@ -148,50 +148,50 @@ The relevant parts of the example MinIO values are:
 minio:
   oidc:
     enabled: true
-    configUrl: "https://auth.my-domain.net/realms/datalab/.well-known/openid-configuration"
+    configUrl: "https://auth.example.com/realms/my-realm/.well-known/openid-configuration"
     clientId: "minio"
     clientSecret: "<MINIO_OIDC_CLIENT_SECRET>"
-    claimName: "minio-policy"
+    claimName: "policy"
     claimPrefix: ""
 
   policies:
     - name: stsonly
       statements:
         - resources:
-            - 'arn:aws:s3:::user-${jwt:onyxia-username}'
-            - 'arn:aws:s3:::user-${jwt:onyxia-username}/*'
+            - 'arn:aws:s3:::user-${jwt:preferred_username}'
+            - 'arn:aws:s3:::user-${jwt:preferred_username}/*'
           actions:
             - "s3:*"
 ```
 {% endcode %}
 
-MinIO uses the access token's `minio-policy` claim to select the `stsonly` policy. It then substitutes the token's `onyxia-username` claim in the resource names. For `johnd`, the policy grants S3 operations on the `user-johnd` bucket and its objects.
+MinIO uses the access token's `policy` claim to select the `stsonly` policy. It then substitutes the token's `preferred_username` claim in the resource names. For `johnd`, the policy grants S3 operations on the `user-johnd` bucket and its objects.
 
 The `user-` prefix is a convention in this example, not an Onyxia requirement. If your user's bucket should be named exactly `johnd`, remove the prefix from both the MinIO policy resources and the Onyxia bookmark so that they continue to match.
 
 If the bucket does not exist, Onyxia will ask the user if they want to create it.
 
 {% hint style="info" %}
-The `minio` client shown in the MinIO values is used by the MinIO Console and has a client secret. It is separate from the public `onyxia` client used by Onyxia. Never place a client secret in the Onyxia web configuration.
+The `minio` client shown in the MinIO values is used by the MinIO Console and has a client secret. It is separate from the public `onyxia-minio` client used by Onyxia. Never place a client secret in the Onyxia web configuration.
 {% endhint %}
 
 #### 3. Configure Onyxia
 
-The following configuration creates a `default` profile and uses the ID token's `onyxia-username` claim to create the matching personal-bucket bookmark:
+The following configuration creates a `default` profile and uses the ID token's `preferred_username` claim to create the matching personal-bucket bookmark:
 
 {% code title="onyxia-values.yaml" %}
 ```yaml
 ingress:
   enabled: true
   hosts:
-    - host: onyxia.my-domain.net
+    - host: onyxia.example.com
 
 web:
   env:
     HEADER_TEXT_FOCUS: "S3 Explorer"
     S3: |
       {
-        URL: "https://minio.my-domain.net",
+        URL: "https://minio.example.com",
         region: "us-east-1",
         pathStyleAccess: true,
         sts: {
@@ -201,15 +201,15 @@ web:
             roleSessionName: ""
           },
           oidcConfiguration: {
-            issuerURI: "https://auth.my-domain.net/realms/datalab",
-            clientID: "onyxia"
+            issuerURI: "https://auth.example.com/realms/my-realm",
+            clientID: "onyxia-minio"
           }
         },
         bookmarks: [
           {
             s3Uri: "s3://user-$1/",
             title: { en: "Personal bucket", fr: "Bucket personnel" },
-            claimName: "onyxia-username",
+            claimName: "preferred_username",
             forProfileName: "default"
           }
         ]
@@ -220,12 +220,12 @@ api:
 ```
 {% endcode %}
 
-Install the chart with the same Helm command used in the quick-evaluation example, then open `https://onyxia.my-domain.net`.
+Install the chart with the same Helm command used in the quick-evaluation example, then open `https://onyxia.example.com`.
 
 For `johnd`, the complete flow is:
 
-1. Onyxia authenticates the user through the public `onyxia` client.
-2. Onyxia resolves the ID token's `onyxia-username` and displays `s3://user-johnd/` as a bookmark.
+1. Onyxia authenticates the user through the public `onyxia-minio` client.
+2. Onyxia resolves the ID token's `preferred_username` and displays `s3://user-johnd/` as a bookmark.
 3. Onyxia sends the access token to MinIO's STS endpoint.
 4. MinIO selects the `stsonly` policy and resolves its resource to `user-johnd`.
 5. MinIO returns temporary credentials that allow the browser to access that bucket.

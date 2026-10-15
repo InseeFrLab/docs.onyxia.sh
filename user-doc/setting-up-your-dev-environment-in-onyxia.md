@@ -11,10 +11,9 @@ You can also find initialization scripts of interactive services [here](https://
 {% hint style="info" %}
 I forgot to show in the video that you can setup your GitHub/GitLab username and token in My Account -> External services.
 
-This will enable Onyxia to clone private repos! &#x20;
+This will enable Onyxia to clone private repos!
 
-![](<../.gitbook/assets/Screenshot 2024-04-03 at 10.28.14 (2).png>)
+<img src="../.gitbook/assets/Screenshot 2024-04-03 at 10.28.14.png" alt="" data-size="original">
 {% endhint %}
 
 {% embed url="https://www.youtube.com/watch?v=_6rKPeQj650" %}
-

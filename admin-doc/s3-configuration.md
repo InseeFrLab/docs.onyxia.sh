@@ -19,7 +19,7 @@ The [installation guide](readme/data-s3.md) demonstrates a basic [MinIO](https:/
 
 ## Minimal MinIO Example
 
-This example defines a single administrator-managed profile named `default`. The bookmark resolves to a bucket named `user-<onyxia-username>`, matching the installation guide's MinIO policy.
+This example defines a single administrator-managed profile named `default`. The bookmark resolves to a bucket named after the user's `preferred_username` claim.
 
 {% code title="apps/onyxia/values.yaml" %}
 ```yaml
@@ -36,13 +36,16 @@ onyxia:
                   "profileName": "default",
                   "roleARN": "",
                   "roleSessionName": ""
+                },
+                "oidcConfiguration": {
+                  "clientID": "onyxia-minio"
                 }
               },
               "bookmarks": [
                 {
-                  "s3Uri": "s3://user-$1/",
+                  "s3Uri": "s3://$1/",
                   "title": "Personal Bucket",
-                  "claimName": "onyxia-username",
+                  "claimName": "preferred_username",
                   "forProfileName": "default"
                 }
               ]
@@ -54,7 +57,7 @@ onyxia:
 
 `roleARN` and `roleSessionName` must be present in the Onyxia configuration, but they can exceptionally be empty for MinIO. Onyxia omits empty values from the STS request. In MinIO's claim-based OIDC mode, when `RoleArn` is absent, MinIO determines the user's authorization from the configured policy claim in the JWT. MinIO's `AssumeRoleWithWebIdentity` endpoint also does not require a role session name.
 
-The [installation guide](readme/data-s3.md) configures MinIO to select the `stsonly` policy from `minio-policy` and restrict access using `onyxia-username`.
+To configure MinIO so that users automatically receive temporary credentials that gives them read/write access to a bucket that matches their username (the preferred\_username claim in the ID and Access token) see [this example](https://github.com/InseeFrLab/paris-sspcloud/blob/master/apps/onyxia-aws/values.yaml).
 
 This is MinIO-specific. Providers such as AWS STS require a valid role ARN and role session name.
 
@@ -62,7 +65,7 @@ For a user whose S3 OIDC ID token contains:
 
 ```json
 {
-  "onyxia-username": "alice"
+  "preferred_username": "alice"
 }
 ```
 
@@ -71,13 +74,13 @@ Onyxia exposes the following profile:
 ```json
 {
   "profileName": "default",
-  "bookmarks": ["s3://user-alice/"]
+  "bookmarks": ["s3://alice/"]
 }
 ```
 
-If the `user-alice` bucket does not exist, the file explorer can offer to create it. Whether creation succeeds depends on the permissions granted by MinIO.
+If the `alice` bucket does not exist, the file explorer can offer to create it. Whether creation succeeds depends on the permissions granted by MinIO.
 
-This example reuses the main `onyxia` access token. See [OIDC Configuration for Services Onyxia Connects To](openid-connect-configuration.md#oidc-configuration-for-services-onyxia-connects-to) for the complete `oidcConfiguration` format. When this object is omitted or only partially specified, Onyxia reuses the corresponding values from its main OIDC configuration.
+See [OIDC Configuration for Services Onyxia Connects To](openid-connect-configuration.md#oidc-configuration-for-services-onyxia-connects-to) for the complete `oidcConfiguration` format. When this object is omitted or only partially specified, Onyxia reuses the corresponding values from its main OIDC configuration.
 
 ## Multiple Profiles From Claims
 
@@ -107,7 +110,7 @@ onyxia:
                     "profileName": "default",
                     "roleARN": "arn:aws:iam::123456789012:role/$1",
                     "roleSessionName": "onyxia-personal-bucket",
-                    "claimName": "onyxia-username"
+                    "claimName": "preferred_username"
                   },
                   {
                     "profileName": "project-$1",
@@ -125,7 +128,7 @@ onyxia:
                 {
                   "s3Uri": "s3://$1/",
                   "title": "Personal Bucket",
-                  "claimName": "onyxia-username",
+                  "claimName": "preferred_username",
                   "forProfileName": "default"
                 },
                 {
@@ -154,7 +157,7 @@ For this S3 OIDC ID token:
 
 ```json
 {
-  "onyxia-username": "johnd",
+  "preferred_username": "johnd",
   "groups": ["sspcloud", "codegouv", "USER_ONYXIA_admin"]
 }
 ```
@@ -212,7 +215,7 @@ onyxia:
                   "profileName": "default",
                   "roleARN": "arn:aws:iam::123456789012:role/onyxia-$1",
                   "roleSessionName": "onyxia-$1",
-                  "claimName": "onyxia-username"
+                  "claimName": "preferred_username"
                 }
               },
               "anonymousProfileName": "public"
@@ -431,7 +434,10 @@ onyxia:
                     "profileName": "default",
                     "roleARN": "arn:aws:iam::123456789012:role/onyxia-$1",
                     "roleSessionName": "onyxia-$1",
-                    "claimName": "onyxia-username"
+                    "claimName": "preferred_username"
+                  },
+                  "oidcConfiguration": {
+                    "clientID": "onyxia-ceph"
                   }
                 }
               }

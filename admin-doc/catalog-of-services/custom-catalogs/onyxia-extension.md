@@ -100,7 +100,7 @@ Note the `"git.name"`, `"git.email"` and `"git.token"`, this enables [onyxia-web
 
 If the user took the time to fill its profile information, [onyxia-web](https://github.com/InseeFrLab/onyxia-web) knows what is the Git **username**, **email** and **personal access token** of the user.
 
-![The onyxia user profile](<../../../.gitbook/assets/image (24).png>)
+![The onyxia user profile](<../../../.gitbook/assets/image (23).png>)
 
 [Here](https://github.com/InseeFrLab/onyxia/blob/main/web/src/core/ports/OnyxiaApi/XOnyxia.ts) is defined the structure of the context that you can use in the `overwriteDefaultWith` field:
 
