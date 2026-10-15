@@ -81,7 +81,6 @@ EOF
 helm install keycloak codecentric/keycloak -f keycloak-values.yaml
 ```
 
-Also note that, the theme will now appear as "onyxia" in the dropdown. Previously it was "onyxia-web"\
-
+Also note that, the theme will now appear as "onyxia" in the dropdown. Previously it was "onyxia-web"<br>
 
 <figure><img src="../../.gitbook/assets/image (44).png" alt=""><figcaption></figcaption></figure>

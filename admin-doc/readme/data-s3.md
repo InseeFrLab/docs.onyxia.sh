@@ -1,6 +1,7 @@
 ---
 description: Enable S3 storage via MinIO S3
 layout:
+  width: default
   title:
     visible: true
   description:
@@ -11,6 +12,14 @@ layout:
     visible: true
   pagination:
     visible: false
+  metadata:
+    visible: true
+  tags:
+    visible: true
+  actions:
+    visible: true
+  anchors:
+    visible: true
 ---
 
 # 🗃️ Data (S3)

@@ -1,6 +1,7 @@
 ---
 description: Convinced by Onyxia? Let's see how you can get your own instance today!
 layout:
+  width: default
   title:
     visible: true
   description:
@@ -11,6 +12,14 @@ layout:
     visible: true
   pagination:
     visible: false
+  metadata:
+    visible: true
+  tags:
+    visible: true
+  actions:
+    visible: true
+  anchors:
+    visible: true
 ---
 
 # 🏁 Install
