@@ -6,7 +6,7 @@ icon: sign-posts-wrench
 # Install
 
 {% hint style="warning" %}
-If you are only interested in deploying Onyxia for it's S3 explorer, start [here](admin-doc/readme/s3-explorer-standalone-deployment.md).!
+If you are only interested in deploying Onyxia for it's S3 explorer, start [here](admin-doc/readme/s3-explorer-standalone-deployment.md).
 {% endhint %}
 
 {% hint style="info" %}
