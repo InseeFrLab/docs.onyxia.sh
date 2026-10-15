@@ -132,12 +132,12 @@ Beyond what's covered in the installation guide, if you need a more general tuto
 
 {% embed url="https://docs.oidc-spa.dev/providers-configuration/keycloak" %}
 For Onyxia, use these substitutions in the guide:\
-&#xNAN;**\<KC\_DOMAIN>**: `auth.lab.my-domain.net`\
-&#xNAN;**\<KC\_RELATIVE\_PATH>**: `/auth`\
-&#xNAN;**\<REALM\_NAME>**: `datalab`\
-&#xNAN;**\<APP\_DOMAIN>**: `datalab.my-domain.net`\
-&#xNAN;**\<BASE\_URL>**: `/`\
-&#xNAN;**\<DEV\_PORT>**: `5173`\
+**\<KC\_DOMAIN>**: `auth.lab.my-domain.net`\
+**\<KC\_RELATIVE\_PATH>**: `/auth`\
+**\<REALM\_NAME>**: `datalab`\
+**\<APP\_DOMAIN>**: `datalab.my-domain.net`\
+**\<BASE\_URL>**: `/`\
+**\<DEV\_PORT>**: `5173`\
 ✅ Note that Onyxia implement an auto logout countdown that will start to display once minute befor auto logout if you configure your client as [a sensible app](https://docs.oidc-spa.dev/providers-configuration/keycloak#security-sensitive-apps-banking-admin-panels-etc)
 {% endembed %}
 
@@ -203,9 +203,9 @@ Follow this guide to configure an Auth0 application for Onyxia.
 {% embed url="https://docs.oidc-spa.dev/providers-configuration/auth0" %}
 For Onyxia, use these substitutions:\
 `"My App"` → `"Onyxia"`\
-&#xNAN;**\<APP\_DOMAIN>** → `datalab.my-domain.net`\
-&#xNAN;**\<BASE\_URL>** → `/`\
-&#xNAN;**\<DEV\_PORT>** → `5173`\
+**\<APP\_DOMAIN>** → `datalab.my-domain.net`\
+**\<BASE\_URL>** → `/`\
+**\<DEV\_PORT>** → `5173`\
 `"My App - API"` → `"Onyxia - API"`\
 `https://myapp.my-company.com/api` → `https://datalab.my-domain.net/api`\
 `"auth.my-company.com"` → `"auth.my-domain.net"`
@@ -252,7 +252,7 @@ exports.onExecutePostLogin = async (event, api) => {
 
 Now, your access token will include the `onyxia-username` claim.
 
-<figure><img src="../.gitbook/assets/image (1) (1).png" alt="" width="375"><figcaption><p>Preview of the decoded JWT of the Access Token issued by Auth0<br>with the custom action enabled when previewed with the<br>test app of the oidc-spa guide</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2).png" alt="" width="375"><figcaption><p>Preview of the decoded JWT of the Access Token issued by Auth0<br>with the custom action enabled when previewed with the<br>test app of the oidc-spa guide</p></figcaption></figure>
 
 **Final Configuration**
 

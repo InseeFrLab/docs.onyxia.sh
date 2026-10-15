@@ -23,9 +23,9 @@ If you want to test theses theme in your local dev env (as shown in the video) d
 
 {% tabs %}
 {% tab title="Ultraviolet" %}
-<figure><img src="../.gitbook/assets/image (54).png" alt=""><figcaption><p>Light Mode</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (57).png" alt=""><figcaption><p>Light Mode</p></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/image (53).png" alt=""><figcaption><p>Dark mode</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (56).png" alt=""><figcaption><p>Dark mode</p></figcaption></figure>
 
 {% code title="values.yaml" %}
 ```yaml
@@ -73,9 +73,9 @@ onyxia:
 {% endtab %}
 
 {% tab title="SSPCloud" %}
-<figure><img src="../.gitbook/assets/image (55).png" alt=""><figcaption><p>Light Mode</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (58).png" alt=""><figcaption><p>Light Mode</p></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/image (56).png" alt=""><figcaption><p>Dark Mode</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (59).png" alt=""><figcaption><p>Dark Mode</p></figcaption></figure>
 
 {% code title="onyxia/values.yaml" %}
 ```yaml
@@ -196,9 +196,9 @@ onyxia:
 {% endtab %}
 
 {% tab title="France" %}
-<figure><img src="../.gitbook/assets/image (58).png" alt=""><figcaption><p>Light Mode</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (61).png" alt=""><figcaption><p>Light Mode</p></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/image (57).png" alt=""><figcaption><p>Dark Mode</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (60).png" alt=""><figcaption><p>Dark Mode</p></figcaption></figure>
 
 {% code title="onyxia/values.yaml" %}
 ```yaml
@@ -248,9 +248,9 @@ onyxia:
 {% endtab %}
 
 {% tab title="Honey" %}
-<figure><img src="../.gitbook/assets/image (59).png" alt=""><figcaption><p>Light mode</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (62).png" alt=""><figcaption><p>Light mode</p></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/image (60).png" alt=""><figcaption><p>Dark mode</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (63).png" alt=""><figcaption><p>Dark mode</p></figcaption></figure>
 
 {% code title="onyxia/values.yaml" %}
 ```yaml

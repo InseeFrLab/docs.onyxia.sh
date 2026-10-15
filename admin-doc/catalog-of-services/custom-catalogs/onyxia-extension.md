@@ -100,7 +100,7 @@ Note the `"git.name"`, `"git.email"` and `"git.token"`, this enables [onyxia-web
 
 If the user took the time to fill its profile information, [onyxia-web](https://github.com/InseeFrLab/onyxia-web) knows what is the Git **username**, **email** and **personal access token** of the user.
 
-![The onyxia user profile](<../../../.gitbook/assets/image (21).png>)
+![The onyxia user profile](<../../../.gitbook/assets/image (24).png>)
 
 [Here](https://github.com/InseeFrLab/onyxia/blob/main/web/src/core/ports/OnyxiaApi/XOnyxia.ts) is defined the structure of the context that you can use in the `overwriteDefaultWith` field:
 
@@ -313,7 +313,7 @@ You can also concatenate string values using by wrapping the XOnyxia targeted va
 
 This is an option for customizing the options of the forms fields rendered as select.
 
-<figure><img src="../../../.gitbook/assets/image (1) (1) (1).png" alt="" width="375"><figcaption><p>Example of select form field in the onyxia launcher</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (3).png" alt="" width="375"><figcaption><p>Example of select form field in the onyxia launcher</p></figcaption></figure>
 
 In your values shema such a field would be defined like:
 

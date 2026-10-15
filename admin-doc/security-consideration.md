@@ -3,7 +3,7 @@ description: Information about security considerations
 icon: triangle-exclamation
 ---
 
-# Security consideration
+# Security considerations
 
 #### 1. Autolaunch Feature
 

@@ -10,7 +10,7 @@ At this stage of this installation process we assumes that:
 
 * You have a Kubernetes cluster and `kubectl` configured
 * **datalab.my-domain.net** and **\*.lab.my-domain.net**'s DNS are pointing to your cluster's external address. **my-domain.net** being a domain that you own.
-* Your ingress-nginx is set up with a default TLS certificate that covers both **datalab.my-domain.net** and **\*.lab.my-domain.net**, processing all ingress objects, [even those that do not have a class specified](#user-content-fn-1)[^1].&#x20;
+* Your ingress-nginx is set up with a default TLS certificate that covers both **datalab.my-domain.net** and **\*.lab.my-domain.net**, processing all ingress objects, [even those that do not have a class specified](#user-content-fn-1)[^1].
 {% endhint %}
 
 We can proceed with manually installing various services via Helm to set up the datalab. However, it's more convenient and reproducible to maintain a Git repository that outlines the required services that we need for our datalab, allowing [ArgoCD](https://argo-cd.readthedocs.io/en/stable/) to handle the deployment for us.
@@ -41,7 +41,7 @@ helm install argocd argo-cd \
   -f ./argocd-values.yaml
 ```
 
-Now you have to get the password that have been automatically generated to protect ArgoCD's admin console.  \
+Now you have to get the password that have been automatically generated to protect ArgoCD's admin console.\
 Allow some time for ArgoCD to start, you can follow the progress by running `kubectl get pods` and making sure that all pod are ready 1/1. After that running this command will print the password:
 
 ```bash
@@ -54,14 +54,14 @@ You can now login to **https://argocd.lab.my-domain.net** using:
 * username: **admin**
 * password: **\<the output of the previous command (without the `%` at the end)>**
 
-<figure><img src="../../.gitbook/assets/image (12).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (15).png" alt=""><figcaption></figcaption></figure>
 
 Now that we have an ArgoCD we want to connect it to a Git repository that will describe what services we want to be running on our cluster.
 
 Let's fork the onyxia-ops GitHub repo and use it to deploy an Onyxia instance!
 
 {% hint style="info" %}
-Note that in this guide, we use GitHub, but feel free to fork the [InseeFrLab/onyxia-ops](https://github.com/InseeFrLab/onyxia-ops) repository on GitLab or any other forge. You'll need to slightly adapt the instructions, but you should be able to follow along!&#x20;
+Note that in this guide, we use GitHub, but feel free to fork the [InseeFrLab/onyxia-ops](https://github.com/InseeFrLab/onyxia-ops) repository on GitLab or any other forge. You'll need to slightly adapt the instructions, but you should be able to follow along!
 {% endhint %}
 
 {% embed url="https://app.tango.us/app/embed/55af08f3-43b0-4b5d-84b7-dfb75f6983c9" %}
@@ -93,10 +93,9 @@ To put that to the test try to modify your Onyxia configuration by setting up a 
 ```
 {% endcode %}
 
-After a few seconds, if you reload **https://datalab.my-domain.net** you should see the message!\
+After a few seconds, if you reload **https://datalab.my-domain.net** you should see the message!\\
 
-
-<figure><img src="../../.gitbook/assets/image (2).png" alt="" width="354"><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (5).png" alt="" width="354"><figcaption></figcaption></figure>
 
 Next step is to see how to enable your user to authenticate themselvs to your datalab!
 
