@@ -105,6 +105,15 @@ If the user took the time to fill its profile information, [onyxia-web](https://
 [Here](https://github.com/InseeFrLab/onyxia/blob/main/web/src/core/ports/OnyxiaApi/XOnyxia.ts) is defined the structure of the context that you can use in the `overwriteDefaultWith` field:
 
 ```typescript
+// Documentation: https://docs.onyxia.sh/contributing/catalog-of-services
+
+import type { Language } from "./Language";
+import { id } from "tsafe/id";
+import { z } from "zod";
+import { assert, type Equals } from "tsafe/assert";
+import { type Stringifyable, zStringifyable } from "core/tools/Stringifyable";
+
+export const onyxiaReservedPropertyNameInFieldDescription = "x-onyxia";
 
 export type XOnyxiaParams = {
     /**
@@ -123,6 +132,23 @@ export type XOnyxiaParams = {
     readonly?: boolean;
 };
 
+export const zXOnyxiaParams = (() => {
+    type TargetType = XOnyxiaParams;
+
+    const zTargetType = z.object({
+        overwriteDefaultWith: z
+            .union([z.string(), z.array(zStringifyable), z.record(zStringifyable)])
+            .optional(),
+        overwriteListEnumWith: z.union([z.string(), z.array(zStringifyable)]).optional(),
+        hidden: z.boolean().optional(),
+        readonly: z.boolean().optional()
+    });
+
+    assert<Equals<z.infer<typeof zTargetType>, TargetType>>();
+
+    return id<z.ZodType<TargetType>>(zTargetType);
+})();
+
 export type XOnyxiaContext = {
     user: {
         idep: string;
@@ -139,25 +165,19 @@ export type XOnyxiaContext = {
          * {
          *   "sub": "9000ffa3-5fb8-45b5-88e4-e2e869ba3cfa",
          *   "name": "Joseph Garrone",
-         *   "aud": ["onyxia", "minio-datanode"],
+         *   "aud": "onyxia",
          *   "groups": [
          *       "USER_ONYXIA",
          *       "codegouv",
-         *       "onyxia",
          *       "sspcloud-admin",
          *   ],
-         *   "preferred_username": "jgarrone",
-         *   "given_name": "Joseph",
-         *   "locale": "en",
-         *   "family_name": "Garrone",
+         *   "onyxia-username": "garronej",
          *   "email": "joseph.garrone@insee.fr",
          *   "policy": "stsonly",
          *   "typ": "ID",
          *   "azp": "onyxia",
          *   "email_verified": true,
-         *   "realm_access": {
-         *       "roles": ["offline_access", "uma_authorization", "default-roles-sspcloud"]
-         *   }
+         *   "onyxia-roles": ["vip"]
          * }
          */
         decodedIdToken: Record<string, unknown>;
@@ -279,6 +299,18 @@ export type XOnyxiaContext = {
         useCertManager: boolean;
         certManagerClusterIssuer: string | undefined;
     };
+    ai: {
+        enabled: boolean;
+        models: string[]; // <providerName>/<model>[]
+        defaultModel: string | undefined; // <providerName>/<model>
+        providers: {
+            name: string; //Needs to be unique
+            apiBase: string;
+            apiKey: string | undefined;
+            models: string[];
+            type: "openai-compatible" | "openai" | "anthropic" | "mistral" | "deepseek";
+        }[];
+    };
     proxyInjection:
         | {
               enabled: boolean | undefined;
@@ -302,9 +334,6 @@ export type XOnyxiaContext = {
           }
         | undefined;
 };
-
-assert<Equals<XOnyxiaContext["user"]["lang"], Language>>();
-
 ```
 
 You can also concatenate string values using by wrapping the XOnyxia targeted values in `{{}}`.
