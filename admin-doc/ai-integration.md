@@ -148,17 +148,6 @@ namespace AIConfigsObject {
                    * token is refreshed before subsequent service launches.
                    */
                   obtentionMethod: "open-webui-oidc-token-exchange";
-                  /**
-                   * Optional overrides for this provider's OIDC settings.
-                   * Omitted fields inherit Onyxia's login settings.
-                   */
-                  oidcConfiguration?: {
-                      issuerURI?: string;
-                      clientID?: string;
-                      extraQueryParams?: string; // URL query string
-                      scope?: string; // Space-separated scopes
-                      idleSessionLifetimeInSeconds?: number | string;
-                  };
               };
         /**
          * Explicit model IDs offered instead of the discovered list. Duplicates are
