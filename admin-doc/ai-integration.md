@@ -5,17 +5,18 @@ icon: microchip-ai
 # AI Integration
 
 Onyxia's main use case is launching IDE environments such as VS Code, Jupyter, and RStudio.
-We want users to be able to use coding assistants such as Claude Code or Codex in these environments.
 
-For organizations that host open weight LLMs on their own infrastructure through [Open WebUI](https://openwebui.com/), Onyxia can automatically exchange OpenID Connect tokens for AI API tokens.
+Onyxia's AI integration makes users' API credentials available to these environments at launch time, so services can configure open source coding assistants such as [OpenCode](https://opencode.ai/) and [Continue](https://docs.continue.dev/). These tools offer functionality similar to Claude Code and the Codex VS Code extension, respectively. Unlike their proprietary counterparts, they are not tied to a specific provider and can work with different LLM APIs, giving users a choice of providers and models.
 
-Users can also set up their own tokens for popular AI providers: OpenAI, Anthropic, Mistral, and DeepSeek. Users' tokens are [stored in Vault](readme/vault.md) when Vault is configured, or in browser storage otherwise.
+In the Onyxia UI, users can set up their own API keys for popular AI providers: OpenAI, Anthropic, Mistral, and DeepSeek. Users' API keys are [stored in Vault](readme/vault.md) when Vault is configured, or in browser storage otherwise.
 
-Users can choose their default model and select which models they want to make available.
+For organizations that host open weight LLMs on their own infrastructure through [Open WebUI](https://openwebui.com/), Onyxia automatically obtains the API key when token exchange is configured, with no manual action required from the user.
+
+Users can select which models to make available in their services and choose one as the default.
 
 <figure><img src="../.gitbook/assets/image (60).png" alt=""><figcaption></figcaption></figure>
 
-Services that support this feature ([such as the IDEs in Onyxia's default catalog](https://github.com/InseeFrLab/helm-charts-interactive-services/tree/main/charts)) can then provide open source equivalents of Claude Code and the Codex VS Code extension, such as [OpenCode](https://opencode.ai/) and [Continue](https://docs.continue.dev/), respectively. Users can use these tools with the model of their choice.
+Services that support this feature ([such as the IDEs in Onyxia's default catalog](https://github.com/InseeFrLab/helm-charts-interactive-services/tree/main/charts)) can then provide coding assistant tools, preconfigured and ready to use with the user's chosen LLM.
 
 <figure><img src="../.gitbook/assets/image (61).png" alt=""><figcaption></figcaption></figure>
 
@@ -25,10 +26,16 @@ Services that support this feature ([such as the IDEs in Onyxia's default catalo
 
 <summary>Understanding what Onyxia does</summary>
 
-At this stage of the project's development, Onyxia does not interact directly with the AI API. It only makes these credentials available through [the XOnyxia launcher context (`xOnyxia.ai`)](catalog-of-services/custom-catalogs/onyxia-extension.md) so that they can be injected into services.
+Concretely, Onyxia provides a UI in the Account > AI section that lets users bring their own API keys, choose which models to make available, and select a default model.
 
-Services are responsible for using this data to configure tools that use the AI API credentials.
-The services in the default [catalog of interactive services](https://github.com/InseeFrLab/helm-charts-interactive-services) do this by setting up [Continue](https://docs.continue.dev/) and [OpenCode](https://opencode.ai/).
+For organizations with an Open WebUI instance, it can be configured to automatically exchange an OpenID Connect access token for an Open WebUI API key, with no manual action required from the user.
+
+Onyxia then makes all these credentials available through [the XOnyxia launcher context (`xOnyxia.ai`)](catalog-of-services/custom-catalogs/onyxia-extension.md). Services are responsible for using this information to configure tools such as OpenCode and Continue so that they are ready to use without requiring any manual configuration from the user.
+
+The services in the [catalog of interactive services](https://github.com/InseeFrLab/helm-charts-interactive-services), one of the default catalogs included with Onyxia, already implement this approach.
+
+In the future, Onyxia might use these AI credentials to provide AI features directly in its UI, such as an assistant to help configure services for a specific use case or "Explain with AI" buttons for commands or logs displayed by Onyxia.
+However, these features are not currently implemented. Onyxia uses the APIs to obtain credentials and list available models; the services are responsible for sending prompts to the models.
 
 </details>
 
@@ -257,8 +264,8 @@ onyxia:
             disable: false,
             disallowUserToAddProviders: false,
             description: {
-              en: "Use the models of your organization in your services. [Read more about this feature](https://www.$DOMAIN/document?path=SSPCloud%E2%90%A3Documentation%E2%80%BAUsing%E2%90%A3the%E2%90%A3Datalab%E2%80%BAUsing%E2%90%A3AI%E2%90%A3models%E2%90%A3in%E2%90%A3the%E2%90%A3Datalab)",
-              fr: "Utilisez les modèles de votre organisation dans vos services. [En savoir plus sur cette fonctionnalité](https://www.$DOMAIN/document?path=SSPCloud%E2%90%A3Documentation%E2%80%BAUsing%E2%90%A3the%E2%90%A3Datalab%E2%80%BAUsing%E2%90%A3AI%E2%90%A3models%E2%90%A3in%E2%90%A3the%E2%90%A3Datalab)"
+              en: "Choose which AI models to use with [OpenCode](https://opencode.ai/) and [Continue](https://docs.continue.dev/) in your services. [Read more about this feature](https://www.sspcloud.fr/document?path=SSPCloud%E2%90%A3Documentation%E2%80%BAUsing%E2%90%A3the%E2%90%A3Datalab%E2%80%BAUsing%E2%90%A3AI%E2%90%A3models%E2%90%A3in%E2%90%A3the%E2%90%A3Datalab)",
+              fr: "Choisissez les modèles d'IA à utiliser avec [OpenCode](https://opencode.ai/) et [Continue](https://docs.continue.dev/) dans vos services. [En savoir plus sur cette fonctionnalité](https://www.sspcloud.fr/document?path=SSPCloud%E2%90%A3Documentation%E2%80%BAUsing%E2%90%A3the%E2%90%A3Datalab%E2%80%BAUsing%E2%90%A3AI%E2%90%A3models%E2%90%A3in%E2%90%A3the%E2%90%A3Datalab)"
             },
             providers: [
               {
