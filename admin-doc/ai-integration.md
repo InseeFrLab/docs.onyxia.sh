@@ -4,17 +4,17 @@ icon: microchip-ai
 
 # AI Integration
 
-Onyxia launches IDE environments such as VS Code, JupyterLab, and RStudio. Its AI integration lets users configure access to AI models for coding assistants in those environments.
+The main usecase of Onyxia is to launch IDE environement like VSCode, Jupyter or RStudio.\
+We want to enable users to uses coding assistant like Claude Code or Codex in thoses environements.
 
-Organizations that serve models through [Open WebUI](https://openwebui.com/) can configure Onyxia to exchange OpenID Connect (OIDC) access tokens for Open WebUI API tokens automatically. This includes organizations that host open weight large language models (LLMs) on their own infrastructure.
-
-Users can also supply their own API keys for providers such as OpenAI, Anthropic, Mistral, and DeepSeek. These user-provided keys are [stored in Vault](readme/vault.md) when Vault is configured, or in browser storage otherwise.
-
-In **Account > AI**, users can choose which models to make available in their services and select a default model.
+For organizatino that would self host open weight LLMs models within their organization through [Open WebUI](https://openwebui.com/), onyxia is able to automatically exchange OpenID Connext token for AI API tokens.\
+User can also setup their own tokens for popular AI providers: OpenAI, Antropic, Mistral and DeepSeek. Users tokens are [stored in Vault](readme/vault.md) if configured, in the browser storage otherwise.\
+\
+Uther can select what model they want as default and wich one they way to have available.&#x20;
 
 <figure><img src="../.gitbook/assets/image (60).png" alt=""><figcaption></figcaption></figure>
 
-Compatible services, such as the [IDEs in Onyxia's default catalog](https://github.com/InseeFrLab/helm-charts-interactive-services/tree/main/charts), can use these settings to configure coding assistants such as OpenCode and Continue with the selected providers and models.
+Then services that supports it ([like the IDE provided in the Onyxia's default catalog](https://github.com/InseeFrLab/helm-charts-interactive-services/tree/main/charts)) will be able to provide Open source equivalents of Claude Code and the Codex VS Code extention, like for example respectively, Open Code and Continue. And use the model of their choosing with it.&#x20;
 
 <figure><img src="../.gitbook/assets/image (61).png" alt=""><figcaption></figcaption></figure>
 
@@ -22,34 +22,36 @@ Compatible services, such as the [IDEs in Onyxia's default catalog](https://gith
 
 <details>
 
-<summary>Understanding what Onyxia does</summary>
+<summary>Understanding the boundary of what Onyxia does</summary>
 
-Onyxia manages provider configuration, obtains credentials, and retrieves model lists. It does not send prompts to models or run inference. It exposes the provider credentials and selected models through the [launcher context (`xOnyxia.ai`)](catalog-of-services/custom-catalogs/onyxia-extension.md), so charts can inject them into launched services.
+At this stage of the developement of thse project, onyxia does not do anything with the AI API directly, it only makes thoses creedentials available to [the XOnyxia launcher context (`xOnyxia.ai`) ](catalog-of-services/custom-catalogs/onyxia-extension.md)context so that they can be injected in the services.   &#x20;
 
-Each service's chart is responsible for using this configuration to set up its coding tools. Compatible charts in the default [catalog of interactive services](https://github.com/InseeFrLab/helm-charts-interactive-services) do this for Continue and OpenCode.
+It's the responsability of the services to levrage thoses data to setup tools into the services to levrage those AI APIs credentials.  \
+The services provided in the [catalog of interactive services](https://github.com/InseeFrLab/helm-charts-interactive-services) provided by default do it by setting up Continue and Open Code.
 
 </details>
 
 ## API Reference
 
-Configure AI integration under `onyxia.api.regions[0].AI` in your Helm values. The Helm chart uses the first region's `AI` configuration for the web application, unless `onyxia.web.env.AI` is explicitly set. The examples on this page show only the relevant settings; merge them into your existing region configuration.
+AI integration configuration is configured in the Region:
 
 {% code title="apps/onyxia/values.yaml" %}
-
 ```yaml
 onyxia:
   api:
     regions:
-      - AI:
-          providers: []
+      - {
+          // The AI configuration object
+          IA: { 
+            providers: [...]
+          }
+        }
 ```
-
 {% endcode %}
 
-AI integration is available to signed-in users. By default, no providers are provisioned by the administrator, and users can add their own. When you supply an `AI` object, `providers` is required, including when AI integration is disabled.
+The AI configuration object respect this shape: &#x20;
 
-The `AI` configuration object has the following shape. `LocalizedString` means a string or an object mapping supported language codes to strings, such as `{ en: "...", fr: "..." }`. `ArrayOrNot<T>` means `T | T[]`. The property names `authentification` and `obtentionMethod` below match the configuration API.
-
+{% code title="" %}
 ```typescript
 type AIConfigsObject = {
     /**
@@ -117,14 +119,14 @@ namespace AIConfigsObject {
              * Links opened in a new tab, with localized labels and absolute URLs.
              * Defaults to an empty list.
              */
-            links?: { label: LocalizedString; url: string }[];
+            links?: AiConfig.Documentation.Link[];
         };
         /**
          * Image displayed on the provider card: one absolute URL for both themes or
          * `{ light: "https://...", dark: "https://..." }`. Omit to show no logo;
          * admin-provided providers do not fall back to the protocol's built-in logo.
          */
-        logoUrl?: string | { light: string; dark: string };
+        logoUrl?: string | { light: string; dark: string; };
         /**
          * How the provider's credentials are obtained. An authenticated provider
          * with at least one selected model is included in the launch context along
@@ -164,69 +166,69 @@ namespace AIConfigsObject {
     };
 }
 ```
+{% endcode %}
 
 ## Example Configurations
 
-### Disabling all AI features
+### Disabling all AI feature
 
-To hide **Account > AI** and provide an empty, disabled `xOnyxia.ai` launch context, set `disable` to `true`:
+By default user can go in their account and configure their API keys. If you want to disalow this:
 
 {% code title="apps/onyxia/values.yaml" %}
-
 ```yaml
 onyxia:
   api:
     regions:
-      - AI:
-          disable: true
-          providers: []
+      - {
+          IA: { 
+            disable: true,
+            providers: []
+          }
+        }
 ```
-
 {% endcode %}
 
-### Provisioning a single provider
+### Allowing only one said provider
 
-To provision Mistral and prevent users from adding other providers through **Account > AI**, use the configuration below. Users still need to enter their own Mistral API key.
-
-`disallowUserToAddProviders` prevents new personal providers from being added. Previously saved personal providers remain available, so this setting does not enforce an exclusive provider list.
+If you want, for example, that your user be allowed to use mistral but only mistral (Not OpenAI, Antropic or DeepSeek) you can do: &#x20;
 
 {% code title="apps/onyxia/values.yaml" %}
-
 ```yaml
 onyxia:
   api:
     regions:
-      - AI:
-          disable: false
-          disallowUserToAddProviders: true
-          providers:
-            - name: "Mistral"
-              providerType: "mistral"
-              apiBase: "https://api.mistral.ai/v1"
-              authentification:
-                type: "api-key"
-                obtentionMethod: "user-provided"
-              # Optional: offer only these models in Onyxia.
-              models:
-                - "mistral-medium-3-5"
-                - "mistral-small-2603"
-                - "mistral-large-4"
+      - {
+          IA: { 
+            disable: false,
+            disallowUserToAddProviders: true,
+            providers: [
+              {
+                  name: "Mistral",
+                  providerType: "mistral",
+                  apiBase: "https://api.mistral.ai/v1",
+                  authentification: {
+                    type: "api-key",
+                    obtentionMethod: "user-provided"
+                  },
+                  # If you want to restrict usage to specific models from the provider:
+                  models: ["mistral-medium-3-5", "mistral-small-2603", "mistral-large-4"]
+              }  
+            ]
+          }
+        }
 ```
-
 {% endcode %}
 
-Omit `models` to offer the models returned by the provider's `/models` endpoint. An explicit list controls which models Onyxia offers to services; it does not change the permissions associated with the user's API key. Use model IDs supported by your provider and coding tools.
+### Self hosted LLMs
 
-### Self-hosted LLMs
-
-If your organization serves models through Open WebUI, Onyxia can exchange the user's OIDC access token for an Open WebUI API token. Users can then launch compatible services with Continue and OpenCode configured, without entering an API key in Onyxia.
-
-The following example connects Onyxia at `https://datalab.my-domain.net` to Open WebUI at `https://llm.lab.my-domain.net`, using the Keycloak realm `datalab`. Both applications use the same OIDC issuer.
-
-Replace the example domain names, documentation links, and logo URL with your own values.
+If your organization self host open weight LLMs model though Open WebUI, Onyxia is able to exchange the OpenID Connect token for a AI API token.  \
+This way, the user don't even have to go in their acount and provide their API keys, they can simply launch a service and get Continue and Open Code readily available in their services.  \
+\
+For example, for https://datalab.my-domain.net Onyxia instance is integrated with our instance of Open WebUI https://llm.lab.my-domain.net\
+\
+The Onyxia configuration would look like:&#x20;
 
 {% code title="apps/onyxia/values.yaml" %}
-
 ```yaml
 onyxia:
   ingress:
@@ -238,47 +240,55 @@ onyxia:
       authentication.mode: "openidconnect"
       oidc.issuer-uri: "https://auth.lab.my-domain.net/realms/datalab"
       oidc.clientID: "onyxia"
+      # .//
     regions:
-      - AI:
-          disable: false
-          disallowUserToAddProviders: false
-          description:
-            en: >-
-              Use your organization's models in your services.
-              [Read more about this feature](https://www.my-domain.net/ai-models).
-            fr: >-
-              Utilisez les modèles de votre organisation dans vos services.
-              [En savoir plus sur cette fonctionnalité](https://www.my-domain.net/ai-models).
-          providers:
-            - name: "Organization LLM"
-              providerType: "openai-compatible"
-              apiBase: "https://llm.lab.my-domain.net/api"
-              authentification:
-                type: "api-key"
+      - {
+        AI: {
+          disable: false,
+          disallowUserToAddProviders: false,
+          description: {
+            en: "Use the models of your organization in your services. [Read more about this feature](https://www.$DOMAIN/document?path=SSPCloud%E2%90%A3Documentation%E2%80%BAUsing%E2%90%A3the%E2%90%A3Datalab%E2%80%BAUsing%E2%90%A3AI%E2%90%A3models%E2%90%A3in%E2%90%A3the%E2%90%A3Datalab)",
+            fr: "Utilisez les modèles de votre organisation dans vos services. [En savoir plus sur cette fonctionnalité](https://www.$DOMAIN/document?path=SSPCloud%E2%90%A3Documentation%E2%80%BAUsing%E2%90%A3the%E2%90%A3Datalab%E2%80%BAUsing%E2%90%A3AI%E2%90%A3models%E2%90%A3in%E2%90%A3the%E2%90%A3Datalab)"
+          },
+          providers: [
+            {
+              name: "SSPCloud LLM",
+              providerType: "openai-compatible",
+              apiBase: "https://llm.lab.my-domain.net/api",
+              authentification: {
+                type: "api-key",
                 obtentionMethod: "open-webui-oidc-token-exchange"
-              logoUrl: "https://datalab.my-domain.net/custom-resources/assets/openwebui.png"
-              documentation:
-                mainText:
-                  en: >-
-                    Access your organization's models through Open WebUI
-                    and its OpenAI-compatible API.
-                  fr: >-
-                    Accédez aux modèles de votre organisation via Open WebUI
-                    et son API compatible OpenAI.
-                links:
-                  - label:
-                      en: "API documentation"
-                      fr: "Documentation de l'API"
+              },
+              logoUrl: "%PUBLIC_URL%/custom-resources/assets/openwebui.png",
+              documentation: {
+                mainText: {
+                  en: "SSPCloud LLM uses Open WebUI to give you access to AI models and its OpenAI-compatible API.",
+                  fr: "SSPCloud LLM utilise Open WebUI pour vous donner accès à des modèles d'IA et à son API compatible OpenAI."
+                },
+                links: [
+                  {
+                    label: { en: "API documentation", fr: "Documentation de l'API" },
                     url: "https://docs.openwebui.com/reference/api-endpoints/"
-                  - label:
-                      en: "Models documentation"
-                      fr: "Documentation des modèles"
+                  },
+                  {
+                    label: { en: "Models documentation", fr: "Documentation des modèles" },
                     url: "https://llm.lab.my-domain.net/workspace/models"
+                  },
+                  {
+                    label: { en: "Models configuration (vLLM)", fr: "Configuration des modèles (vLLM)" },
+                    url: "https://github.com/InseeFrLab/sspcloud-llm"
+                  }
+                ]
+              }
+            }
+            }
+          ]
+        }
+        }
 ```
-
 {% endcode %}
 
-The screenshots below illustrate how the provider and its documentation appear in **Account > AI**:
+This is what we would get in the UI: &#x20;
 
 <figure><img src="../.gitbook/assets/image (64).png" alt=""><figcaption></figcaption></figure>
 
@@ -287,57 +297,59 @@ The screenshots below illustrate how the provider and its documentation appear i
 #### Configuring Open WebUI
 
 {% hint style="info" %}
-The [onyxia-ops repository](https://github.com/InseeFrLab/onyxia-ops) contains reference configurations:
+The onyxia-ops repo contain reference configuration:
 
-- [Open WebUI configuration](https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/openwebui/values.yaml)
-- [Onyxia AI configuration](https://github.com/InseeFrLab/onyxia-ops/blob/024057d1be868b2e7f1b4b11584d673806d9a8f4/apps/onyxia/values-kitchen-sink.yaml#L1001-L1057)
-- [Keycloak realm configuration](https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/keycloak/realm-export.json)
+Repo: [https://github.com/InseeFrLab/onyxia-ops](https://github.com/InseeFrLab/onyxia-ops)
 
-For Keycloak setup instructions, see [User authentication](readme/user-authentication.md).
+Open WebUI Configuration: [https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/openwebui/values.yaml](https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/openwebui/values.yaml)\
+Onyxia Configuration: [https://github.com/InseeFrLab/onyxia-ops/blob/024057d1be868b2e7f1b4b11584d673806d9a8f4/apps/onyxia/values-kitchen-sink.yaml#L1001-L1057](https://github.com/InseeFrLab/onyxia-ops/blob/024057d1be868b2e7f1b4b11584d673806d9a8f4/apps/onyxia/values-kitchen-sink.yaml#L1001-L1057)\
+Keycloak realm configuration: [https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/keycloak/realm-export.json](https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/keycloak/realm-export.json) - More instruction on how to setup Keycloak here: [user-authentication.md](readme/user-authentication.md "mention")<br>
 {% endhint %}
 
-The configuration below assumes:
 
-- Open WebUI is deployed at `https://llm.lab.my-domain.net`.
-- Keycloak is deployed at `https://auth.lab.my-domain.net`, with a realm named `datalab`.
 
-In the `datalab` realm, configure the **`openwebui` client**:
+Let's see how to make the token exchange work, assuming here you're using keycloak:\
+\
+Assume your Open WebUI instance is deployed at https://llm.lab.my-domain.net\
+\
+Keycloak configuration:<br>
 
-- **Client authentication:** On (a confidential client with a client secret).
-- **Valid redirect URI:** `https://llm.lab.my-domain.net/oauth/oidc/callback`.
+Server: https://auth.lab.my-domain.net, realm: datalab\
+\
+\---
 
-Configure the **`onyxia` client**:
+Client: openwebui
 
-- **Client authentication:** Off (a public client).
-- **Valid redirect URI:** `https://datalab.my-domain.net/`.
-- **Access-token audience:** include `openwebui`, alongside any other resource servers used by Onyxia.
+Confidential: true (there is a client secret)
 
-For example, an access token issued to `onyxia` may contain these claims:
-
-```json
-{
-  "aud": ["onyxia-api", "minio", "vault", "openwebui"],
-  "azp": "onyxia"
-}
-```
-
-The audience (`aud`) identifies the intended resource servers. Open WebUI's `OAUTH_TOKEN_EXCHANGE_TRUSTED_CLIENT_IDS` setting checks the issuing client through token introspection; set it to `onyxia` for this example. See the [Open WebUI token exchange configuration](https://docs.openwebui.com/reference/env-configuration/#oauth_token_exchange_trusted_client_ids).
-
-Apply the following Open WebUI settings. Replace `<openwebui-client-secret>` with the secret of the Keycloak `openwebui` client. For a complete deployment example, see the [reference values file](https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/openwebui/values.yaml).
+Valid redirect URI: https://llm.lab.my-domain.net/oauth/oidc/callback\
+\
+\---\
+\
+Client: onyxia\
+\
+Confidential: false\
+\
+Audience includes "openwebui" - This means that the Access Token issued to the client "onyxia" are intended to be used (also) with your Open WebUI instance. Concreatly this means that the "aud" claim of the access token issued to onyxia should look like "aud": \["onyxia-api", "minio", "vault", "openwebui"]\
+\
+Valid Redirect URI: https://datalab.my-domain.net/\
+\
+\---\
+\
+This are the more relevent configurations of open WebUI, for a complete reference check: [https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/openwebui/values.yaml](https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/openwebui/values.yaml)
 
 {% code title="apps/openwebui/values.yaml" %}
-
 ```yaml
 open-webui:
   extraEnvVars:
     - name: OAUTH_CLIENT_ID
-      value: "openwebui"
+      value: openwebui
     - name: OAUTH_CLIENT_SECRET
-      value: "<openwebui-client-secret>"
+      value: <TODO REPLACE>
     - name: OPENID_PROVIDER_URL
-      value: "https://auth.lab.my-domain.net/realms/datalab/.well-known/openid-configuration"
+      value: https://auth.lab.$DOMAIN/realms/sspcloud/.well-known/openid-configuration
     - name: OPENID_REDIRECT_URI
-      value: "https://llm.lab.my-domain.net/oauth/oidc/callback"
+      value: https://llm.lab.$DOMAIN/oauth/oidc/callback
     - name: ENABLE_OAUTH_TOKEN_EXCHANGE
       value: "true"
     - name: OAUTH_TOKEN_EXCHANGE_TRUSTED_CLIENT_IDS
@@ -349,7 +361,4 @@ open-webui:
     - name: ENABLE_LOGIN_FORM
       value: "false"
 ```
-
 {% endcode %}
-
-Users must sign in to Open WebUI at least once to create their account before using token exchange. With `ENABLE_OAUTH_SIGNUP` enabled, they can do this through Keycloak. See the [Open WebUI token exchange requirements](https://docs.openwebui.com/reference/env-configuration/#enable_oauth_token_exchange).
