@@ -14,7 +14,7 @@ For organizations that host open weight LLMs on their own infrastructure through
 
 Users can select which models to make available in their services and choose one as the default.
 
-<figure><img src="../.gitbook/assets/image (60).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (66).png" alt=""><figcaption></figcaption></figure>
 
 Services that support this feature ([such as the IDEs in Onyxia's default catalog](https://github.com/InseeFrLab/helm-charts-interactive-services/tree/main/charts)) can then provide coding assistant tools, preconfigured and ready to use with the user's chosen LLM.
 
@@ -34,8 +34,7 @@ Onyxia then makes all these credentials available through [the XOnyxia launcher 
 
 The services in the [catalog of interactive services](https://github.com/InseeFrLab/helm-charts-interactive-services), one of the default catalogs included with Onyxia, already implement this approach.
 
-In the future, Onyxia might use these AI credentials to provide AI features directly in its UI, such as an assistant to help configure services for a specific use case or "Explain with AI" buttons for commands or logs displayed by Onyxia.
-However, these features are not currently implemented. Onyxia uses the APIs to obtain credentials and list available models; the services are responsible for sending prompts to the models.
+In the future, Onyxia might use these AI credentials to provide AI features directly in its UI, such as an assistant to help configure services for a specific use case or "Explain with AI" buttons for commands or logs displayed by Onyxia. However, these features are not currently implemented. Onyxia uses the APIs to obtain credentials and list available models; the services are responsible for sending prompts to the models.
 
 </details>
 
@@ -44,7 +43,6 @@ However, these features are not currently implemented. Onyxia uses the APIs to o
 AI integration settings are defined in the region configuration:
 
 {% code title="apps/onyxia/values.yaml" %}
-
 ```yaml
 onyxia:
   api:
@@ -56,13 +54,11 @@ onyxia:
           }
         }
 ```
-
 {% endcode %}
 
 The AI configuration object has the following shape:
 
 {% code title="AIConfigsObject" %}
-
 ```typescript
 type AIConfigsObject = {
     /**
@@ -177,7 +173,6 @@ namespace AIConfigsObject {
     };
 }
 ```
-
 {% endcode %}
 
 ## Example Configurations
@@ -187,7 +182,6 @@ namespace AIConfigsObject {
 By default, users can configure their API keys in their account settings. To disable this:
 
 {% code title="apps/onyxia/values.yaml" %}
-
 ```yaml
 onyxia:
   api:
@@ -199,7 +193,6 @@ onyxia:
           }
         }
 ```
-
 {% endcode %}
 
 ### Allowing only a specific provider
@@ -207,7 +200,6 @@ onyxia:
 For example, to allow your users to use only Mistral (and not OpenAI, Anthropic, or DeepSeek), use the following configuration:
 
 {% code title="apps/onyxia/values.yaml" %}
-
 ```yaml
 onyxia:
   api:
@@ -232,20 +224,17 @@ onyxia:
           }
         }
 ```
-
 {% endcode %}
 
 ### Self-hosted LLMs
 
-If your organization hosts open weight LLMs through [Open WebUI](https://openwebui.com/), Onyxia can exchange the OpenID Connect token for an AI API token.
-Users do not need to go to their account settings and provide API keys. They can simply launch a service with [Continue](https://docs.continue.dev/) and [OpenCode](https://opencode.ai/) ready to use.
+If your organization hosts open weight LLMs through [Open WebUI](https://openwebui.com/), Onyxia can exchange the OpenID Connect token for an AI API token. Users do not need to go to their account settings and provide API keys. They can simply launch a service with [Continue](https://docs.continue.dev/) and [OpenCode](https://opencode.ai/) ready to use.
 
 For example, an Onyxia instance at `https://datalab.my-domain.net` can be integrated with an [Open WebUI](https://openwebui.com/) instance at `https://llm.lab.my-domain.net`
 
 The Onyxia configuration would look like this:
 
 {% code title="apps/onyxia/values.yaml" %}
-
 ```yaml
 onyxia:
   ingress:
@@ -302,26 +291,25 @@ onyxia:
           }
         }
 ```
-
 {% endcode %}
 
 This is how it would appear in the UI:
 
-<figure><img src="../.gitbook/assets/image (64).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (69).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/image (65).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (68).png" alt=""><figcaption></figcaption></figure>
 
 #### Configuring Open WebUI
 
 {% hint style="info" %}
 The onyxia-ops repository contains reference configurations:
 
-- **Repo:** [onyxia-ops](https://github.com/InseeFrLab/onyxia-ops)
-- **[Open WebUI](https://openwebui.com/) configuration:** [apps/openwebui/values.yaml](https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/openwebui/values.yaml)
-- **Onyxia configuration:** [apps/onyxia/values-kitchen-sink.yaml](https://github.com/InseeFrLab/onyxia-ops/blob/024057d1be868b2e7f1b4b11584d673806d9a8f4/apps/onyxia/values-kitchen-sink.yaml#L1001-L1057)
-- **Keycloak realm configuration:** [apps/keycloak/realm-export.json](https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/keycloak/realm-export.json)
+* **Repo:** [onyxia-ops](https://github.com/InseeFrLab/onyxia-ops)
+* [**Open WebUI**](https://openwebui.com/) **configuration:** [apps/openwebui/values.yaml](https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/openwebui/values.yaml)
+* **Onyxia configuration:** [apps/onyxia/values-kitchen-sink.yaml](https://github.com/InseeFrLab/onyxia-ops/blob/024057d1be868b2e7f1b4b11584d673806d9a8f4/apps/onyxia/values-kitchen-sink.yaml#L1001-L1057)
+* **Keycloak realm configuration:** [apps/keycloak/realm-export.json](https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/keycloak/realm-export.json)
 
-For more instructions on setting up Keycloak, see [User authentication](readme/user-authentication.md "mention")
+For more instructions on setting up Keycloak, see [user-authentication.md](readme/user-authentication.md "mention")
 {% endhint %}
 
 Let's see how to configure token exchange, assuming you are using Keycloak:
@@ -336,16 +324,16 @@ Assume your [Open WebUI](https://openwebui.com/) instance is deployed at `https:
 {% step %}
 #### Client: `openwebui`
 
-- **Confidential:** `true` (there is a client secret)
-- **Valid redirect URI:** `https://llm.lab.my-domain.net/oauth/oidc/callback`
+* **Confidential:** `true` (there is a client secret)
+* **Valid redirect URI:** `https://llm.lab.my-domain.net/oauth/oidc/callback`
 {% endstep %}
 
 {% step %}
 #### Client: `onyxia`
 
-- **Confidential:** `false`
-- **Audience includes** `"openwebui"`
-- **Valid redirect URI:** `https://datalab.my-domain.net/`
+* **Confidential:** `false`
+* **Audience includes** `"openwebui"`
+* **Valid redirect URI:** `https://datalab.my-domain.net/`
 
 This means that access tokens issued to the `"onyxia"` client are also intended for your [Open WebUI](https://openwebui.com/) instance. Specifically, the `"aud"` claim of an access token issued to `"onyxia"` should look like `"aud": ["onyxia-api", "minio", "vault", "openwebui"]`
 {% endstep %}
@@ -354,7 +342,6 @@ This means that access tokens issued to the `"onyxia"` client are also intended 
 These are the most relevant [Open WebUI](https://openwebui.com/) settings. For a complete reference, see: [Open WebUI configuration](https://github.com/InseeFrLab/onyxia-ops/blob/main/apps/openwebui/values.yaml)
 
 {% code title="apps/openwebui/values.yaml" %}
-
 ```yaml
 open-webui:
   extraEnvVars:
@@ -377,5 +364,4 @@ open-webui:
     - name: ENABLE_LOGIN_FORM
       value: "false"
 ```
-
 {% endcode %}
