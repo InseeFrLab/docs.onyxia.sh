@@ -132,23 +132,6 @@ export type XOnyxiaParams = {
     readonly?: boolean;
 };
 
-export const zXOnyxiaParams = (() => {
-    type TargetType = XOnyxiaParams;
-
-    const zTargetType = z.object({
-        overwriteDefaultWith: z
-            .union([z.string(), z.array(zStringifyable), z.record(zStringifyable)])
-            .optional(),
-        overwriteListEnumWith: z.union([z.string(), z.array(zStringifyable)]).optional(),
-        hidden: z.boolean().optional(),
-        readonly: z.boolean().optional()
-    });
-
-    assert<Equals<z.infer<typeof zTargetType>, TargetType>>();
-
-    return id<z.ZodType<TargetType>>(zTargetType);
-})();
-
 export type XOnyxiaContext = {
     user: {
         idep: string;
