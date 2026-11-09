@@ -139,7 +139,7 @@ namespace AIConfigsObject {
          * with at least one selected model is included in the launch context along
          * with its API key; `none` providers are included without a key.
          */
-        authentification:
+        authentication:
             | {
                   /** No credentials required; model requests omit the API key. */
                   type: "none";
@@ -147,7 +147,7 @@ namespace AIConfigsObject {
             | {
                   type: "api-key";
                   /** The user enters their own API key in the provider's management dialog. */
-                  obtentionMethod: "user-provided";
+                  acquisitionMethod: "user-provided";
               }
             | {
                   type: "api-key";
@@ -156,7 +156,7 @@ namespace AIConfigsObject {
                    * `POST <apiBase>/v1/auths/oauth/oidc/token/exchange`. The resulting
                    * token is refreshed before subsequent service launches.
                    */
-                  obtentionMethod: "open-webui-oidc-token-exchange";
+                  acquisitionMethod: "open-webui-oidc-token-exchange";
               };
         /**
          * Explicit model IDs offered instead of the discovered list. Duplicates are
@@ -213,9 +213,9 @@ onyxia:
                 name: "Mistral",
                 providerType: "mistral",
                 apiBase: "https://api.mistral.ai/v1",
-                authentification: {
+                authentication: {
                   type: "api-key",
-                  obtentionMethod: "user-provided"
+                  acquisitionMethod: "user-provided"
                 },
                 # If you want to restrict usage to specific models from the provider:
                 models: ["mistral-medium-3-5", "mistral-small-2603", "mistral-large-4"]
@@ -261,9 +261,9 @@ onyxia:
                 name: "SSPCloud LLM",
                 providerType: "openai-compatible",
                 apiBase: "https://llm.lab.my-domain.net/api",
-                authentification: {
+                authentication: {
                   type: "api-key",
-                  obtentionMethod: "open-webui-oidc-token-exchange"
+                  acquisitionMethod: "open-webui-oidc-token-exchange"
                 },
                 logoUrl: "%PUBLIC_URL%/custom-resources/assets/openwebui.png",
                 documentation: {
