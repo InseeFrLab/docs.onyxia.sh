@@ -142,7 +142,15 @@ OAuth applications are **public** (no client secret, PKCE) with the redirect URI
 | Forgejo | `read:user`, `read:repository` | `write:repository` |
 | GitHub | — | `repo` (device flow) |
 
-For `service: { type: "oauth" }`, register a second application with its own `clientId`, also public, with the same redirect URI. On GitLab and Forgejo, Onyxia opens an authorization popup when the user clicks **Launch** and hands the refresh token over to the service. On GitHub, there is no authorization at launch: the service uses the [device flow](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps#device-flow) and the user enters a code from a terminal of the service on first use.
+For `service: { type: "oauth" }`, register a second application with its own `clientId`, also public, with the same redirect URI. On GitLab and Forgejo, Onyxia opens an authorization popup when the user clicks **Launch** and hands the refresh token over to the service. On GitHub, there is no authorization at launch: the service uses the [device flow](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps#device-flow) and the user enters a code from a terminal of the service on first use. Forgejo has no device flow: with `service: oauth`, the popup at launch is its only authorization.
+
+{% hint style="warning" %}
+With GitHub and `service: oauth`:
+
+* Check **Enable Device Flow** in the settings of the GitHub OAuth App, otherwise the service can't get a token.
+* The service has no credentials for GitHub when it starts: the device flow is configured after the repositories are cloned, so that a clone waiting for a code doesn't block the startup. A private GitHub repository selected in the launcher isn't cloned; the user clones it from a terminal, which prompts for the code.
+* Prefer `personal-access-token` / `personal-access-token` when users expect their GitHub repositories to be cloned at startup.
+{% endhint %}
 
 {% hint style="warning" %}
 Forgejo doesn't enforce OAuth scopes yet: its OAuth tokens have every right of the user, as a personal access token created with every scope would.
