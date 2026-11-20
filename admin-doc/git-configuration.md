@@ -99,7 +99,7 @@ Each provider defines two authentications:
   * `{ type: "oauth", clientId }`: the user signs in through a popup.
   * `{ type: "personal-access-token" }`: the user pastes a token in **My account > Git**.
 * `service`: what the launched services receive to clone and push.
-  * `{ type: "personal-access-token" }`: the user's token from the `ui` authentication.
+  * `{ type: "personal-access-token" }`: the user's token from the `ui` authentication. It is the only option when `ui` is `personal-access-token`: the token the user creates is the one handed over to the services.
   * `{ type: "scoped-access-token", lifetimeDays }`: Onyxia creates a dedicated token, named `onyxia-<service name>`, when the user clicks **Launch**. `lifetimeDays` defaults to `30`.
   * `{ type: "oauth", clientId }`: the service gets its own OAuth authorization, through an OAuth application distinct from Onyxia's.
 
@@ -110,13 +110,12 @@ Each provider defines two authentications:
 | `oauth` / `scoped-access-token` | ✅ | | | |
 | `oauth` / `oauth` | ✅ | ✅ | | |
 | `personal-access-token` / `personal-access-token` | ✅ | ✅ | ✅ | ✅ |
-| `personal-access-token` / `scoped-access-token` | ✅ | | | |
-| `personal-access-token` / `oauth` | ✅ | ✅ | ✅ | |
 
 Onyxia rejects any other combination at startup with an explicit error:
 
 * GitHub's and Bitbucket's token endpoints require a client secret, so Onyxia cannot sign in to them with OAuth. Use personal access tokens.
 * With `ui: oauth`, there is no personal access token to hand over: `service` can't be `personal-access-token`.
+* With `ui: personal-access-token`, the services get that same token: `service` must be `personal-access-token` too.
 * Only GitLab lets Onyxia create tokens: `scoped-access-token` is GitLab only.
 
 ### Recommended setup for a GitLab instance
@@ -126,7 +125,6 @@ Onyxia rejects any other combination at startup with an explicit error:
 * Requires **GitLab 19.2 or later**, with fine-grained personal access tokens enabled.
 * The token is created with the `download_code` and `push_code` permissions on the user's personal projects and on all the projects they are a member of.
 * GitLab expires tokens at 00:00 UTC on their expiration date: the expiration advertised to the service is that midnight.
-* With `ui: personal-access-token`, the user's token needs the `api` scope to create tokens.
 
 ### OAuth applications
 
@@ -140,17 +138,8 @@ OAuth applications are **public** (no client secret, PKCE) with the redirect URI
 | --- | --- | --- |
 | GitLab | `read_api` (`api` with `scoped-access-token`) | `read_repository`, `write_repository` |
 | Forgejo | `read:user`, `read:repository` | `write:repository` |
-| GitHub | — | `repo` (device flow) |
 
-For `service: { type: "oauth" }`, register a second application with its own `clientId`, also public, with the same redirect URI. On GitLab and Forgejo, Onyxia opens an authorization popup when the user clicks **Launch** and hands the refresh token over to the service. On GitHub, there is no authorization at launch: the service uses the [device flow](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps#device-flow) and the user enters a code from a terminal of the service on first use. Forgejo has no device flow: with `service: oauth`, the popup at launch is its only authorization.
-
-{% hint style="warning" %}
-With GitHub and `service: oauth`:
-
-* Check **Enable Device Flow** in the settings of the GitHub OAuth App, otherwise the service can't get a token.
-* The service has no credentials for GitHub when it starts: the device flow is configured after the repositories are cloned, so that a clone waiting for a code doesn't block the startup. A private GitHub repository selected in the launcher isn't cloned; the user clones it from a terminal, which prompts for the code.
-* Prefer `personal-access-token` / `personal-access-token` when users expect their GitHub repositories to be cloned at startup.
-{% endhint %}
+For `service: { type: "oauth" }`, register a second application with its own `clientId`, also public, with the same redirect URI. Onyxia opens an authorization popup when the user clicks **Launch** and hands the refresh token over to the service. On GitLab, the service falls back on the [device flow](https://docs.gitlab.com/api/oauth2/#device-authorization-grant-flow) if the refresh token can no longer be used: a terminal of the service shows a link and a code. Forgejo has no device flow.
 
 {% hint style="warning" %}
 Forgejo doesn't enforce OAuth scopes yet: its OAuth tokens have every right of the user, as a personal access token created with every scope would.
@@ -214,8 +203,8 @@ Each entry of `git.providers` has the following shape:
               scopes: string[];
               authorizationUrl: string;
               tokenUrl: string;
-              deviceAuthorizationUrl: string | undefined;
-              refreshToken: string | undefined; // undefined: device flow from a terminal
+              deviceAuthorizationUrl: string | undefined; // Fallback when refreshing fails
+              refreshToken: string;   // Obtained by Onyxia when the user clicks "Launch"
           }
         | undefined;
 }

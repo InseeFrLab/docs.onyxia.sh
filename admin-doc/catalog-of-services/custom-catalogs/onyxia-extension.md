@@ -198,7 +198,7 @@ export type XOnyxiaContext = {
                       authorizationUrl: string;
                       tokenUrl: string;
                       deviceAuthorizationUrl: string | undefined;
-                      refreshToken: string | undefined;
+                      refreshToken: string;
                   }
                 | undefined;
         }[];

@@ -68,7 +68,7 @@ For every connected provider, the service is configured with:
 * your commit identity on that forge (`user.name` and `user.email`), used for the repositories hosted there;
 * credentials for `git clone`, `git pull` and `git push` over HTTPS, without typing anything.
 
-Some providers rely on a device code: on the first `git` command towards that forge, a terminal of the service shows a link and a code to enter in your browser. For these providers, private repositories selected in the launcher aren't cloned at startup: run `git clone` from a terminal of the service, then enter the code.
+If the authorization of a long-running service can no longer be renewed, a `git` command towards that forge may show a link and a code in the terminal: open the link and enter the code in your browser.
 
 Changes in **My account > Git** apply to the services you launch afterwards; they don't update an already running service.
 
