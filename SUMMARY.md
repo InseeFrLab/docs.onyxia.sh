@@ -19,6 +19,7 @@
 * [OpenID Connect Configuration](admin-doc/openid-connect-configuration.md)
 * [S3 Configuration](admin-doc/s3-configuration.md)
 * [AI Integration](admin-doc/ai-integration.md)
+* [Git integration](admin-doc/git-configuration.md)
 * [Setting up group projects](admin-doc/setting-up-group-projects.md)
 * [Security considerations](admin-doc/security-consideration.md)
 * [Offline / airgap considerations](admin-doc/offline-airgap-considerations.md)
@@ -48,6 +49,7 @@
 ## user doc
 
 * [Getting started with Onyxia](user-doc/user-guide.md)
+* [Connect your Git accounts](user-doc/git-providers.md)
 * [Datascience Trainings and Tutorials](user-doc/datascience-trainings-and-tutorials.md)
 * [Setting up your dev environment in Onyxia](user-doc/setting-up-your-dev-environment-in-onyxia.md)
 * [Community resources](user-doc/community-resources.md)
