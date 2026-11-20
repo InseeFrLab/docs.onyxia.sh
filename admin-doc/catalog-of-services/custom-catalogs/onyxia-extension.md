@@ -178,9 +178,37 @@ export type XOnyxiaContext = {
         basic: string;
     };
     git: {
+        enabled: boolean;
+        /** See https://docs.onyxia.sh/admin-doc/git-configuration */
+        providers: {
+            id: string;
+            url: string;
+            user: { name: string; email: string };
+            credentials:
+                | {
+                      type: "token";
+                      username: string;
+                      token: string;
+                      expirationTime: number | undefined;
+                  }
+                | {
+                      type: "oauth";
+                      clientId: string;
+                      scopes: string[];
+                      authorizationUrl: string;
+                      tokenUrl: string;
+                      deviceAuthorizationUrl: string | undefined;
+                      refreshToken: string;
+                  }
+                | undefined;
+        }[];
+        /** @deprecated Use git.providers */
         name: string;
+        /** @deprecated Use git.providers */
         email: string;
+        /** @deprecated */
         credentials_cache_duration: number;
+        /** @deprecated Use git.providers */
         token: string | undefined;
     };
     vault:

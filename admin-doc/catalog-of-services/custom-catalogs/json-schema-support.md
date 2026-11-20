@@ -84,6 +84,25 @@ In Onyxia’s JSON Schema implementation, string elements include various `rende
 
 
 
+## Object
+
+#### Render
+
+**Git repository (`render: "gitRepository"`)**: On an object `{ providerId, url, branch }`, alone or as the items of an array, renders a field to pick a repository among the user's connected Git providers, or to paste any HTTPS clone URL, with a branch selector. See [Git integration](../../git-configuration.md#inject-the-credentials-into-a-service).
+
+```json
+{
+  "type": "object",
+  "render": "gitRepository",
+  "default": { "providerId": "", "url": "", "branch": "" },
+  "properties": {
+    "providerId": { "type": "string" },
+    "url": { "type": "string" },
+    "branch": { "type": "string" }
+  }
+}
+```
+
 Onyxia also define some extention to the JSON Schema standard in order to let you pre-fill some values levraging what we know about the user. &#x20;
 
 {% content-ref url="onyxia-extension.md" %}
