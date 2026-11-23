@@ -15,17 +15,21 @@ This replaces the former single "GitHub personal access token" field of the user
 
 ## Enable or disable the integration
 
-Configure the integration through the `GIT_PROVIDERS` environment variable of Onyxia Web. The value is a JSON5 **object**. In Helm values, use a YAML literal block (`|`) to pass it as a string.
+Git integration settings are defined in the region configuration, under `gitProviders`. The Onyxia Helm chart passes the `gitProviders` object of the first region to Onyxia Web as JSON, in its `GIT_PROVIDERS` environment variable. An explicit `web.env.GIT_PROVIDERS` value takes precedence.
 
-An unset or empty `GIT_PROVIDERS` enables the integration with no administrator-configured provider: users add their own. To disable it entirely:
+An unset `gitProviders` enables the integration with no administrator-configured provider: users add their own. To disable it entirely:
 
 {% code title="apps/onyxia/values.yaml" %}
 ```yaml
 onyxia:
-  web:
-    env:
-      GIT_PROVIDERS: |
-        { providers: [], disallowUserToAddProviders: true }
+  api:
+    regions:
+      - {
+          gitProviders: {
+            providers: [],
+            disallowUserToAddProviders: true
+          }
+        }
 ```
 {% endcode %}
 
@@ -38,7 +42,7 @@ The **Git** tab is then empty, and services receive the Onyxia identity (name an
 | `description` | Unset | Introductory Markdown below the **Git profiles** heading; a string or a localized object such as `{ en: "...", fr: "..." }`. Use it to link to your own documentation. |
 
 {% hint style="warning" %}
-The `GIT_PROVIDERS` configuration is exposed to the browser. Do not put client secrets, tokens or other secrets in it. Every OAuth application referenced here is a public client, without secret.
+The `gitProviders` configuration is exposed to the browser. Do not put client secrets, tokens or other secrets in it. Every OAuth application referenced here is a public client, without secret.
 {% endhint %}
 
 ## Configure providers
@@ -48,33 +52,34 @@ This example offers an organization GitLab, where Onyxia signs in with OAuth and
 {% code title="apps/onyxia/values.yaml" %}
 ```yaml
 onyxia:
-  web:
-    env:
-      GIT_PROVIDERS: |
-        {
-          description: {
-            en: "Connect your Git accounts to clone and push from your services. [Read more](https://example.com/git)",
-            fr: "Connectez vos comptes Git pour cloner et pousser depuis vos services. [En savoir plus](https://example.com/git)"
-          },
-          providers: [
-            {
-              type: "gitlab",
-              url: "https://git.example.com",
-              displayName: "Organization GitLab",
-              authentication: {
-                ui: { type: "oauth", clientId: "<application id of the Onyxia OAuth app>" },
-                service: { type: "scoped-access-token", lifetimeDays: 30 }
-              }
+  api:
+    regions:
+      - {
+          gitProviders: {
+            description: {
+              en: "Connect your Git accounts to clone and push from your services. [Read more](https://example.com/git)",
+              fr: "Connectez vos comptes Git pour cloner et pousser depuis vos services. [En savoir plus](https://example.com/git)"
             },
-            {
-              type: "github",
-              url: "https://github.com",
-              authentication: {
-                ui: { type: "personal-access-token" },
-                service: { type: "personal-access-token" }
+            providers: [
+              {
+                type: "gitlab",
+                url: "https://git.example.com",
+                displayName: "Organization GitLab",
+                authentication: {
+                  ui: { type: "oauth", clientId: "<application id of the Onyxia OAuth app>" },
+                  service: { type: "scoped-access-token", lifetimeDays: 30 }
+                }
+              },
+              {
+                type: "github",
+                url: "https://github.com",
+                authentication: {
+                  ui: { type: "personal-access-token" },
+                  service: { type: "personal-access-token" }
+                }
               }
-            }
-          ]
+            ]
+          }
         }
 ```
 {% endcode %}
