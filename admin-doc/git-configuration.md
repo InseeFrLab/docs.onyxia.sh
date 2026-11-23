@@ -181,9 +181,9 @@ The IDE charts of [InseeFrLab/helm-charts-interactive-services](https://github.c
 ```
 {% endcode %}
 
-Whatever the chart declares inline under `git` is replaced by `ide/git.json`. As long as that schema has no `providers` and `repositories` properties, the launcher shows no repository field and the services get **no** Git provider, even with providers connected in **My account > Git**.
+Whatever the chart declares inline under `git` is replaced by `ide/git.json`. The `ide/git.json` shipped with Onyxia API has no `providers` and `repositories` properties: the launcher shows no repository field and the services get **no** Git provider, even with providers connected in **My account > Git**.
 
-Override `ide/git.json` at the instance level to add them. The charts must be recent enough to turn `git.providers` and `git.repositories` into the `GIT_PROVIDERS` and `GIT_REPOSITORIES` variables of their Git secret (library chart), with images that read them ([images-datascience](https://github.com/InseeFrLab/images-datascience)).
+The default schemas of Onyxia API are not updated for this, they are meant to be removed. Override `ide/git.json` in the `schemas.files` of the Onyxia Helm chart instead. The charts must be recent enough to turn `git.providers` and `git.repositories` into the `GIT_PROVIDERS` and `GIT_REPOSITORIES` variables of their Git secret (library chart), with images that read them ([images-datascience](https://github.com/InseeFrLab/images-datascience)).
 
 {% code title="apps/onyxia/values.yaml" %}
 ```yaml
@@ -281,6 +281,8 @@ In this schema:
 {% hint style="info" %}
 Use a [role-based override](catalog-of-services/override-schema-for-a-specific-instance.md#role-based-overrides-different-schema-per-user-role) (`onyxia.api.schemas.roles`) to roll the new form out to a group of users first.
 {% endhint %}
+
+Once Onyxia API no longer serves `ide/git.json`, this override isn't needed anymore: the charts drop `overwriteSchemaWith` on `git`, and the `providers` and `repositories` they declare inline apply.
 
 ## Inject the credentials into a service
 
