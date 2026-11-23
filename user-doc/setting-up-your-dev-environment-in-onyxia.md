@@ -9,7 +9,7 @@ In this video, we guide you through setting up your development environment in O
 You can also find initialization scripts of interactive services [here](https://github.com/InseeFrLab/sspcloud-init-scripts).
 
 {% hint style="info" %}
-To clone private repositories, connect your Git accounts in **My account > Git**: see [Connect your Git accounts](git-providers.md).
+To clone private repositories, connect your Git accounts in **My account > Git**.
 
 
 <img src="../.gitbook/assets/Screenshot 2024-04-03 at 10.28.14.png" alt="" data-size="original">

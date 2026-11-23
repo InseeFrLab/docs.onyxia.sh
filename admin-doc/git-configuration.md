@@ -168,6 +168,120 @@ Unless `disallowUserToAddProviders` is `true`, users can add their own providers
 
 Disconnecting a provider in Onyxia revokes the session when the forge allows it; tokens created for running services stay valid until they expire or are revoked on the forge.
 
+## Enable it in the catalog charts
+
+The IDE charts of [InseeFrLab/helm-charts-interactive-services](https://github.com/InseeFrLab/helm-charts-interactive-services) don't define their Git form themselves: their `git` block points to the `ide/git.json` schema of Onyxia API, through [`overwriteSchemaWith`](catalog-of-services/override-schema-for-a-specific-instance.md).
+
+{% code title="charts/vscode-python/values.schema.json (excerpt)" %}
+```json
+"git": {
+  "x-onyxia": { "overwriteSchemaWith": "ide/git.json" },
+  ...
+}
+```
+{% endcode %}
+
+Whatever the chart declares inline under `git` is replaced by `ide/git.json`. As long as that schema has no `providers` and `repositories` properties, the launcher shows no repository field and the services get **no** Git provider, even with providers connected in **My account > Git**.
+
+Override `ide/git.json` at the instance level to add them. The charts must be recent enough to turn `git.providers` and `git.repositories` into the `GIT_PROVIDERS` and `GIT_REPOSITORIES` variables of their Git secret (library chart), with images that read them ([images-datascience](https://github.com/InseeFrLab/images-datascience)).
+
+{% code title="apps/onyxia/values.yaml" %}
+```yaml
+onyxia:
+  api:
+    schemas:
+      enabled: true
+      files:
+        - relativePath: ide/git.json
+          content: |
+            {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "title": "Git",
+              "description": "Git user configuration",
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "Add git config inside your environment",
+                  "default": true
+                },
+                "name": {
+                  "type": "string",
+                  "description": "user name for git",
+                  "default": "",
+                  "x-onyxia": { "overwriteDefaultWith": "{{git.name}}" },
+                  "hidden": { "value": false, "path": "enabled", "isPathRelative": true }
+                },
+                "email": {
+                  "type": "string",
+                  "description": "user email for git",
+                  "default": "",
+                  "x-onyxia": { "overwriteDefaultWith": "{{git.email}}" },
+                  "hidden": { "value": false, "path": "enabled", "isPathRelative": true }
+                },
+                "cache": {
+                  "type": "string",
+                  "default": "",
+                  "hidden": true,
+                  "x-onyxia": { "overwriteDefaultWith": "{{git.credentials_cache_duration}}" }
+                },
+                "token": {
+                  "type": "string",
+                  "default": "",
+                  "render": "password",
+                  "hidden": true,
+                  "x-onyxia": { "overwriteDefaultWith": "{{git.token}}" }
+                },
+                "repository": {
+                  "type": "string",
+                  "default": "",
+                  "hidden": true
+                },
+                "branch": {
+                  "type": "string",
+                  "default": "",
+                  "hidden": true
+                },
+                "providers": {
+                  "description": "The connected Git providers (identity and credentials), filled by Onyxia",
+                  "type": "array",
+                  "default": [],
+                  "hidden": true,
+                  "x-onyxia": { "overwriteDefaultWith": "{{git.providers}}" },
+                  "items": { "type": "object", "additionalProperties": true }
+                },
+                "repositories": {
+                  "title": "Repositories",
+                  "description": "Cloned when the service starts",
+                  "type": "array",
+                  "default": [],
+                  "items": {
+                    "type": "object",
+                    "render": "gitRepository",
+                    "properties": {
+                      "providerId": { "type": "string", "default": "" },
+                      "url": { "type": "string", "default": "" },
+                      "branch": { "type": "string", "default": "" }
+                    }
+                  },
+                  "hidden": { "value": false, "path": "enabled", "isPathRelative": true }
+                }
+              }
+            }
+```
+{% endcode %}
+
+In this schema:
+
+* `providers` is hidden: the user never edits credentials, Onyxia fills them from **My account > Git**.
+* `repositories` replaces the former `repository` and `branch` text fields, hidden but kept for the charts and images that still read them: the library chart fills them with the first repository.
+* `token` and `cache` are hidden: they only serve the images that don't read `GIT_PROVIDERS` yet.
+* A property that a chart declares inline but that isn't in this schema (for example `asCodeServerRoot`) disappears from the launcher; its `values.yaml` default still applies. Add it here if you want to keep it.
+
+{% hint style="info" %}
+Use a [role-based override](catalog-of-services/override-schema-for-a-specific-instance.md#role-based-overrides-different-schema-per-user-role) (`onyxia.api.schemas.roles`) to roll the new form out to a group of users first.
+{% endhint %}
+
 ## Inject the credentials into a service
 
 The launcher exposes the following [`x-onyxia`](catalog-of-services/custom-catalogs/onyxia-extension.md) context:
