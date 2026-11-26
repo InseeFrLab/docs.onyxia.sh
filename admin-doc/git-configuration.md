@@ -408,8 +408,7 @@ onyxia:
                       "url": { "type": "string", "default": "" },
                       "branch": { "type": "string", "default": "" }
                     }
-                  },
-                  "hidden": { "value": false, "path": "enabled", "isPathRelative": true }
+                  }
                 }
               }
             }
@@ -418,8 +417,18 @@ onyxia:
 {% endcode %}
 
 {% hint style="warning" %}
-This schema requires charts built on the [library chart](https://github.com/InseeFrLab/helm-charts-interactive-services/tree/main/charts/library-chart) **2.1.11 or later**: earlier versions don't pass `git.providers` and `git.repositories` to the service, so nothing is cloned. Check the `library-chart` dependency in the `Chart.yaml` of each chart of your catalog. The images must also be recent [images-datascience](https://github.com/InseeFrLab/images-datascience) images, which read the `GIT_PROVIDERS` and `GIT_REPOSITORIES` variables.
+This schema requires two things in your catalog:
+
+- **Charts built on the [library chart](https://github.com/InseeFrLab/helm-charts-interactive-services/tree/main/charts/library-chart) 2.1.11 or later.** Earlier versions don't pass `git.providers` and `git.repositories` to the service, so nothing is cloned. Check the `library-chart` dependency in the `Chart.yaml` of each chart of your catalog. From 2.1.11, the chart's Git secret gives the service two environment variables: `GIT_PROVIDERS` (the JSON of `git.providers`) and `GIT_REPOSITORIES` (the JSON of `git.repositories`).
+- **Images built on 2026-11-23 or later.** The init script ([`onyxia-init.sh`](https://github.com/InseeFrLab/images-datascience/blob/main/base/scripts/onyxia-init.sh)) of the [images-datascience](https://github.com/InseeFrLab/images-datascience) images reads these variables: it configures the commit identity and credentials for each forge, then clones the repositories. Older images ignore them. They only read `GIT_REPOSITORY`, which the chart fills with the first repository, and they get no credentials: a private repository isn't cloned, and `git push` fails.
 {% endhint %}
+
+The charts reference rolling tags, such as `inseefrlab/onyxia-vscode-python:py3.14.7`, with `pullPolicy: IfNotPresent`. A node that cached the tag before 2026-11-23 keeps running the old image. To be sure the services get a recent image, do one of the following:
+
+- reference a dated tag, `2026.11.23` or later, such as `inseefrlab/onyxia-vscode-python:py3.14.7-2026.11.23`;
+- or set `service.image.pullPolicy` to `Always`.
+
+If your catalog uses other images, their entrypoint must read `GIT_PROVIDERS` and `GIT_REPOSITORIES` itself. The format is described in the [images-datascience README](https://github.com/InseeFrLab/images-datascience#readme).
 
 Keep the `enabled` property. The charts mount the Git secret only when `git.enabled` is `true`. Without it in the schema, Onyxia sends no value and each chart falls back on the default in its own `values.yaml`: `true` for `vscode-python`, but `false` for `jupyter-python`, where the services then get no Git variables at all.
 
