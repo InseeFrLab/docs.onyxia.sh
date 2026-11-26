@@ -19,8 +19,6 @@ When launching a service, users pick the repositories to clone, each at a branch
 
 The service starts with the repositories cloned, the user's name and email configured for each forge, and credentials ready: `git pull` and `git push` work without any manual setup.
 
-
-
 {% hint style="warning" %}
 Nothing happens in the services until the catalog charts get the new Git form. See [Enable it in the catalog charts](#enable-it-in-the-catalog-charts).
 {% endhint %}
@@ -40,22 +38,22 @@ It then passes the connected accounts, with their credentials, and the selected 
 Git integration settings are defined in the region configuration:
 
 {% code title="apps/onyxia/values.yaml" %}
+
 ```yaml
 onyxia:
   api:
     regions:
-      - {
-          // The Git integration configuration object
-          gitProviders: {
-            providers: [...]
-          }
-        }
+      - { ? // The Git integration configuration object
+            gitProviders
+          : { providers: [...] } }
 ```
+
 {% endcode %}
 
 The Git integration configuration object has the following shape:
 
 {% code title="GitProvidersConfigObject" %}
+
 ```typescript
 /**
  * JSON5 configuration accepted by the `GIT_PROVIDERS` environment variable
@@ -70,89 +68,90 @@ The Git integration configuration object has the following shape:
  * OAuth applications are public clients, without secret.
  */
 type GitProvidersConfigObject = {
-    /**
-     * Markdown displayed below the "Git profiles" heading in Account > Git. Accepts
-     * a string or translations such as `{ en: "...", fr: "..." }`. Omit to show the
-     * default text.
-     */
-    description?: LocalizedString;
-    /**
-     * Providers provisioned by the administrator. Use `[]` to provision none.
-     */
-    providers: GitProvidersConfigObject.Provider[];
-    /**
-     * Prevents users from adding their own providers (gitlab.com, github.com...)
-     * with a personal access token.
-     * @default false
-     */
-    disallowUserToAddProviders?: boolean;
+  /**
+   * Markdown displayed below the "Git profiles" heading in Account > Git. Accepts
+   * a string or translations such as `{ en: "...", fr: "..." }`. Omit to show the
+   * default text.
+   */
+  description?: LocalizedString;
+  /**
+   * Providers provisioned by the administrator. Use `[]` to provision none.
+   */
+  providers: GitProvidersConfigObject.Provider[];
+  /**
+   * Prevents users from adding their own providers (gitlab.com, github.com...)
+   * with a personal access token.
+   * @default false
+   */
+  disallowUserToAddProviders?: boolean;
 };
 
 namespace GitProvidersConfigObject {
-    export type Provider = {
-        /** `bitbucket` is Bitbucket Cloud only (`https://bitbucket.org`). */
-        type: "gitlab" | "forgejo" | "github" | "bitbucket";
-        /** Base URL of the forge, for example `https://gitlab.example.com`. */
-        url: string;
-        /**
-         * Name displayed in Account > Git. Must be unique among the providers.
-         *
-         * Keep it stable: the user's tokens and sessions are saved under it, so
-         * renaming a provider signs its users out.
-         * @default the host of `url`
-         */
-        displayName?: string;
-        /**
-         * One absolute URL for both themes or `{ light: "https://...", dark: "https://..." }`.
-         * @default the logo of the forge type
-         */
-        logoUrl?: string | { light: string; dark: string };
-        /**
-         * Supported combinations (`ui` / `service`):
-         * - `personal-access-token` / `personal-access-token`: every forge type.
-         * - `oauth` / `oauth`: GitLab, Forgejo.
-         * - `oauth` / `scoped-access-token`: GitLab 19.2 or later (recommended).
-         *
-         * Onyxia refuses any other combination at startup.
-         */
-        authentication: {
-            /** How Onyxia accesses the forge to list the user's repositories and branches. */
-            ui:
-                | {
-                      /** The user signs in to the forge through a popup. */
-                      type: "oauth";
-                      /** The public OAuth application registered for Onyxia. */
-                      clientId: string;
-                  }
-                | {
-                      /** The user pastes a token in Account > Git. */
-                      type: "personal-access-token";
-                  };
-            /** What the launched services receive to clone and push. */
-            service:
-                | {
-                      /** The token the user pasted in Account > Git. */
-                      type: "personal-access-token";
-                  }
-                | {
-                      /**
-                       * Onyxia creates a token dedicated to the service, limited to
-                       * cloning and pushing, when the user clicks Launch. GitLab only.
-                       */
-                      type: "scoped-access-token";
-                      /** @default 30 */
-                      lifetimeDays?: number;
-                  }
-                | {
-                      /** The service gets its own OAuth authorization when the user clicks Launch. */
-                      type: "oauth";
-                      /** A public OAuth application distinct from Onyxia's (`ui.clientId`). */
-                      clientId: string;
-                  };
-        };
+  export type Provider = {
+    /** `bitbucket` is Bitbucket Cloud only (`https://bitbucket.org`). */
+    type: "gitlab" | "forgejo" | "github" | "bitbucket";
+    /** Base URL of the forge, for example `https://gitlab.example.com`. */
+    url: string;
+    /**
+     * Name displayed in Account > Git. Must be unique among the providers.
+     *
+     * Keep it stable: the user's tokens and sessions are saved under it, so
+     * renaming a provider signs its users out.
+     * @default the host of `url`
+     */
+    displayName?: string;
+    /**
+     * One absolute URL for both themes or `{ light: "https://...", dark: "https://..." }`.
+     * @default the logo of the forge type
+     */
+    logoUrl?: string | { light: string; dark: string };
+    /**
+     * Supported combinations (`ui` / `service`):
+     * - `personal-access-token` / `personal-access-token`: every forge type.
+     * - `oauth` / `oauth`: GitLab, Forgejo.
+     * - `oauth` / `scoped-access-token`: GitLab 19.2 or later (recommended).
+     *
+     * Onyxia refuses any other combination at startup.
+     */
+    authentication: {
+      /** How Onyxia accesses the forge to list the user's repositories and branches. */
+      ui:
+        | {
+            /** The user signs in to the forge through a popup. */
+            type: "oauth";
+            /** The public OAuth application registered for Onyxia. */
+            clientId: string;
+          }
+        | {
+            /** The user pastes a token in Account > Git. */
+            type: "personal-access-token";
+          };
+      /** What the launched services receive to clone and push. */
+      service:
+        | {
+            /** The token the user pasted in Account > Git. */
+            type: "personal-access-token";
+          }
+        | {
+            /**
+             * Onyxia creates a token dedicated to the service, limited to
+             * cloning and pushing, when the user clicks Launch. GitLab only.
+             */
+            type: "scoped-access-token";
+            /** @default 30 */
+            lifetimeDays?: number;
+          }
+        | {
+            /** The service gets its own OAuth authorization when the user clicks Launch. */
+            type: "oauth";
+            /** A public OAuth application distinct from Onyxia's (`ui.clientId`). */
+            clientId: string;
+          };
     };
+  };
 }
 ```
+
 {% endcode %}
 
 ## Example Configurations
@@ -164,30 +163,37 @@ The examples below assume Onyxia is deployed at `https://datalab.my-domain.net`.
 The recommended setup for a GitLab instance: users sign in with OAuth, and every service gets its own token, which expires on its own and can be revoked from GitLab without affecting the other services. It requires **GitLab 19.2 or later**, with fine-grained personal access tokens enabled.
 
 {% code title="apps/onyxia/values.yaml" %}
+
 ```yaml
 onyxia:
   api:
     regions:
       - {
-          gitProviders: {
-            description: {
-              en: "Connect your Git accounts to clone and push from your services. [Read more](https://example.com/git)",
-              fr: "Connectez vos comptes Git pour cloner et pousser depuis vos services. [En savoir plus](https://example.com/git)"
+          gitProviders:
+            {
+              description:
+                {
+                  en: "Connect your Git accounts to clone and push from your services. [Read more](https://example.com/git)",
+                  fr: "Connectez vos comptes Git pour cloner et pousser depuis vos services. [En savoir plus](https://example.com/git)",
+                },
+              providers:
+                [
+                  {
+                    type: "gitlab",
+                    url: "https://gitlab.my-domain.net",
+                    displayName: "Organization GitLab",
+                    authentication:
+                      {
+                        ui: { type: "oauth", clientId: "<Application ID>" },
+                        service:
+                          { type: "scoped-access-token", lifetimeDays: 30 },
+                      },
+                  },
+                ],
             },
-            providers: [
-              {
-                type: "gitlab",
-                url: "https://gitlab.my-domain.net",
-                displayName: "Organization GitLab",
-                authentication: {
-                  ui: { type: "oauth", clientId: "<Application ID>" },
-                  service: { type: "scoped-access-token", lifetimeDays: 30 }
-                }
-              }
-            ]
-          }
         }
 ```
+
 {% endcode %}
 
 To create the OAuth application, as a GitLab administrator:
@@ -205,14 +211,19 @@ To create the OAuth application, as a GitLab administrator:
 
 Give each service its own OAuth authorization instead. Create two applications as above, with the same redirect URI and **Confidential** unchecked, but with these scopes:
 
-* Onyxia's application: `read_api`
-* The services' application: `read_repository` and `write_repository`
+- Onyxia's application: `read_api`
+- The services' application: `read_repository` and `write_repository`
 
 ```yaml
-authentication: {
-  ui: { type: "oauth", clientId: "<Application ID of Onyxia's application>" },
-  service: { type: "oauth", clientId: "<Application ID of the services' application>" }
-}
+authentication:
+  {
+    ui: { type: "oauth", clientId: "<Application ID of Onyxia's application>" },
+    service:
+      {
+        type: "oauth",
+        clientId: "<Application ID of the services' application>",
+      },
+  }
 ```
 
 </details>
@@ -222,25 +233,38 @@ authentication: {
 Forgejo supports OAuth for both Onyxia and the services:
 
 {% code title="apps/onyxia/values.yaml" %}
+
 ```yaml
 onyxia:
   api:
     regions:
       - {
-          gitProviders: {
-            providers: [
-              {
-                type: "forgejo",
-                url: "https://forgejo.my-domain.net",
-                authentication: {
-                  ui: { type: "oauth", clientId: "<Client ID of Onyxia's application>" },
-                  service: { type: "oauth", clientId: "<Client ID of the services' application>" }
-                }
-              }
-            ]
-          }
+          gitProviders:
+            {
+              providers:
+                [
+                  {
+                    type: "forgejo",
+                    url: "https://forgejo.my-domain.net",
+                    authentication:
+                      {
+                        ui:
+                          {
+                            type: "oauth",
+                            clientId: "<Client ID of Onyxia's application>",
+                          },
+                        service:
+                          {
+                            type: "oauth",
+                            clientId: "<Client ID of the services' application>",
+                          },
+                      },
+                  },
+                ],
+            },
         }
 ```
+
 {% endcode %}
 
 Create two OAuth2 applications, one for Onyxia and one for the services. For each, as a Forgejo administrator:
@@ -269,25 +293,30 @@ Forgejo doesn't enforce OAuth scopes yet: its OAuth tokens have every right of t
 GitHub doesn't allow OAuth from the browser without a client secret: users paste a personal access token, which the services also receive. Onyxia shows them a link to create it with the right permissions.
 
 {% code title="apps/onyxia/values.yaml" %}
+
 ```yaml
 onyxia:
   api:
     regions:
       - {
-          gitProviders: {
-            providers: [
-              {
-                type: "github",
-                url: "https://github.com",
-                authentication: {
-                  ui: { type: "personal-access-token" },
-                  service: { type: "personal-access-token" }
-                }
-              }
-            ]
-          }
+          gitProviders:
+            {
+              providers:
+                [
+                  {
+                    type: "github",
+                    url: "https://github.com",
+                    authentication:
+                      {
+                        ui: { type: "personal-access-token" },
+                        service: { type: "personal-access-token" },
+                      },
+                  },
+                ],
+            },
         }
 ```
+
 {% endcode %}
 
 Nothing needs to be configured on GitHub's side. For GitHub Enterprise Server, set `url` to your instance.
@@ -300,10 +329,11 @@ Like GitHub, users paste a token: an [Atlassian API token](https://id.atlassian.
 {
   type: "bitbucket",
   url: "https://bitbucket.org",
-  authentication: {
-    ui: { type: "personal-access-token" },
-    service: { type: "personal-access-token" }
-  }
+  authentication:
+    {
+      ui: { type: "personal-access-token" },
+      service: { type: "personal-access-token" },
+    },
 }
 ```
 
@@ -312,36 +342,15 @@ Like GitHub, users paste a token: an [Atlassian API token](https://id.atlassian.
 By default, users can also add forges of their own (gitlab.com, github.com...) with a personal access token. To offer only the providers you declare:
 
 {% code title="apps/onyxia/values.yaml" %}
+
 ```yaml
 onyxia:
   api:
     regions:
-      - {
-          gitProviders: {
-            disallowUserToAddProviders: true,
-            providers: [ ... ]
-          }
-        }
+      - { gitProviders: { disallowUserToAddProviders: true, providers: [...] } }
 ```
+
 {% endcode %}
-
-### Disabling the Git integration
-
-{% code title="apps/onyxia/values.yaml" %}
-```yaml
-onyxia:
-  api:
-    regions:
-      - {
-          gitProviders: {
-            providers: [],
-            disallowUserToAddProviders: true
-          }
-        }
-```
-{% endcode %}
-
-The **Git** tab is then empty, and services only get the name and email of the user's Onyxia account.
 
 ## Enable it in the catalog charts
 
@@ -352,6 +361,7 @@ Without this step, nothing happens: the launcher shows no repository field and t
 The IDE charts of [InseeFrLab/helm-charts-interactive-services](https://github.com/InseeFrLab/helm-charts-interactive-services) take their Git form from the `ide/git.json` schema served by Onyxia API (through [`overwriteSchemaWith`](catalog-of-services/override-schema-for-a-specific-instance.md)). The one shipped with Onyxia API predates the Git integration. Replace it in the `schemas.files` of the Onyxia Helm chart:
 
 {% code title="apps/onyxia/values.yaml" %}
+
 ```yaml
 onyxia:
   api:
@@ -367,46 +377,9 @@ onyxia:
               "type": "object",
               "properties": {
                 "enabled": {
-                  "type": "boolean",
-                  "description": "Add git config inside your environment",
-                  "default": true
-                },
-                "name": {
-                  "type": "string",
-                  "description": "user name for git",
-                  "default": "",
-                  "x-onyxia": { "overwriteDefaultWith": "{{git.name}}" },
-                  "hidden": { "value": false, "path": "enabled", "isPathRelative": true }
-                },
-                "email": {
-                  "type": "string",
-                  "description": "user email for git",
-                  "default": "",
-                  "x-onyxia": { "overwriteDefaultWith": "{{git.email}}" },
-                  "hidden": { "value": false, "path": "enabled", "isPathRelative": true }
-                },
-                "cache": {
-                  "type": "string",
-                  "default": "",
-                  "hidden": true,
-                  "x-onyxia": { "overwriteDefaultWith": "{{git.credentials_cache_duration}}" }
-                },
-                "token": {
-                  "type": "string",
-                  "default": "",
-                  "render": "password",
-                  "hidden": true,
-                  "x-onyxia": { "overwriteDefaultWith": "{{git.token}}" }
-                },
-                "repository": {
-                  "type": "string",
-                  "default": "",
-                  "hidden": true
-                },
-                "branch": {
-                  "type": "string",
-                  "default": "",
-                  "hidden": true
+                    "type": "boolean",
+                    "default": true,
+                    "hidden": true
                 },
                 "providers": {
                   "description": "The connected Git providers (identity and credentials), filled by Onyxia",
@@ -420,7 +393,13 @@ onyxia:
                   "title": "Repositories",
                   "description": "Cloned when the service starts",
                   "type": "array",
-                  "default": [],
+                  "default": [
+                    {
+                      "providerId": "",
+                      "url": "",
+                      "branch": ""
+                    }
+                  ],
                   "items": {
                     "type": "object",
                     "render": "gitRepository",
@@ -435,9 +414,14 @@ onyxia:
               }
             }
 ```
+
 {% endcode %}
 
-This requires recent versions of the charts and of the [images-datascience](https://github.com/InseeFrLab/images-datascience) images. The hidden `name`, `email`, `token`, `repository` and `branch` fields keep older charts and images working.
+{% hint style="warning" %}
+This schema requires charts built on the [library chart](https://github.com/InseeFrLab/helm-charts-interactive-services/tree/main/charts/library-chart) **2.1.11 or later**: earlier versions don't pass `git.providers` and `git.repositories` to the service, so nothing is cloned. Check the `library-chart` dependency in the `Chart.yaml` of each chart of your catalog. The images must also be recent [images-datascience](https://github.com/InseeFrLab/images-datascience) images, which read the `GIT_PROVIDERS` and `GIT_REPOSITORIES` variables.
+{% endhint %}
+
+Keep the `enabled` property. The charts mount the Git secret only when `git.enabled` is `true`. Without it in the schema, Onyxia sends no value and each chart falls back on the default in its own `values.yaml`: `true` for `vscode-python`, but `false` for `jupyter-python`, where the services then get no Git variables at all.
 
 {% hint style="info" %}
 To try the new form with a group of users first, use a [role-based override](catalog-of-services/override-schema-for-a-specific-instance.md#role-based-overrides-different-schema-per-user-role).
