@@ -44,30 +44,30 @@ onyxia:
   api:
     regions:
       - { ? // The Git integration configuration object
-            gitProviders
-          : { providers: [...] } }
+            gitForges
+          : { forges: [...] } }
 ```
 
 {% endcode %}
 
 The Git integration configuration object has the following shape:
 
-{% code title="GitProvidersConfigObject" %}
+{% code title="GitForgesConfigObject" %}
 
 ```typescript
 /**
- * JSON5 configuration accepted by the `GIT_PROVIDERS` environment variable
- * (`gitProviders` in the region configuration). Controls Account > Git and the
+ * JSON5 configuration accepted by the `GIT_FORGES` environment variable
+ * (`gitForges` in the region configuration). Controls Account > Git and the
  * `git` launch context that charts use to clone and push from the services.
  *
- * Omitting it (an empty `GIT_PROVIDERS`) enables the integration with no
- * admin-provided provider: users add their own. To disable it, use
- * `{ providers: [], disallowUserToAddProviders: true }`.
+ * Omitting it (an empty `GIT_FORGES`) enables the integration with no
+ * admin-provided forge: users add their own. To disable it, use
+ * `{ forges: [], disallowUserToAddForges: true }`.
  *
  * This configuration is exposed to the browser and must not contain secrets: the
  * OAuth applications are public clients, without secret.
  */
-type GitProvidersConfigObject = {
+type GitForgesConfigObject = {
   /**
    * Markdown displayed below the "Git profiles" heading in Account > Git. Accepts
    * a string or translations such as `{ en: "...", fr: "..." }`. Omit to show the
@@ -75,28 +75,28 @@ type GitProvidersConfigObject = {
    */
   description?: LocalizedString;
   /**
-   * Providers provisioned by the administrator. Use `[]` to provision none.
+   * Forges provisioned by the administrator. Use `[]` to provision none.
    */
-  providers: GitProvidersConfigObject.Provider[];
+  forges: GitForgesConfigObject.Forge[];
   /**
-   * Prevents users from adding their own providers (gitlab.com, github.com...)
+   * Prevents users from adding their own forges (gitlab.com, github.com...)
    * with a personal access token.
    * @default false
    */
-  disallowUserToAddProviders?: boolean;
+  disallowUserToAddForges?: boolean;
 };
 
-namespace GitProvidersConfigObject {
-  export type Provider = {
+namespace GitForgesConfigObject {
+  export type Forge = {
     /** `bitbucket` is Bitbucket Cloud only (`https://bitbucket.org`). */
     type: "gitlab" | "forgejo" | "github" | "bitbucket";
     /** Base URL of the forge, for example `https://gitlab.example.com`. */
     url: string;
     /**
-     * Name displayed in Account > Git. Must be unique among the providers.
+     * Name displayed in Account > Git. Must be unique among the forges.
      *
      * Keep it stable: the user's tokens and sessions are saved under it, so
-     * renaming a provider signs its users out.
+     * renaming a forge signs its users out.
      * @default the host of `url`
      */
     displayName?: string;
@@ -169,14 +169,14 @@ onyxia:
   api:
     regions:
       - {
-          gitProviders:
+          gitForges:
             {
               description:
                 {
                   en: "Connect your Git accounts to clone and push from your services. [Read more](https://example.com/git)",
                   fr: "Connectez vos comptes Git pour cloner et pousser depuis vos services. [En savoir plus](https://example.com/git)",
                 },
-              providers:
+              forges:
                 [
                   {
                     type: "gitlab",
@@ -239,9 +239,9 @@ onyxia:
   api:
     regions:
       - {
-          gitProviders:
+          gitForges:
             {
-              providers:
+              forges:
                 [
                   {
                     type: "forgejo",
@@ -299,9 +299,9 @@ onyxia:
   api:
     regions:
       - {
-          gitProviders:
+          gitForges:
             {
-              providers:
+              forges:
                 [
                   {
                     type: "github",
@@ -339,7 +339,7 @@ Like GitHub, users paste a token: an [Atlassian API token](https://id.atlassian.
 
 ### Only the forges of your organization
 
-By default, users can also add forges of their own (gitlab.com, github.com...) with a personal access token. To offer only the providers you declare:
+By default, users can also add forges of their own (gitlab.com, github.com...) with a personal access token. To offer only the forges you declare:
 
 {% code title="apps/onyxia/values.yaml" %}
 
@@ -347,7 +347,7 @@ By default, users can also add forges of their own (gitlab.com, github.com...) w
 onyxia:
   api:
     regions:
-      - { gitProviders: { disallowUserToAddProviders: true, providers: [...] } }
+      - { gitForges: { disallowUserToAddForges: true, forges: [...] } }
 ```
 
 {% endcode %}
@@ -382,11 +382,11 @@ onyxia:
                     "hidden": true
                 },
                 "providers": {
-                  "description": "The connected Git providers (identity and credentials), filled by Onyxia",
+                  "description": "The connected Git forges (identity and credentials), filled by Onyxia",
                   "type": "array",
                   "default": [],
                   "hidden": true,
-                  "x-onyxia": { "overwriteDefaultWith": "{{git.providers}}" },
+                  "x-onyxia": { "overwriteDefaultWith": "{{git.forges}}" },
                   "items": { "type": "object", "additionalProperties": true }
                 },
                 "repositories": {
@@ -395,7 +395,7 @@ onyxia:
                   "type": "array",
                   "default": [
                     {
-                      "providerId": "",
+                      "forgeId": "",
                       "url": "",
                       "branch": ""
                     }
@@ -404,7 +404,7 @@ onyxia:
                     "type": "object",
                     "render": "gitRepository",
                     "properties": {
-                      "providerId": { "type": "string", "default": "" },
+                      "forgeId": { "type": "string", "default": "" },
                       "url": { "type": "string", "default": "" },
                       "branch": { "type": "string", "default": "" }
                     }
@@ -419,8 +419,8 @@ onyxia:
 {% hint style="warning" %}
 This schema requires two things in your catalog:
 
-- **Charts built on the [library chart](https://github.com/InseeFrLab/helm-charts-interactive-services/tree/main/charts/library-chart) 2.1.11 or later.** Earlier versions don't pass `git.providers` and `git.repositories` to the service, so nothing is cloned. Check the `library-chart` dependency in the `Chart.yaml` of each chart of your catalog. From 2.1.11, the chart's Git secret gives the service two environment variables: `GIT_PROVIDERS` (the JSON of `git.providers`) and `GIT_REPOSITORIES` (the JSON of `git.repositories`).
+- **Charts built on the [library chart](https://github.com/InseeFrLab/helm-charts-interactive-services/tree/main/charts/library-chart) 2.1.11 or later.** Earlier versions don't pass `git.providers` and `git.repositories` to the service, so nothing is cloned. Check the `library-chart` dependency in the `Chart.yaml` of each chart of your catalog. From 2.1.11, the chart's Git secret gives the service two environment variables: `GIT_PROVIDERS` (the JSON of the chart value `git.providers`, filled from the `git.forges` context) and `GIT_REPOSITORIES` (the JSON of `git.repositories`).
 - **Images built on 2026-11-23 or later.** The init script ([`onyxia-init.sh`](https://github.com/InseeFrLab/images-datascience/blob/main/base/scripts/onyxia-init.sh)) of the [images-datascience](https://github.com/InseeFrLab/images-datascience) images reads these variables: it configures the commit identity and credentials for each forge, then clones the repositories. Older images ignore them. They only read `GIT_REPOSITORY`, which the chart fills with the first repository, and they get no credentials: a private repository isn't cloned, and `git push` fails.
 {% endhint %}
 
-If you build your own charts, the `git.providers` context is described in the [x-onyxia documentation](catalog-of-services/custom-catalogs/onyxia-extension.md). The [library chart](https://github.com/InseeFrLab/helm-charts-interactive-services/blob/main/charts/library-chart/templates/_secret.tpl) of the interactive services shows how to pass it to a service.
+If you build your own charts, the `git.forges` context is described in the [x-onyxia documentation](catalog-of-services/custom-catalogs/onyxia-extension.md). The [library chart](https://github.com/InseeFrLab/helm-charts-interactive-services/blob/main/charts/library-chart/templates/_secret.tpl) of the interactive services shows how to pass it to a service.

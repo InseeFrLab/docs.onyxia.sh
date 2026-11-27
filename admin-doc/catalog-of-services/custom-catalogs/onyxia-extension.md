@@ -180,7 +180,7 @@ export type XOnyxiaContext = {
     git: {
         enabled: boolean;
         /** See https://docs.onyxia.sh/admin-doc/git-configuration */
-        providers: {
+        forges: {
             id: string;
             url: string;
             user: { name: string; email: string };
@@ -202,13 +202,13 @@ export type XOnyxiaContext = {
                   }
                 | undefined;
         }[];
-        /** @deprecated Use git.providers */
+        /** @deprecated Use git.forges */
         name: string;
-        /** @deprecated Use git.providers */
+        /** @deprecated Use git.forges */
         email: string;
         /** @deprecated */
         credentials_cache_duration: number;
-        /** @deprecated Use git.providers */
+        /** @deprecated Use git.forges */
         token: string | undefined;
     };
     vault:
