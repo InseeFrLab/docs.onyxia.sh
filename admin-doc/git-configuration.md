@@ -381,7 +381,7 @@ onyxia:
                     "default": true,
                     "hidden": true
                 },
-                "providers": {
+                "forges": {
                   "description": "The connected Git forges (identity and credentials), filled by Onyxia",
                   "type": "array",
                   "default": [],
@@ -419,7 +419,7 @@ onyxia:
 {% hint style="warning" %}
 This schema requires two things in your catalog:
 
-- **Charts built on the [library chart](https://github.com/InseeFrLab/helm-charts-interactive-services/tree/main/charts/library-chart) 2.1.11 or later.** Earlier versions don't pass `git.providers` and `git.repositories` to the service, so nothing is cloned. Check the `library-chart` dependency in the `Chart.yaml` of each chart of your catalog. From 2.1.11, the chart's Git secret gives the service two environment variables: `GIT_PROVIDERS` (the JSON of the chart value `git.providers`, filled from the `git.forges` context) and `GIT_REPOSITORIES` (the JSON of `git.repositories`).
+- **Charts built on the [library chart](https://github.com/InseeFrLab/helm-charts-interactive-services/tree/main/charts/library-chart) 2.1.12 or later.** Earlier versions don't pass `git.forges` to the service, so no credentials are configured. Check the `library-chart` dependency in the `Chart.yaml` of each chart of your catalog. From 2.1.12, the chart's Git secret gives the service two environment variables: `GIT_PROVIDERS` (the JSON of the chart value `git.forges`, filled from the `git.forges` context; the variable keeps the name the images read) and `GIT_REPOSITORIES` (the JSON of `git.repositories`).
 - **Images built on 2026-11-23 or later.** The init script ([`onyxia-init.sh`](https://github.com/InseeFrLab/images-datascience/blob/main/base/scripts/onyxia-init.sh)) of the [images-datascience](https://github.com/InseeFrLab/images-datascience) images reads these variables: it configures the commit identity and credentials for each forge, then clones the repositories. Older images ignore them. They only read `GIT_REPOSITORY`, which the chart fills with the first repository, and they get no credentials: a private repository isn't cloned, and `git push` fails.
 {% endhint %}
 
